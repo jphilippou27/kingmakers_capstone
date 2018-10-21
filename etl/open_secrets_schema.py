@@ -186,6 +186,8 @@ LOCATION '{externalTableLocation}';
                                                                                             dtConvStr=self._column_dt_formats[c['name']])
             
             comment = c['description'].replace("'", "").replace('"', '')
+            comment += ', orig-dtype=' + c['dataType'].replace("'", "").replace('"', '')
+            comment += ', source=' + c['source'].replace("'", "").replace('"', '')
             alterTableStmt = "ALTER TABLE {tableName} CHANGE `{name}` `{name}` {dtype} COMMENT '{comment}';".format(tableName=tableName,
                                                                                                                     name=c['name'],
                                                                                                                     dtype=dtype,
@@ -212,6 +214,62 @@ FROM {originalTableName};
            alterTableStmts='\n'.join(alterTableStmtsList)
            )
         return ddl
+
+    @classmethod
+    def hive_ddl_parquet_select(self, tableName, originalTableName):
+        """
+        Return only the "SELECT ..." clause portion from the CTAS statement in `hive_ddl_parquet' 
+        """
+        self._check_init()
+        selectData = []
+        for c in self.parsed_schema:
+            dtype = c['hiveDtype']
+            if dtype == 'STRING':
+                columnStr = "`{name}` AS `{name}`".format(name=c['name'])
+            elif dtype == 'INTEGER':
+                columnStr = "CAST(`{name}` AS {dtype}) AS `{name}`".format(name=c['name'], dtype=dtype)
+            elif dtype == 'DOUBLE':
+                columnStr = "CAST(`{name}` AS {dtype}) AS `{name}`".format(name=c['name'], dtype=dtype)
+            elif dtype == 'BOOLEAN':
+                columnStr = "CAST(`{name}` AS {dtype}) AS `{name}`".format(name=c['name'], dtype=dtype)
+            elif dtype == 'DATE':
+                columnStr = "TO_DATE(FROM_UNIXTIME(UNIX_TIMESTAMP(`{name}`, '{dtConvStr}'))) AS `{name}`".format(name=c['name'],
+                                                                                            dtConvStr=self._column_dt_formats[c['name']])
+            
+            comment = c['description'].replace("'", "").replace('"', '')
+            
+            
+            selectData.append(columnStr)
+            
+        selStmt = """SELECT
+    {selectStatement}
+FROM {originalTableName}
+""".format(originalTableName=originalTableName,
+           selectStatement=',\n    '.join(selectData),
+           )
+        return selStmt
+    
+    @classmethod
+    def hive_ddl_parquet_alter(self, tableName, originalTableName):
+        """
+        Return only the ALTER TABLE statements from the `hive_ddl_parquet' DDL 
+        """
+        self._check_init()
+        alterTableStmtsList = []
+        for c in self.parsed_schema:
+            dtype = c['hiveDtype']
+            comment = c['description'].replace("'", "").replace('"', '')
+            comment += ', orig-dtype=' + c['dataType'].replace("'", "").replace('"', '')
+            comment += ', source=' + c['source'].replace("'", "").replace('"', '')
+            alterTableStmt = "ALTER TABLE {tableName} CHANGE `{name}` `{name}` {dtype} COMMENT '{comment}';".format(tableName=tableName,
+                                                                                                                    name=c['name'],
+                                                                                                                    dtype=dtype,
+                                                                                                                    comment=comment)
+            
+            alterTableStmtsList.append(alterTableStmt)
+            
+        alterTableStmts='\n'.join(alterTableStmtsList)
+        return alterTableStmts
     
     
     @staticmethod
@@ -240,4 +298,8 @@ FROM {originalTableName};
             return True
         elif 'date' in dtype.lower():
             return True
+        elif 'yyyy-MM-dd' in dtype.lower():
+            return True
+        elif 'yyyy' in dtype.lower():
+            return True  # probably, right?
         return False
