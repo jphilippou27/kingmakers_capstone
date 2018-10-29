@@ -1,0 +1,37 @@
+
+pacs2pacs
+87064660.0|C00075820|National Republican Congressional Cmte
+49478573.0|C00545947|Team Ryan
+47297598.0|C00000935|Democratic Congressional Campaign Cmte
+32235159.0|C00042366|Democratic Senatorial Campaign Cmte
+31658415.0|C00003418|Republican National Cmte
+31519295.0|C00580100|Donald J Trump for President
+31166657.0|C00010603|DNC Services Corp
+26220594.0|C00027466|National Republican Senatorial Cmte
+24497927.0|C00618371|Trump Make America Great Again Cmte
+19238180.0|C00330894|Ryan for Congress
+
+pacs2cands
+13632286|C00484642|Senate Majority PAC
+13323047|C00075820|National Republican Congressional Cmte
+12742506|C00504530|Congressional Leadership Fund
+11506775|C00000935|Democratic Congressional Campaign Cmte
+8347968|C00571703|Senate Leadership Fund
+7287005|C00487470|Club for Growth Action
+5567665|C00473918|Women Vote!
+5387399|C00659896|Highway 31
+4574075|C00559906|Americas PAC
+4202874|C00571588|Restoration PAC
+
+all
+100387707.0|C00075820|National Republican Congressional Cmte
+58804373.0|C00000935|Democratic Congressional Campaign Cmte
+49478473.0|C00545947|Team Ryan
+35656756.0|C00003418|Republican National Cmte
+33078268.0|C00042366|Democratic Senatorial Campaign Cmte
+32033284.0|C00010603|DNC Services Corp
+31519295.0|C00580100|Donald J Trump for President
+27234408.0|C00027466|National Republican Senatorial Cmte
+24497927.0|C00618371|Trump Make America Great Again Cmte
+23779417.0|C00484642|Senate Majority PAC
+

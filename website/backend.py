@@ -3,7 +3,7 @@ from flask import Flask
 from flask import g
 
 app = Flask(__name__)
-DATABASE = "/home/dbalck/KingMakers/data/os.db"
+DATABASE = "/home/dbalck/kingmakers_capstone/data/os.db"
 
 def get_db():
     db = getattr(g, '_database', None)
@@ -60,3 +60,37 @@ def get_expends_by_amt(min=0, max=0):
         return query_db("select * from expends where amount <= ? order by amount desc limit 1000", [max])
     return None
 
+def get_cands_by_amt():
+    return query_db("select recip_id, sum(amount) as amt, cands.name from indivs join cands where cands.cand_id = indivs.recip_id group by recip_id order by amt desc limit 10", [])
+
+
+######
+        
+def get_all_sums_by_cand():
+    return query_db("select sum(amount) as amt, indivs.recip_id, cands.name from indivs join cands where cands.cand_id = indivs.recip_id group by indivs.recip_id order by amt desc limit 100", [])
+def get_all_sums_by_cmte():
+    return query_db("select sum(amount) as amt, indivs.recip_id, cmtes.name from indivs join cmtes where cmtes.cmte_id = indivs.recip_id group by indivs.recip_id order by amt desc limit 100", [])
+def get_all_sums_by_industry():
+    return query_db("select sum(amount) as amt, indivs.industry, industry.name from indivs join industry on indivs.industry = industry.code  group by indivs.industry order by amt desc limit 100", [])
+
+def get_income_by_cand():
+    return query_db("select sum(amount) as amt, indivs.recip_id, cands.name from indivs join cands where cands.cand_id = indivs.recip_id group by indivs.recip_id order by amt desc limit 100", [])
+def get_income_by_cmte():
+    return query_db("select sum(amount) as amt, indivs.recip_id, cmtes.name from indivs join cmtes where cmtes.cmte_id = indivs.recip_id group by indivs.recip_id order by amt desc limit 100", [])
+def get_income_by_industry():
+    pass
+
+def get_spending_by_cand():
+    pass
+def get_spending_by_cmte():
+    rows = query_db("select sum(amt) as total, id, name from (select sum(amount) as amt, pacs2cands.pac_id as id, cmtes.name as name from pacs2cands join cmtes on pacs2cands.pac_id = cmtes.cmte_id group by pac_id UNION ALL select sum(amount) as amt, pacs2pacs.filer_id as id, cmtes.name as name from pacs2pacs join cmtes on pacs2pacs.filer_id = cmtes.cmte_id group by filer_id order by amt desc ) group by id order by total desc limit 100", [])
+
+def get_spending_by_industry():
+    return query_db("select sum(amt) as total, industry, name from (select sum(amount) as amt, pacs2cands.industry as industry, industry.name as name from pacs2cands join industry on pacs2cands.industry = industry.code group by industry.code UNION ALL select sum(amount) as amt, pacs2pacs.donor_industry as industry, industry.name as name from pacs2pacs join industry on pacs2pacs.donor_industry = industry.code group by industry order by amt desc ) group by  industry order by total desc limit 100", [])
+
+
+def get_sankey_by_industry():
+     return query_db("select donor_industry as src, recip_industry as tgt, sum(amount) as amt from pacs2pacs group by donor_industry, recip_industry union all  select industry || '_2' as src, cand_id as tgt, sum(amount) as amt from pacs2cands group by industry, cand_id  order by amt desc limit 100", [])
+
+def get_simple_sankey_by_industry():
+     return query_db("select cmtes.name as source, cands.name as target, sum(p2c.amount) as value from pacs2cands as p2c join cmtes on cmtes.cmte_id = p2c.pac_id join cands on cands.cand_id = p2c.cand_id group by p2c.pac_id order by value desc limit 10", [])
