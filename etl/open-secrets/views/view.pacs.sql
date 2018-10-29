@@ -1,0 +1,16 @@
+CREATE VIEW pq_crp_pacs AS
+SELECT * FROM pq_crp_pacs90 UNION ALL
+SELECT * FROM pq_crp_pacs92 UNION ALL
+SELECT * FROM pq_crp_pacs94 UNION ALL
+SELECT * FROM pq_crp_pacs96 UNION ALL
+SELECT * FROM pq_crp_pacs98 UNION ALL
+SELECT * FROM pq_crp_pacs00 UNION ALL
+SELECT * FROM pq_crp_pacs02 UNION ALL
+SELECT * FROM pq_crp_pacs04 UNION ALL
+SELECT * FROM pq_crp_pacs06 UNION ALL
+SELECT * FROM pq_crp_pacs08 UNION ALL
+SELECT * FROM pq_crp_pacs10 UNION ALL
+SELECT * FROM pq_crp_pacs12 UNION ALL
+SELECT * FROM pq_crp_pacs14 UNION ALL
+SELECT * FROM pq_crp_pacs16 UNION ALL
+SELECT * FROM pq_crp_pacs18
