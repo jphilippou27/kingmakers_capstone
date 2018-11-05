@@ -1,4 +1,6 @@
 function run(data) {
+    const nodes_with_names = data.nodes
+    //console.log(data)
     var svg = d3.select("#chart1")
         .style("width", "1000px")
         .style("height", "1000px")
@@ -13,7 +15,6 @@ function run(data) {
         .nodePadding(10)
         .nodeAlign(d3.sankeyCenter);
     let graph = sk(data)
-    console.log(graph)
     //console.log(sk.links);
     //console.log(sk.nodes);
     //console.log(sk.links());
@@ -57,10 +58,23 @@ function run(data) {
         .attr("width", d => d.x1 - d.x0)
         .attr("height", d => d.y1 - d.y0)
         .attr("opacity", 0.8)
-        .append("title").text(d => data.nodes[d.index]);
+        .attr("fill", function(d) {return color(d.id); })
+        .append("title").text(function(d) {return d.id + "\n" + d.value; });
 
+
+
+      svg.append("g")
+        .style("font", "10px sans-serif")
+        .selectAll("text")
+        .data(graph.nodes)
+        .enter().append("text")
+        .attr("x", d => d.x0 < width / 2 ? d.x1 + 6 : d.x0 - 6)
+        .attr("y", d => (d.y1 + d.y0) / 2)
+        .attr("dy", "0.35em")
+        .attr("text-anchor", d => d.x0 < width / 2 ? "start" : "end")
+        .text(d => d.id);
     console.log(graph.nodes)
-    console.log(data.nodes)
+    //console.log(graph.links)
     
     //nodes.append("text")
      //   .text(d => d.id);
@@ -117,10 +131,12 @@ var generateNL = function(rawdata) {
     var counter = 0
     var n2 = []
     n1.forEach(function(value) {
-        n2[counter] = {"id": +value}
+        n2[counter] = {"id": value}
         l1[value] = counter;
         counter++;
     });
+    console.log("n2")
+    console.log(n2)
 
     l2 = []
     var counter = 0
@@ -151,10 +167,7 @@ var format = function(d) {
     return d => '${f(d)} TWh';
 }
 
-var color = function(name) {
-  const color = d3.scaleOrdinal(d3.schemeCategory10);
-  return name => color(name.replace(/ .*/, ""));
-}
+const color = d3.scaleOrdinal(d3.schemeCategory10);
 
 //var data = d3.json("https://gist.githubusercontent.com/mbostock/ca9a0bb7ba204d12974bca90acc507c0/raw/398136b7db83d7d7fd89181b080924eb76041692/energy.json")
 var data = d3.json("/sankey")

@@ -92,5 +92,9 @@ def get_spending_by_industry():
 def get_sankey_by_industry():
      return query_db("select donor_industry as src, recip_industry as tgt, sum(amount) as amt from pacs2pacs group by donor_industry, recip_industry union all  select industry || '_2' as src, cand_id as tgt, sum(amount) as amt from pacs2cands group by industry, cand_id  order by amt desc limit 100", [])
 
+#def get_simple_sankey_by_industry():
+#     return query_db("select cmtes.name as source, cands.name as target, sum(p2c.amount) as value from pacs2cands as p2c join cmtes on cmtes.cmte_id = p2c.pac_id join cands on cands.cand_id = p2c.cand_id group by p2c.pac_id order by value desc limit 10", [])
+     
+ 
 def get_simple_sankey_by_industry():
-     return query_db("select cmtes.name as source, cands.name as target, sum(p2c.amount) as value from pacs2cands as p2c join cmtes on cmtes.cmte_id = p2c.pac_id join cands on cands.cand_id = p2c.cand_id group by p2c.pac_id order by value desc limit 10", [])
+     return query_db("select industry.name as source, cand_id as target, sum(amount) as value, substr(industry,0,2) from pacs2cands join industry on pacs2cands.industry = industry.code  group by industry, cand_id order by value desc limit 20", [])
