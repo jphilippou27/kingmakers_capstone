@@ -7,21 +7,21 @@ from flask import url_for
 
 import backend
 
-app = Flask(__name__)
+application = Flask(__name__)
 DATABASE = ''
 
-with app.app_context():
+with application.app_context():
     db = backend.get_db()
 
-@app.route("/")
+@application.route("/")
 def home():
     return render_template("index.html")
 
-@app.route("/ping")
+@application.route("/ping")
 def ping():
     return "pong"
 
-@app.route("/donors", methods=["GET", "PUT"])
+@application.route("/donors", methods=["GET", "PUT"])
 def donors():
     if request.method == "GET":
         pass
@@ -32,7 +32,7 @@ def donors():
     else:
         return abort(401)
 
-@app.route("/donors/<uuid:donor_id>", methods=["GET", "PUT"])
+@application.route("/donors/<uuid:donor_id>", methods=["GET", "PUT"])
 def donor(donor_id):
     if request.method == "GET":
         db = get_db()
@@ -43,7 +43,7 @@ def donor(donor_id):
     else:
         return abort(401)
 
-@app.route("/recipients", methods=["GET", "PUT"])
+@application.route("/recipients", methods=["GET", "PUT"])
 def recipients():
     if request.method == "GET":
         pass
@@ -54,7 +54,7 @@ def recipients():
     else:
         return abort(401)
 
-@app.route("/recipients/<uuid:rep_id>", methods=["GET", "PUT"])
+@application.route("/recipients/<uuid:rep_id>", methods=["GET", "PUT"])
 def recipient(rep_id):
     if request.method == "GET":
         pass
@@ -65,7 +65,7 @@ def recipient(rep_id):
     else:
         return abort(401)
 
-@app.route("/candidates/<cand_id>", methods=["GET", "PUT"])
+@application.route("/candidates/<cand_id>", methods=["GET", "PUT"])
 def candidate(cand_id):
      if request.method == "GET":
          return jsonify(backend.get_candidate(cand_id))
@@ -76,7 +76,7 @@ def candidate(cand_id):
      else:
          return abort(401)
 
-@app.route("/candidates", methods=["GET"])
+@application.route("/candidates", methods=["GET"])
 def candidate_query():
      if request.method == "GET":
          fn = request.args.get("fn")
@@ -86,7 +86,7 @@ def candidate_query():
          return abort(401)
 
 
-@app.route("/expenditures/<trans_id>", methods=["GET", "PUT"])
+@application.route("/expenditures/<trans_id>", methods=["GET", "PUT"])
 def expenditure(trans_id):
      if request.method == "GET":
          return jsonify(backend.get_expends(trans_id))
@@ -97,7 +97,7 @@ def expenditure(trans_id):
      else:
          return abort(401)
 
-@app.route("/expenditures", methods=["GET"])
+@application.route("/expenditures", methods=["GET"])
 def expenditures():
      if request.method == "GET":
          max = request.args.get("max")
@@ -106,7 +106,7 @@ def expenditures():
      else:
          return abort(401)
 
-@app.route("/filers/", methods=["GET"])
+@application.route("/filers/", methods=["GET"])
 def expenditures_filer():
      if request.method == "GET":
          max = request.args.get("max")
@@ -115,14 +115,14 @@ def expenditures_filer():
      else:
          return abort(401)
 
-@app.route("/candidates/amt", methods=["GET"])
+@application.route("/candidates/amt", methods=["GET"])
 def candidates_amt():
      if request.method == "GET":
          return jsonify(backend.get_cands_by_amt())
      else:
          return abort(401)
 
-@app.route("/sums", methods=["GET"])
+@application.route("/sums", methods=["GET"])
 def sums_all():
     sum_type = request.args.get("type")
     if sum_type == "cmte":
@@ -133,7 +133,7 @@ def sums_all():
         get_all_sums_by_industry()
     return None
 
-@app.route("/spending", methods=["GET"])
+@application.route("/spending", methods=["GET"])
 def spending():
     sum_type = request.args.get("type")
     if sum_type == "cmte":
@@ -144,7 +144,7 @@ def spending():
         return jsonify(backend.get_spending_by_industry())
     return None
 
-@app.route("/income", methods=["GET"])
+@application.route("/income", methods=["GET"])
 def income():
     sum_type = request.args.get("type")
     if sum_type == "cmte":
@@ -155,6 +155,10 @@ def income():
         return jsonify(backend.get_income_by_industry())
     return None
 
-@app.route("/sankey", methods=["GET"])
+@application.route("/sankey", methods=["GET"])
 def sankey():
     return jsonify(backend.get_simple_sankey_by_industry())
+
+
+if __name__ == "__main__":
+	application.run(host="0.0.0.0")

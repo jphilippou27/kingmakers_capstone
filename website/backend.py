@@ -3,7 +3,7 @@ from flask import Flask
 from flask import g
 
 app = Flask(__name__)
-DATABASE = "/home/dbalck/kingmakers_capstone/data/os.db"
+DATABASE = "/home/daniel/kingmakers_capstone/data/os.db"
 
 def get_db():
     db = getattr(g, '_database', None)
