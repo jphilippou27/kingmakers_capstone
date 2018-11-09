@@ -15,7 +15,7 @@ with app.app_context():
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    return render_template("home.html")
 
 @app.route("/ping")
 def ping():
@@ -157,4 +157,8 @@ def income():
 
 @app.route("/sankey", methods=["GET"])
 def sankey():
+    return render_template("sankey.html")
+
+@app.route("/sankeydata", methods=["GET"])
+def sankeydata():
     return jsonify(backend.get_simple_sankey_by_industry())

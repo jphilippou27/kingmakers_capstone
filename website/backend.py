@@ -97,4 +97,4 @@ def get_sankey_by_industry():
      
  
 def get_simple_sankey_by_industry():
-     return query_db("select industry.name as source, cand_id as target, sum(amount) as value, substr(industry,0,2) from pacs2cands join industry on pacs2cands.industry = industry.code  group by industry, cand_id order by value desc limit 20", [])
+     return query_db("select industry.name as source, cands.name as target, sum(amount) as value, substr(industry,0,2) from pacs2cands join industry on pacs2cands.industry = industry.code join cands on pacs2cands.cand_id = cands.cand_id  where substr(industry.code,0,2) != 'J' AND substr(industry.code,0,2) != 'Z' group by industry, pacs2cands.cand_id order by value desc limit 50", [])
