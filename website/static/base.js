@@ -80,6 +80,19 @@ lib.sankeyModule = function() {
     };
 };
 
+var generateChordMatrix = function(raw) {
+    var s = new Set();
+    var counter = 0;
+    raw.forEach(function(row) {
+        s.add(row.source);
+        s.add(row.target);
+    });
+    index = Array.from(s);
+    var map = new Map()
+    for (var i=0; i<index.length; i++) {
+         
+    }
+}
 
 var generateNL = function(rawdata) {
     var n1 = new Set();

@@ -162,3 +162,8 @@ def sankey():
 @app.route("/sankeydata", methods=["GET"])
 def sankeydata():
     return jsonify(backend.get_simple_sankey_by_industry())
+
+@app.route("/chorddata", methods=["GET"])
+def chorddata():
+    return jsonify(backend.get_chord_data())
+

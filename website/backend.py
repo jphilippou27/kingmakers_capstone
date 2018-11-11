@@ -1,6 +1,7 @@
 import sqlite3
 from flask import Flask
 from flask import g
+import numpy as np
 
 app = Flask(__name__)
 DATABASE = "/home/dbalck/kingmakers_capstone/data/os.db"
@@ -98,3 +99,38 @@ def get_sankey_by_industry():
  
 def get_simple_sankey_by_industry():
      return query_db("select industry.name as source, cands.name as target, sum(amount) as value, substr(industry,0,2) from pacs2cands join industry on pacs2cands.industry = industry.code join cands on pacs2cands.cand_id = cands.cand_id  where substr(industry.code,0,2) != 'J' AND substr(industry.code,0,2) != 'Z' group by industry, pacs2cands.cand_id order by value desc limit 50", [])
+
+
+
+def get_chord_data(): 
+    return query_db("", [])
+
+
+
+    data = query_db("""select 
+            p2p.donor_id as source, 
+            p2p.recip_id as target, 
+            sum(p2p.amount) as value, 
+            donor_totals.donor_total as dt 
+            from simple_pacs2pacs as p2p 
+            join (
+                select donor_id, sum(amount) as donor_total 
+                from simple_pacs2pacs 
+                group by donor_id ) as donor_totals 
+            on donor_totals.donor_id = source 
+            group by p2p.donor_id, p2p.recip_id 
+            order by dt desc 
+            limit 20""", [])
+    print(data)
+    s = set()
+    for obj in data:
+        s.add(obj['source'])
+        s.add(obj['target'])
+
+    d = dict(zip(s, range(0, len(s))))
+    matrix = np.zeros((len(s), len(s))) 
+    for obj in data:
+        matrix[d[obj['source']], d[obj['target']]] = obj['value']
+
+    return matrix.tolist()
+
