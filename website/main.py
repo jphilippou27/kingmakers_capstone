@@ -159,7 +159,7 @@ def income():
 def sankey():
     return render_template("sankey.html")
 
-@app.route("/sankeydata", methods=["GET"])
+@application.route("/sankeydata", methods=["GET"])
 def sankeydata():
     return jsonify(backend.get_simple_sankey_by_industry())
 
