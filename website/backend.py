@@ -5,6 +5,7 @@ if not USE_POSTGRES:
     import sqlite3
 if USE_POSTGRES:
     import psycopg2
+    import psycopg2.extras
 from flask import Flask
 from flask import g
 
@@ -28,7 +29,9 @@ if USE_POSTGRES:
             with open(CONNECTION_STR, 'r') as f:
                 conx = f.read().strip()
             print("connecting to postgres...")
-            db = g._database = psycopg2.connect(conx, sslrootcert=ROOT_CERT)
+            db = g._database = psycopg2.connect(conx,
+                                                sslrootcert=ROOT_CERT,
+                                                cursor_factory=psycopg2.extras.RealDictCursor)
         return db            
 
 @app.teardown_appcontext
@@ -115,4 +118,4 @@ def get_sankey_by_industry():
      
  
 def get_simple_sankey_by_industry():
-     return query_db("select MAX(industry.name) as source, MAX(cands.name) as target, sum(amount) as value, substr(industry,0,2) from pacs2cands join industry on pacs2cands.industry = industry.code join cands on pacs2cands.cand_id = cands.cand_id  where substr(industry.code,0,2) != 'J' AND substr(industry.code,0,2) != 'Z' group by industry, pacs2cands.cand_id order by value desc limit 50", [])
+     return query_db("""select MAX(industry.name) as source, MAX(cands.name) as target, sum(amount) as value, substr(industry,0,2) AS "substr(industry,0,2)" from pacs2cands join industry on pacs2cands.industry = industry.code join cands on pacs2cands.cand_id = cands.cand_id  where substr(industry.code,0,2) != 'J' AND substr(industry.code,0,2) != 'Z' group by industry, pacs2cands.cand_id order by value desc limit 50""", [])
