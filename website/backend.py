@@ -12,7 +12,7 @@ import numpy as np
 import pandas as pd
 
 app = Flask(__name__)
-SQLITE = "/home/daniel/kingmakers_capstone/data/os2/os2.db"
+SQLITE = "/home/dbalck/kingmakers_capstone/data/os2/os2.db"
 CONNECTION_STR = "/var/www/production/connection_str"
 ROOT_CERT = "/var/www/production/root.crt"
 

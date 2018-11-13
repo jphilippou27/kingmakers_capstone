@@ -36,7 +36,7 @@ def donors():
 @application.route("/donors/<uuid:donor_id>", methods=["GET", "PUT"])
 def donor(donor_id):
     if request.method == "GET":
-        db = get_db()
+        db = get_sqlite()
     elif request.method == "PUT":
         pass
     elif request.method == "OPTIONS":
@@ -232,7 +232,7 @@ def network():
 
 @application.route("/networkdata", methods=["GET"])
 def networkdata():
-    return (backend.get_network_by_industry())
+    return (backend.get_network_by_industry("Elizabeth Warren (D)"))
 
 @application.route("/tableau")
 def tableau():
@@ -240,8 +240,8 @@ def tableau():
 
 if __name__ == "__main__":
 
-    with application.app_context():
-        db = backend.get_db()
+    #with application.app_context():
+        #db = backend.get_sqlite()
 	#application.run(host="0.0.0.0")
     app = index2.init_dash(application)
     app.run_server(host="0.0.0.0")
