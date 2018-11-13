@@ -4,14 +4,15 @@ from flask import jsonify
 from flask import request
 from flask import render_template 
 from flask import url_for 
+import sys
+import dash
 
+#sys.path.insert(0, 'dash')
+import index2
 import backend
 
 application = Flask(__name__)
 DATABASE = ''
-
-with application.app_context():
-    db = backend.get_db()
 
 @application.route("/")
 def home():
@@ -219,4 +220,9 @@ def sankeydata():
 
 
 if __name__ == "__main__":
-	application.run(host="0.0.0.0")
+
+    with application.app_context():
+        db = backend.get_db()
+	#application.run(host="0.0.0.0")
+    app = index2.init_dash(application)
+    app.run_server(host="0.0.0.0")
