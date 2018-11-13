@@ -6,6 +6,8 @@ import pandas as pd
 import plotly.graph_objs as go
 import pickle
 import base64
+import os
+import flask
 
 
 # Load candidate data
@@ -21,8 +23,11 @@ for k in cand_data:
 all_2018_cands = pd.read_pickle('all_2018_cands.pickle')
 print(f'Loaded {len(all_2018_cands)} potential candidates')
 
-external_stylesheets = ['style.css']
+css_directory = os.getcwd()
+stylesheets = ['style.css']
+static_css_route = '/static/'
 
+external_stylesheets = ['http://169.62.194.155:8050/static/style.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 available_candidates = all_2018_cands['strrep'].unique()
@@ -70,6 +75,12 @@ app.layout = html.Div([
         dcc.Graph(id='pacbreakdown-pac-contribs'),
     ], style={'display': 'inline-block', 'width': '49%'})
 ])
+
+@app.server.route('{}<stylesheet>'.format(static_css_route))
+def serve_stylesheet(stylesheet):
+    if stylesheet not in stylesheets:
+        return {}
+    return flask.send_from_directory(css_directory, stylesheet)
 
 @app.callback(
     dash.dependencies.Output('candidate-header', 'children'),
