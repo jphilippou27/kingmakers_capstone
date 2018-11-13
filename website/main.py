@@ -218,6 +218,14 @@ def sankey():
 def sankeydata():
     return jsonify(backend.get_simple_sankey_by_industry())
 
+@application.route("/network", methods=["GET"])
+def network():
+    return render_template("network.html")
+
+@application.route("/networkdata", methods=["GET"])
+def networkdata():
+    return (backend.get_network_by_industry())
+
 @application.route("/tableau")
 def tableau():
     return render_template("tableau.html")
