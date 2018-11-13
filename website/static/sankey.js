@@ -1,9 +1,17 @@
 var lib = lib || {};
 
 lib.sankeyModule = function() {
+    var contentDiv = document.getElementById("content")
+    var height = 1600;
+    //var width = contentDiv.clientWidth;
     var data = [];
     const color = d3.scaleOrdinal(d3.schemeCategory10);
     const politicolor = d3.scaleSequential(d3.interpolateRdBu);
+    var svg = d3.select("#chart1");
+    let links = svg.append("g");
+    var nodes = svg.append("g");
+    var titles  = svg.append("g")
+    window.addEventListener("resize", plot_by_industry_)
 
     function industry_data_(_) {
         var that = this;
@@ -13,11 +21,12 @@ lib.sankeyModule = function() {
     }
 
     function plot_by_industry_() {
+        var width = contentDiv.clientWidth - 40;
         const nodes_with_names = data.nodes
-        var svg = d3.select("#chart1")
-            .style("width", "1000px")
-            .style("height", "1000px")
-            .style("border", "red");
+        svg
+            .attr("width", width)
+            .attr("height", height);
+        console.log(svg);
 
         const sk = d3.sankey()
             .nodeWidth(15)
@@ -27,9 +36,12 @@ lib.sankeyModule = function() {
             .nodePadding(10)
             .nodeAlign(d3.sankeyCenter);
         let graph = sk(data)
-        let links = svg.append("g")
+
+        links
             .selectAll("path")
             .data(graph.links)
+            .attr("d", d3.sankeyLinkHorizontal())
+            .attr("stroke-width", d => d.width)
             .enter()
             .append("path")
             .classed("link", true)
@@ -38,11 +50,14 @@ lib.sankeyModule = function() {
             .attr("stroke-width", d => d.width)
             .attr("stroke-opacity", 0.5)
             .append("title").text(d =>  "$" + d.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-
-        var nodes = svg.append("g")
+        nodes
             .classed("nodes", true)
             .selectAll("rect")
             .data(graph.nodes)
+            .attr("x", d => d.x0)
+            .attr("y", d => d.y0)
+            .attr("width", d => d.x1 - d.x0)
+            .attr("height", d => d.y1 - d.y0)
             .enter()
             .append("rect")
             .classed("nodes", true)
@@ -60,10 +75,13 @@ lib.sankeyModule = function() {
             }).append("title").text(function(d) {
                 return d.id + "\n" + "$" + d.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
             });
-
-        svg.append("g")
+        titles
             .style("font", "10px sans-serif")
             .selectAll("text")
+            .attr("x", d => d.x0 < width / 2 ? d.x1 + 6 : d.x0 - 6)
+            .attr("y", d => (d.y1 + d.y0) / 2)
+            .attr("dy", "0.35em")
+            .attr("text-anchor", d => d.x0 < width / 2 ? "start" : "end")
             .data(graph.nodes)
             .enter().append("text")
             .attr("x", d => d.x0 < width / 2 ? d.x1 + 6 : d.x0 - 6)
@@ -71,7 +89,6 @@ lib.sankeyModule = function() {
             .attr("dy", "0.35em")
             .attr("text-anchor", d => d.x0 < width / 2 ? "start" : "end")
             .text(d => d.id);
-        console.log(graph.nodes)
     }
 
     return {
@@ -80,19 +97,6 @@ lib.sankeyModule = function() {
     };
 };
 
-var generateChordMatrix = function(raw) {
-    var s = new Set();
-    var counter = 0;
-    raw.forEach(function(row) {
-        s.add(row.source);
-        s.add(row.target);
-    });
-    index = Array.from(s);
-    var map = new Map()
-    for (var i=0; i<index.length; i++) {
-         
-    }
-}
 
 var generateNL = function(rawdata) {
     var n1 = new Set();
@@ -126,8 +130,6 @@ var generateNL = function(rawdata) {
     return {"nodes": n2, "links": l2 }
 }
 
-var width = 964;
-var height = 600;
 var sankeydata = d3.json("/sankeydata")
 sankeydata.then(function(d){
     var clean_data = generateNL(d)

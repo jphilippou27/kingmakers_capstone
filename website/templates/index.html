@@ -41,11 +41,14 @@
         <a href="/" class="w3-bar-item w3-button">Other</a>
     </div>
     <div style="margin-left:10%">
-        <div class="w3-panel">
-            {% block content %}  
-            {% endblock %}
+        <div class="w3-container">
+            <div id="content" style="margin-top:10%">
+                {% block content %}  
+                {% endblock %}
+            </div>
         </div> 
     </div>
 </body>
-<script type="text/javascript" src={{ url_for('static', filename='base.js') }}></script>
+{% block script %}  
+{% endblock %}
 </html> 

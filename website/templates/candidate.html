@@ -1,0 +1,31 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<div class="w3-row">
+    <div class="w3-col m6 l6">
+        <p>Spending data here</p>
+        <svg></svg>
+    </div>
+    <div class="w3-col m6 l6">
+        <p>Other data here</p>
+        <svg></svg>
+    </div>
+</div>
+<div class="w3-card-4 w3-panel">
+    <header class="w3-container"><h2>PAC Spending for {{cand_name}}</h2></header>
+    <svg id="timeseries_for"></svg>
+</div>
+<div class="w3-card-4 w3-panel">
+    <header class="w3-container"><h2>PAC Spending against {{cand_name}}</h2></header>
+    <svg id="timeseries_against"></svg>
+</div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        const cand_id = '{{cand_id}}';
+        const cand_name = '{{cand_name}}';
+    </script>
+    <script type="text/javascript" src={{ url_for('static', filename='candidate.js') }}></script>
+{% endblock %}
+

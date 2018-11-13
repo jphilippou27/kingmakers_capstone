@@ -21,7 +21,7 @@ if __name__ == "__main__":
         donor_zip TEXT(5),
         donor_employer TEXT(38),
         donor_occupation TEXT(38),
-        date DATE, 
+        date TEXT(10), 
         amount REAL, 
         memo TEXT(100));"""
         )
@@ -32,7 +32,7 @@ if __name__ == "__main__":
         with open(os.path.join("by_date", name), errors="ignore") as input:
             counter = 0
             reader = csv.reader(input, delimiter="|")
-            rows = [(row[16], row[15], row[7], row[0], row[1], row[5], row[6], row[8], row[9], row[10], row[11], row[12], row[13], row[14], row[19] ) for row in reader]
+            rows = [(row[16], row[15], row[7], row[0], row[1], row[5], row[6], row[8], row[9], row[10], row[11], row[12], row[13][4:8] + "-" + row[13][0:2] + "-" + row[13][2:4], row[14], row[19] ) for row in reader]
         cur.executemany("""INSERT INTO indiv (
             trans_id,
             donor_id,
