@@ -5,6 +5,7 @@ import dash_html_components as html
 import pandas as pd
 import plotly.graph_objs as go
 import pickle
+import base64
 
 
 # Load candidate data
@@ -20,7 +21,7 @@ for k in cand_data:
 all_2018_cands = pd.read_pickle('all_2018_cands.pickle')
 print(f'Loaded {len(all_2018_cands)} potential candidates')
 
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+external_stylesheets = ['style.css']
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
@@ -45,10 +46,16 @@ app.layout = html.Div([
     }),
 
     html.Div([
-        html.H2(id='candidate-header',
+        html.Img(id='candidate-img',
+                 src='data:image/png;base64,{}'.format(base64.b64encode(open('ossoff.jpg', 'rb').read()).decode('utf-8', 'ignore')),
+                 height='50')
+    ], style={'width': '5%', 'display': 'inline-block', 'padding': '10 20'}),
+ 
+    html.Div([
+       html.H2(id='candidate-header',
                 children='Jon Ossoff (D): GA06')
-    ], style={'width': '99%', 'display': 'inline-block', 'padding': '0 20'}),
-    
+    ], style={'width': '94%', 'display': 'inline-block', 'padding': '0 20'}),
+
 
     html.Div([
         dcc.Graph(
@@ -69,6 +76,16 @@ app.layout = html.Div([
     [dash.dependencies.Input('crossfilter-candidate', 'value')])
 def update_candidate_header(candidate_strrep):
     return candidate_strrep
+
+@app.callback(
+    dash.dependencies.Output('candidate-img', 'src'),
+    [dash.dependencies.Input('crossfilter-candidate', 'value')])
+def update_candidate_header(candidate_strrep):
+    if candidate_strrep == 'Jon Ossoff (D): GA06':
+        return 'data:image/png;base64,{}'.format(base64.b64encode(open('ossoff.jpg', 'rb').read()).decode('utf-8', 'ignore'))
+    else:
+        return {}
+
 
 @app.callback(
     dash.dependencies.Output('candidate-indiv-contribs', 'figure'),
