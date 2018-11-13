@@ -218,6 +218,9 @@ def sankey():
 def sankeydata():
     return jsonify(backend.get_simple_sankey_by_industry())
 
+@application.route("/tableau")
+def tableau():
+    return render_template("tableau.html")
 
 if __name__ == "__main__":
 
@@ -226,3 +229,5 @@ if __name__ == "__main__":
 	#application.run(host="0.0.0.0")
     app = index2.init_dash(application)
     app.run_server(host="0.0.0.0")
+
+
