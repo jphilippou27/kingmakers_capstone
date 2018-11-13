@@ -220,7 +220,7 @@ def sankeydata():
 
 @application.route("/tableau")
 def tableau():
-    return flask.render_template("tableau.html")
+    return render_template("tableau.html")
 
 if __name__ == "__main__":
 
