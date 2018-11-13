@@ -45,6 +45,12 @@ app.layout = html.Div([
     }),
 
     html.Div([
+        html.H2(id='candidate-header',
+                children='Jon Ossoff (D): GA06')
+    ], style={'width': '99%', 'display': 'inline-block', 'padding': '0 20'}),
+    
+
+    html.Div([
         dcc.Graph(
             id='candidate-pac-contribs',
             hoverData={'points': [{'customdata': 'C00504530'}]}
@@ -58,6 +64,11 @@ app.layout = html.Div([
     ], style={'display': 'inline-block', 'width': '49%'})
 ])
 
+@app.callback(
+    dash.dependencies.Output('candidate-header', 'children'),
+    [dash.dependencies.Input('crossfilter-candidate', 'value')])
+def update_candidate_header(candidate_strrep):
+    return candidate_strrep
 
 @app.callback(
     dash.dependencies.Output('candidate-indiv-contribs', 'figure'),
@@ -66,6 +77,7 @@ def update_candidate_indiv_contribs(candidate_strrep):
     try:
         this_cand_data = cand_data[candidate_strrep]
     except:
+        return {}
         print('Candidate not found in cand_data, using Jon Ossoff')
         this_cand_data = cand_data['Jon Ossoff (D): GA06']
 
@@ -76,15 +88,12 @@ def update_candidate_indiv_contribs(candidate_strrep):
             text=this_cand_data['indiv_support_direct']['indivs_contribid']
         )],
         'layout': go.Layout(
-            xaxis={
-                'title': 'Contributions from individuals and corporations'
-            },
+            title='Individual contributions to candidate',
             yaxis={
                 'title': 'Amount donated'
             },
-            margin={'l': 40, 'b': 30, 't': 10, 'r': 0},
-            height=450,
-            hovermode='closest'
+            margin={'l': 60, 'b': 130, 't': 30, 'r': 30},
+            height=350
         )
     }
 
@@ -95,6 +104,7 @@ def update_candidate_pac_contribs(candidate_strrep):
     try:
         this_cand_data = cand_data[candidate_strrep]
     except:
+        return {}
         print('Candidate not found in cand_data, using Jon Ossoff')
         this_cand_data = cand_data['Jon Ossoff (D): GA06']
 
@@ -104,22 +114,23 @@ def update_candidate_pac_contribs(candidate_strrep):
             y=-this_cand_data['pac_support_direct']['pac_bad'],
             text=this_cand_data['pac_support_direct']['cmteid'],
             customdata=this_cand_data['pac_support_direct']['cmteid'],
-            marker={'color': 'red'}
+            name='Contributions against',
+            opacity=0.6
         ), go.Bar(
             x=this_cand_data['pac_support_direct']['cmte_name'],
             y=this_cand_data['pac_support_direct']['pac_good'],
             text=this_cand_data['pac_support_direct']['cmteid'],
-            customdata=this_cand_data['pac_support_direct']['cmteid']
+            customdata=this_cand_data['pac_support_direct']['cmteid'],
+            marker={'color': '#1f77b4'},
+            name='Contributions for'
         )],
         'layout': go.Layout(
-            xaxis={
-                'title': 'Contributions from PACs'
-            },
+            title='Candidate contributions from PACs',
             yaxis={
                 'title': 'Amount donated'
             },
-            margin={'l': 40, 'b': 30, 't': 10, 'r': 0},
-            height=450,
+            margin={'l': 60, 'b': 130, 't': 30, 'r': 30},
+            height=350,
             barmode='stack',
             hovermode='closest'
         )
@@ -135,6 +146,7 @@ def update_pacpac_contribs(hoverData, candidate_strrep):
     try:
         this_cand_data = cand_data[candidate_strrep]
     except:
+        return {}
         print('Candidate not found in cand_data, using Jon Ossoff')
         this_cand_data = cand_data['Jon Ossoff (D): GA06']
 
@@ -150,9 +162,6 @@ def update_pacpac_contribs(hoverData, candidate_strrep):
             y=hoverpacdata['amount_received_from']
          )],
          'layout': {
-             'xaxis': {
-                 'title': f'Secondary contributor PACs (via {title})'
-             },
              'yaxis': {
                  'title': 'Amount donated'
              },
@@ -160,10 +169,10 @@ def update_pacpac_contribs(hoverData, candidate_strrep):
                 'x': 0, 'y': 0.85, 'xanchor': 'left', 'yanchor': 'bottom',
                 'xref': 'paper', 'yref': 'paper', 'showarrow': False,
                 'align': 'left', 'bgcolor': 'rgba(255, 255, 255, 0.5)',
-                'text': title
+                'text': 'PAC contributions for ' + title 
              }],
-             'height': 225,
-             'margin': {'l': 20, 'b': 30, 'r': 10, 't': 10}
+             'height': 350,
+             'margin': {'l': 60, 'b': 130, 'r': 30, 't': 30}
          }
      }
              
@@ -175,6 +184,7 @@ def update_pacindiv_contribs(hoverData, candidate_strrep):
     try:
         this_cand_data = cand_data[candidate_strrep]
     except:
+        return {}
         print('Candidate not found in cand_data, using Jon Ossoff')
         this_cand_data = cand_data['Jon Ossoff (D): GA06']
 
@@ -190,9 +200,6 @@ def update_pacindiv_contribs(hoverData, candidate_strrep):
             y=hoverpacdata['total_amt']
          )],
          'layout': {
-             'xaxis': {
-                 'title': f'Secondary contributor individuals (via {title})'
-             },
              'yaxis': {
                  'title': 'Amount donated'
              },
@@ -200,10 +207,10 @@ def update_pacindiv_contribs(hoverData, candidate_strrep):
                 'x': 0, 'y': 0.85, 'xanchor': 'left', 'yanchor': 'bottom',
                 'xref': 'paper', 'yref': 'paper', 'showarrow': False,
                 'align': 'left', 'bgcolor': 'rgba(255, 255, 255, 0.5)',
-                'text': title
+                'text': 'Individual contributions for ' + title
              }],
-             'height': 225,
-             'margin': {'l': 20, 'b': 30, 'r': 10, 't': 10}
+             'height': 350,
+             'margin': {'l': 60, 'b': 120, 'r': 10, 't': 30}
          }
      }
 
