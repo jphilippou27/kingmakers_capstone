@@ -123,17 +123,25 @@ def candidate_interest_against(cand_id):
 
 @application.route("/candidates", methods=["GET"])
 def candidate_query():
-     if request.method == "GET":
-         fn = request.args.get("fn")
-         ln = request.args.get("ln")
-         return jsonify(backend.get_cands_by_name(ln, fn))
-     else:
-         return abort(401)
+    if request.method == "GET":
+        if len(request.args) == 0:
+            return render_template("candlookup.html")
+
+        string = request.args.get("lookup")
+        if string:
+            return jsonify(backend.cand_lookup(string))
+        fn = request.args.get("fn")
+        ln = request.args.get("ln")
+        return jsonify(backend.get_cands_by_name(ln, fn))
+    else:
+        return abort(401)
 
 @application.route("/candview", methods=["GET"])
 def candidate_view():
     if request.method == "GET":
         cand_id = request.args.get("id")
+        if cand_id is None: 
+            render_template("search_cand.html")
         cand_data = backend.get_candidate(cand_id)
         print(cand_data)
         return render_template("candidate.html", cand_id=cand_id, cand_name=cand_data["name"])
@@ -217,6 +225,7 @@ def sankey():
 @application.route("/sankeydata", methods=["GET"])
 def sankeydata():
     return jsonify(backend.get_simple_sankey_by_industry())
+
 
 @application.route("/tableau")
 def tableau():

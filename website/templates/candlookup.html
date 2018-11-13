@@ -1,0 +1,17 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<h3>Candidate Search</h3>
+<div id="searchbox">
+    <input id="search" type="text" name="candname" value="enter name">
+</div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        const cand_id = '{{cand_id}}';
+        const cand_name = '{{cand_name}}';
+    </script>
+    <script type="text/javascript" src=/assets/lookup.js></script>
+{% endblock %}
+
