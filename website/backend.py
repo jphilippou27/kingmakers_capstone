@@ -1,18 +1,16 @@
 
 USE_POSTGRES=False
 
-if not USE_POSTGRES:
-    import sqlite3
-if USE_POSTGRES:
-    import psycopg2
-    import psycopg2.extras
+import sqlite3
+import psycopg2
+import psycopg2.extras
 from flask import Flask
 from flask import g
 import numpy as np
 import pandas as pd
 
 app = Flask(__name__)
-SQLITE = "/home/dbalck/kingmakers_capstone/data/os2/os2.db"
+SQLITE = "/home/daniel/kingmakers_capstone/data/os2/os2.db"
 CONNECTION_STR = "/var/www/production/connection_str"
 ROOT_CERT = "/var/www/production/root.crt"
 

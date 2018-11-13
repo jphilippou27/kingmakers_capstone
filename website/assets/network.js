@@ -1,3 +1,4 @@
+
 var color = d3.scaleOrdinal() // D3 Version 4
   .domain(["D", "R", "I","Industry"])
   .range(["#0000FF","#FF0000" , "#009933" , "#C0C0C0"]);
@@ -25,11 +26,14 @@ var tooltip = d3.select("body")
 	.style("opacity", 0);
 
 //d3.json("function_test_names.json", function(error, graph) {
-d3.json("/networkdata", function(error, graph) {
-  if (error) throw error;
- 	const svg = d3.select('svg'),
-        width = +svg.attr('width'),
-  			height = +svg.attr('height');
+var contentDiv = document.getElementById("content")
+var contentWidth = contentDiv.clientWidth - 40;
+var networkdata = d3.json("/networkdata")
+networkdata.then(function( graph) {
+ 	const svg = d3.select('svg').attr("width", contentWidth).attr("height", 600);
+
+        const width = +svg.attr('width'),
+  		height = +svg.attr('height');
     
 
   
@@ -49,7 +53,6 @@ d3.json("/networkdata", function(error, graph) {
   const R = 6;
 
  
-
 
   let link = svg.selectAll('line')
     .data(graph.links)
@@ -172,51 +175,44 @@ function releasenode(d) {
 							.domain(["D", "R", "I","Industry"])
 							.range(["#0000FF","#FF0000" , "#009933" , "#C0C0C0"]);
 
-
 svg.append("g")
   .attr("class", "legendSequential")
   .attr("transform", "translate("+(width-140)+","+(height-300)+")");
 
-var legendSequential = d3.legendColor()
-    .shapeWidth(30)
-    .cells(11)
-    .orient("vertical")
-		.title("Group number by color:")
-		.titleWidth(100)
-    .scale(sequentialScale) 
+//var legendSequential = d3.legendColor().shapeWidth(30).cells(11).orient("vertical").title("Group number by color:").titleWidth(100).scale(sequentialScale);
 
-svg.select(".legendSequential")
-  .call(legendSequential); 
+//svg.select(".legendSequential")
+  //.call(legendSequential); 
 
   
 })
 //trying to add search
-var optArray = [];
-for (var i = 0; i < graph.nodes.length - 1; i++) {
-    optArray.push(graph.nodes[i].name);
-}
-optArray = optArray.sort();
-$(function () {
-    $("#search").autocomplete({
-        source: optArray
-    });
-});
-function searchNode() {
-    //find the node
-    var selectedVal = document.getElementById('search').value;
-    var node = svg.selectAll(".node");
-    if (selectedVal == "none") {
-        node.style("stroke", "white").style("stroke-width", "1");
-    } else {
-        var selected = node.filter(function (d, i) {
-            return d.name != selectedVal;
-        });
-        selected.style("opacity", "0");
-        var link = svg.selectAll(".link")
-        link.style("opacity", "0");
-        d3.selectAll(".node, .link").transition()
-            .duration(5000)
-            .style("opacity", 1);
-    }
-}
-
+//var optArray = [];
+//for (var i = 0; i < graph.nodes.length - 1; i++) {
+//    optArray.push(graph.nodes[i].name);
+//}
+//optArray = optArray.sort();
+//$(function () {
+//    $("#search").autocomplete({
+//        source: optArray
+//    });
+//});
+//function searchNode() {
+//    //find the node
+//    var selectedVal = document.getElementById('search').value;
+//    var node = svg.selectAll(".node");
+//    if (selectedVal == "none") {
+//        node.style("stroke", "white").style("stroke-width", "1");
+//    } else {
+//        var selected = node.filter(function (d, i) {
+//            return d.name != selectedVal;
+//        });
+//        selected.style("opacity", "0");
+//        var link = svg.selectAll(".link")
+//        link.style("opacity", "0");
+//        d3.selectAll(".node, .link").transition()
+//            .duration(5000)
+//            .style("opacity", 1);
+//    }
+//}
+//
