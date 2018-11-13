@@ -9,6 +9,7 @@ if USE_POSTGRES:
 from flask import Flask
 from flask import g
 import numpy as np
+import pandas as pd
 
 app = Flask(__name__)
 SQLITE = "/home/dbalck/kingmakers_capstone/data/os2/os2.db"
@@ -134,3 +135,77 @@ def get_simple_sankey_by_industry():
 def cand_lookup(name):
     res = query_db("select name, id from cand where name like ?", ["%" + name + "%"])
     return res
+
+def make_links(dataset):
+    """Create source and link pairs for the network graph from a pandas dataframe
+    
+    'INPUT: aggregated pandas dataframe with these columns:  sum(amount) ,feccandid, bioguide_id, firstlastp, party, Industry
+    'OUTPUT: JSON format of links (ex: {"value": 20000.0, "source": 1, "target": 96},
+    """
+    
+    #create a list of target and source values
+    links_list = list(dataset.apply(lambda row: {"source": row['industry'], "target": row['firstlastp'], "value": row['contr_amt']}, axis=1))
+    print(links_list)
+    #make an index of the values
+    unique_ids = pd.Index(dataset['industry']
+                      .append(dataset['firstlastp'])
+                      .reset_index(drop=True).unique())
+    #print(unique_ids)
+    #convert source and target values to numbers for d3.v3
+    links_list_fv = []
+    for link in links_list:
+        record = {"value":link['value'], "source": (unique_ids.get_loc(link['source'])+1),
+         "target": (unique_ids.get_loc(link['target'])+1)}
+        links_list_fv.append(record)
+    return (links_list)
+
+def make_nodes(dataset):
+    """Create nodes for the network graph from a pandas dataframe
+    
+    'INPUT: aggregated pandas dataframe with these columns:  sum(amount) ,feccandid, bioguide_id, firstlastp, party, Industry
+    'OUTPUT: JSON format of links (ex: {'name': 'Misc Agriculture', 'group': 'Industry', 'pic_id': 'flower'},
+    """
+    #contributions nodes
+    df_nodes_I = pd.DataFrame(dataset.industry.unique())
+    df_nodes_I["party"] = "Industry"
+    df_nodes_I['bioguide_id'] = 'flower'
+    df_nodes_I.columns = ['firstlastp' if x== 0 else x for x in df_nodes_I.columns]
+    df_nodes_I.head()
+    
+    #same thing for politicians
+    df_nodes_P = dataset[['firstlastp', 'party', 'bioguide_id']].drop_duplicates()
+    df_nodes_P.head()
+    
+    #merge nodes
+    df_nodes = pd.concat([df_nodes_I, df_nodes_P])
+    
+    #Convert to list
+    node_list = list(df_nodes.apply(lambda row: {"name": row['firstlastp'], "group": row['party'], "pic_id": row['bioguide_id']}, axis=1))
+    
+    #export
+    return(node_list)
+def merge_nodes_links(links_list_fv, node_list):
+     #merge
+    json_prep = {"nodes":node_list, "links":links_list_fv}
+    json_prep.keys()
+    
+    #convert to json
+    import json
+    json_dump = json.dumps(json_prep, indent=1)
+    return(json_dump)
+
+def get_network_by_industry(firstlastp):
+    cand = ("'"+ str(firstlastp) +"'")
+    row = query_db(f"SELECT * FROM network_industry t1 LEFT JOIN (select distinct(Industry) FROM network_industry \
+                            WHERE firstlastp = {cand})sub ON t1.Industry = sub.Industry \
+                            WHERE (sub.Industry IS NOT NULL) and (t1.contr_amt> 1)", cand)
+    df_network_viz_fv = pd.DataFrame([i.copy() for i in row])
+    links_list_fv = make_links(df_network_viz_fv)
+    node_list = make_nodes(df_network_viz_fv)
+    network_json = merge_nodes_links(links_list_fv, node_list)
+    
+    return (network_json)
+
+
+
+
