@@ -9,6 +9,7 @@
     <script src="https://unpkg.com/d3-path@1"></script>
     <script src="https://unpkg.com/d3-shape@1"></script>
     <script src="https://unpkg.com/d3-sankey@0"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.13.0/d3-legend.js"></script>
     <!--<script type="text/javascript" src={{ url_for('static', filename='sankey.js') }}></script> -->
 <style>
 .node rect {
@@ -43,7 +44,7 @@
     </div>
     <div style="margin-left:10%">
         <div class="w3-container">
-            <div id="content" style="margin-top:10%">
+            <div id="content" >
                 {% block content %}  
                 {% endblock %}
             </div>

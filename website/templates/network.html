@@ -1,11 +1,11 @@
 {% extends 'index.html' %}
 
 {% block content %}
+<h2>Politician Network Visualization</h2>
 <svg id="svg"></svg>
 {% endblock %}
 
 {% block script %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.13.0/d3-legend.js"></script>
+<link rel="stylesheet" href="/assets/network_style.css">
 <script type="text/javascript" src="/assets/network.js"></script>
-<script type="text/css" src="/assets/network_style.css"></script>
 {% endblock %}

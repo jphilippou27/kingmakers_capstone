@@ -149,7 +149,7 @@ def make_links(dataset):
     
     #create a list of target and source values
     links_list = list(dataset.apply(lambda row: {"source": row['industry'], "target": row['firstlastp'], "value": row['contr_amt']}, axis=1))
-    print(links_list)
+    #print(links_list)
     #make an index of the values
     unique_ids = pd.Index(dataset['industry']
                       .append(dataset['firstlastp'])

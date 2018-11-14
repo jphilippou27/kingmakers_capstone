@@ -1,17 +1,17 @@
-	.link {
+.link {
 	  stroke: #c1c1c1;
     stroke-width: 2px;
     pointer-events: all;
-	}
+}
 
-  .node circle {
-	  pointer-events: all;
-	  stroke: #777;
-	  stroke-width: 1px;
-	}
+.node circle {
+	pointer-events: all;
+	stroke: #777;
+	stroke-width: 1px;
+}
   
   
-	div.tooltip {
+div.tooltip {
     position: absolute;
     background-color: white;
     max-width; 200px;
