@@ -1,3 +1,4 @@
+
 var color = d3.scaleOrdinal() // D3 Version 4
   .domain(["D", "R", "I","Industry"])
   .range(["#0000FF","#FF0000" , "#009933" , "#C0C0C0"]);
@@ -25,11 +26,14 @@ var tooltip = d3.select("body")
 	.style("opacity", 0);
 
 //d3.json("function_test_names.json", function(error, graph) {
-d3.json("/networkdata", function(error, graph) {
-  if (error) throw error;
- 	const svg = d3.select('svg'),
-        width = +svg.attr('width'),
-  			height = +svg.attr('height');
+var contentDiv = document.getElementById("content")
+var contentWidth = contentDiv.clientWidth - 40;
+var networkdata = d3.json("/networkdata")
+networkdata.then(function( graph) {
+ 	const svg = d3.select('svg').attr("width", contentWidth).attr("height", 800);
+
+        const width = +svg.attr('width'),
+  		height = +svg.attr('height');
     
 
   
@@ -41,6 +45,7 @@ d3.json("/networkdata", function(error, graph) {
     .force('link', d3.forceLink().id(d => d.name))
     .force('charge', d3.forceManyBody())
     .force('center', d3.forceCenter(width / 2, height / 2))
+    //.force('center', d3.forceCenter())
     .on('tick', ticked);
 
   simulation.force('link')
@@ -49,7 +54,6 @@ d3.json("/networkdata", function(error, graph) {
   const R = 6;
 
  
-
 
   let link = svg.selectAll('line')
     .data(graph.links)
@@ -172,21 +176,15 @@ function releasenode(d) {
 							.domain(["D", "R", "I","Industry"])
 							.range(["#0000FF","#FF0000" , "#009933" , "#C0C0C0"]);
 
-
 svg.append("g")
   .attr("class", "legendSequential")
   .attr("transform", "translate("+(width-140)+","+(height-300)+")");
 
-var legendSequential = d3.legendColor()
-    .shapeWidth(30)
-    .cells(11)
-    .orient("vertical")
-		.title("Group number by color:")
-		.titleWidth(100)
-    .scale(sequentialScale) 
+var legendSequential = d3.legendColor().shapeWidth(30).cells(11).scale(sequentialScale).title("Group number by color").orient("vertical");
+//.orient("vertical").title("Group number by color:").titleWidth(100).scale(sequentialScale);
+//var legendSequential = d3.legendColor().title("Group number by color:").titleWidth(100).scale(sequentialScale);
 
-svg.select(".legendSequential")
-  .call(legendSequential); 
+svg.select(".legendSequential").call(legendSequential); 
 
   
 })
@@ -219,4 +217,3 @@ svg.select(".legendSequential")
 //            .style("opacity", 1);
 //    }
 //}
-
