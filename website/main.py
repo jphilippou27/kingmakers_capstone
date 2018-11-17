@@ -121,6 +121,17 @@ def candidate_interest_against(cand_id):
      else:
          return abort(401)
 
+@application.route("/candidates/<cand_id>/indiv/for", methods=["GET", "PUT"])
+def candidate_individual_support(cand_id):
+     if request.method == "GET":
+         return jsonify(backend.get_individual_support_direct(cand_id))
+     elif request.method == "PUT":
+         pass
+     elif request.method == "OPTIONS":
+         pass
+     else:
+         return abort(401)
+
 @application.route("/candidates", methods=["GET"])
 def candidate_query():
     if request.method == "GET":
