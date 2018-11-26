@@ -99,18 +99,23 @@ lib.sankeyModule = function() {
 
 
 var generateNL = function(rawdata) {
+    for (i = 0; i < rawdata.length; i++) {
+        rawdata[i].target =  rawdata[i].target + " (" + rawdata[i].party + ")"
+    }
     var n1 = new Set();
+    console.log(rawdata);
     for (i = 0; i < rawdata.length; i++) {
         n1.add(rawdata[i].source)
         n1.add(rawdata[i].target)
     }
+    console.log(n1);
     var l1 = {}
     var counter = 0
     var n2 = []
     n1.forEach(function(value) {
-        if (value.includes("(D)")) {
+        if (value.includes("(DEM)")) {
             n2[counter] = {"id": value, "color": 0.9}
-        } else if (value.includes("(R)")) {
+        } else if (value.includes("(REP)")) {
             n2[counter] = {"id": value, "color": 0.1}
         } else {
             n2[counter] = {"id": value}
