@@ -29,9 +29,10 @@ def init_dash(flask_app):
     stylesheets = ['dash/style.css']
     static_css_route = '/static/'
 
-    external_stylesheets = ['http://169.62.194.155:8050/static/style.css']
+    #external_stylesheets = ['http://169.62.194.155:8050/static/style.css']
     #app = dash.Dash(__name__, server=application)
-    app = dash.Dash(__name__, url_base_pathname='/dash/',  external_stylesheets=external_stylesheets, server=flask_app)
+    #app = dash.Dash(__name__, url_base_pathname='/dash/',  external_stylesheets=external_stylesheets, server=flask_app)
+    app = dash.Dash(__name__, url_base_pathname='/dash/', server=flask_app)
 
     available_candidates = all_2018_cands['strrep'].unique()
 
@@ -97,7 +98,7 @@ def init_dash(flask_app):
         [dash.dependencies.Input('crossfilter-candidate', 'value')])
     def update_candidate_header(candidate_strrep):
         if candidate_strrep == 'Jon Ossoff (D): GA06':
-            return 'data:image/png;base64,{}'.format(base64.b64encode(open('ossoff.jpg', 'rb').read()).decode('utf-8', 'ignore'))
+            return 'data:image/png;base64,{}'.format(base64.b64encode(open('dash/ossoff.jpg', 'rb').read()).decode('utf-8', 'ignore'))
         else:
             return {}
 
