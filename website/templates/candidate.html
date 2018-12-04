@@ -2,13 +2,13 @@
 
 {% block content %}
 <div class="w3-row">
-    <div class="w3-col m6 l6">
-        <p>Spending data here</p>
-        <svg></svg>
+    <div class="w3-col m6 l6 w3-card-4 w3-panel" id="content">
+        <header class="w3-container"><h2>Direct Contributions to {{cand_name}}</h2></header>
+        <svg id="chart1"></svg>
     </div>
     <div class="w3-col m6 l6">
         <p>Other data here</p>
-        <svg></svg>
+        <svg id="chart2"></svg> 
     </div>
 </div>
 <div class="w3-card-4 w3-panel">
@@ -25,8 +25,10 @@
     <script>
         const cand_id = '{{cand_id}}';
         const cand_name = '{{cand_name}}';
+        const data_endpoint = '/tree/' + cand_id;
     </script>
     <script type="text/javascript" src=/assets/candidate.js></script>
+    <script type="text/javascript" src=/assets/sankey.js></script>
 {% endblock %}
 
 

@@ -1,9 +1,13 @@
 var lib = lib || {};
 
-lib.sankeyModule = function() {
+lib.sankeyModule = function(type) {
     var contentDiv = document.getElementById("content")
-    var height = 1600;
-    //var width = contentDiv.clientWidth;
+    if (type == "tree") {
+        var height = 700;
+        //var height = contentDiv.clientHeight - 40;
+    } else {
+        var height = 1000;
+    }
     var data = [];
     const color = d3.scaleOrdinal(d3.schemeCategory10);
     const politicolor = d3.scaleSequential(d3.interpolateRdBu);
@@ -22,10 +26,11 @@ lib.sankeyModule = function() {
 
     function plot_by_industry_() {
         var width = contentDiv.clientWidth - 40;
+        var width = contentDiv.clientWidth - 40;
         const nodes_with_names = data.nodes
         svg
             .attr("width", width)
-            .attr("height", height);
+            .attr("height", height + 30);
         console.log(svg);
 
         const sk = d3.sankey()
@@ -98,9 +103,12 @@ lib.sankeyModule = function() {
 };
 
 
-var generateNL = function(rawdata) {
-    for (i = 0; i < rawdata.length; i++) {
-        rawdata[i].target =  rawdata[i].target + " (" + rawdata[i].party + ")"
+var generateNL = function(rawdata, include_parties) {
+    if (include_parties) {
+        console.log("using party info")
+        for (i = 0; i < rawdata.length; i++) {
+            rawdata[i].target =  rawdata[i].target + " (" + rawdata[i].party + ")"
+        }
     }
     var n1 = new Set();
     console.log(rawdata);
@@ -112,17 +120,25 @@ var generateNL = function(rawdata) {
     var l1 = {}
     var counter = 0
     var n2 = []
-    n1.forEach(function(value) {
-        if (value.includes("(DEM)")) {
-            n2[counter] = {"id": value, "color": 0.9}
-        } else if (value.includes("(REP)")) {
-            n2[counter] = {"id": value, "color": 0.1}
-        } else {
+    if (include_parties) {
+        n1.forEach(function(value) {
+            if (value.includes("(DEM)")) {
+                n2[counter] = {"id": value, "color": 0.9}
+            } else if (value.includes("(REP)")) {
+                n2[counter] = {"id": value, "color": 0.1}
+            } else {
+                n2[counter] = {"id": value}
+            }
+            l1[value] = counter;
+            counter++;
+        });
+    } else {
+        n1.forEach(function(value) {
             n2[counter] = {"id": value}
-        }
-        l1[value] = counter;
-        counter++;
-    });
+            l1[value] = counter;
+            counter++;
+        });
+    }
     l2 = []
     var counter = 0
     rawdata.forEach(function(value) {
@@ -135,10 +151,16 @@ var generateNL = function(rawdata) {
     return {"nodes": n2, "links": l2 }
 }
 
-var sankeydata = d3.json("/sankeydata")
+
+var sankeydata = d3.json(data_endpoint)
 sankeydata.then(function(d){
-    var clean_data = generateNL(d)
-    var sankey = lib.sankeyModule();
+    if (data_endpoint == "/tree/" + cand_id) {
+        var clean_data = generateNL(d, false)
+        var sankey = lib.sankeyModule("tree");
+    } else {
+        var clean_data = generateNL(d, true)
+        var sankey = lib.sankeyModule("full");
+    }
     sankey.industry_data(clean_data)
     sankey.plot_by_industry()
 });

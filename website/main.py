@@ -249,6 +249,10 @@ def networkdata():
 def tableau():
     return render_template("tableau.html")
 
+@application.route("/tree/<cand_id>")
+def get_candidate_tree(cand_id):
+    return jsonify(backend.get_candidate_tree(cand_id))
+
 if __name__ == "__main__":
 
     #with application.app_context():
