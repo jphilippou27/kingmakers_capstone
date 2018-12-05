@@ -77,6 +77,10 @@ def candidate(cand_id):
      else:
          return abort(401)
 
+@application.route("/candidates/<cand_id>/tree")
+def get_candidate_tree(cand_id):
+    return jsonify(backend.get_candidate_tree(cand_id))
+
 @application.route("/candidates/<cand_id>/ts/for", methods=["GET", "PUT"])
 def candidate_ts_for(cand_id):
      if request.method == "GET":
@@ -249,9 +253,6 @@ def networkdata():
 def tableau():
     return render_template("tableau.html")
 
-@application.route("/tree/<cand_id>")
-def get_candidate_tree(cand_id):
-    return jsonify(backend.get_candidate_tree(cand_id))
 
 if __name__ == "__main__":
 

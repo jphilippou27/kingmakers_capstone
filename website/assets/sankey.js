@@ -154,7 +154,7 @@ var generateNL = function(rawdata, include_parties) {
 
 var sankeydata = d3.json(data_endpoint)
 sankeydata.then(function(d){
-    if (data_endpoint == "/tree/" + cand_id) {
+    if (data_endpoint.startsWith("/candidates")) {
         var clean_data = generateNL(d, false)
         var sankey = lib.sankeyModule("tree");
     } else {
