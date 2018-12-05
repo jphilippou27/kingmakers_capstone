@@ -1,9 +1,13 @@
 var lib = lib || {};
 
 lib.waterfallModule = function() {
-    var contentDiv = document.getElementById("content")
-    var width = contentDiv.clientWidth - 40;
+    var contentDiv = document.getElementById("waterfall-content")
+    var width = contentDiv.clientWidth;
     var height = 1000;
+    var margin = {top: 20, right: 30, bottom: 30, left: 40}, 
+        width = width - margin.left - margin.right, 
+        height = 500 - margin.top - margin.bottom,
+        padding = 0.3;
     var data = [];
     const color = d3.scaleOrdinal(d3.schemeCategory10);
     const politicolor = d3.scaleSequential(d3.interpolateRdBu);
@@ -22,20 +26,16 @@ lib.waterfallModule = function() {
 
     function plot_() {
 
-        var x = d3.scale.ordinal()
-            .rangeRoundBands([0, width], padding);
+        var x = d3.scaleBand()
+            .range([0, width])
+            .round([padding]);
 
-        var y = d3.scale.linear()
+        var y = d3.scaleLinear()
             .range([height, 0]);
 
-        var xAxis = d3.svg.axis()
-            .scale(x)
-            .orient("bottom");
+        var xAxis = d3.axisBottom(x);
 
-        var yAxis = d3.svg.axis()
-            .scale(y)
-            .orient("left")
-            .tickFormat(function(d) { return dollarFormatter(d); });
+        var yAxis = d3.axisLeft(y);
 
         var chart = d3.select("#waterfall")
             .attr("width", width + margin.left + margin.right)
@@ -45,22 +45,22 @@ lib.waterfallModule = function() {
 
         // Transform data (i.e., finding cumulative values and total) for easier charting
         var cumulative = 0;
+        console.log(data)
         for (var i = 0; i < data.length; i++) {
-        data[i].start = cumulative;
-        cumulative += data[i].value;
-        data[i].end = cumulative;
-
-        data[i].class = ( data[i].value >= 0 ) ? 'positive' : 'negative'
+            data[i].start = cumulative;
+            cumulative += data[i].amt;
+            data[i].end = cumulative;
+            data[i].class = ( data[i].amt >= 0 ) ? 'positive' : 'negative'
         }
         data.push({
-        name: 'Total',
+        group: 'Total',
         end: cumulative,
         start: 0,
         class: 'total'
         });
 
-        x.domain(data.map(function(d) { return d.name; }));
-        y.domain([0, d3.max(data, function(d) { return d.end; })]);
+        x.domain(data.map(function(d) { return d.group; }));
+        y.domain([0, d3.max(data, function(d) { return d.amt; })]);
 
         chart.append("g")
           .attr("class", "x axis")
@@ -75,25 +75,25 @@ lib.waterfallModule = function() {
           .data(data)
         .enter().append("g")
           .attr("class", function(d) { return "bar " + d.class })
-          .attr("transform", function(d) { return "translate(" + x(d.name) + ",0)"; });
+          .attr("transform", function(d) { return "translate(" + x(d.group) + ",0)"; });
 
         bar.append("rect")
           .attr("y", function(d) { return y( Math.max(d.start, d.end) ); })
           .attr("height", function(d) { return Math.abs( y(d.start) - y(d.end) ); })
-          .attr("width", x.rangeBand());
+          .attr("width", x.bandwidth());
 
         bar.append("text")
-          .attr("x", x.rangeBand() / 2)
+          .attr("x", x.bandwidth() / 2)
           .attr("y", function(d) { return y(d.end) + 5; })
-          .attr("dy", function(d) { return ((d.class=='negative') ? '-' : '') + ".75em" })
-          .text(function(d) { return dollarFormatter(d.end - d.start);});
+          .attr("dy", function(d) { return ((d.class=='negative') ? '-' : '') + ".75em" });
+          //.text(function(d) { return dollarFormatter(d.end - d.start);});
 
         bar.filter(function(d) { return d.class != "total" }).append("line")
           .attr("class", "connector")
-          .attr("x1", x.rangeBand() + 5 )
+          .attr("x1", x.bandwidth() + 5 )
           .attr("y1", function(d) { return y(d.end) } )
-          .attr("x2", x.rangeBand() / ( 1 - padding) - 5 )
-          .attr("y2", function(d) { return y(d.end) } )
+          .attr("x2", x.bandwidth() / ( 1 - padding) - 5 )
+          .attr("y2", function(d) { return y(d.end) } );
     }
 
     return {
@@ -103,9 +103,9 @@ lib.waterfallModule = function() {
 };
 
 
-var waterfallData = d3.json(data_endpoint)
+var waterfallData = d3.json(wf_endpoint)
 waterfallData.then(function(d){
     var waterfall = lib.waterfallModule();
     waterfall.data(d)
-    waterfall.plot()
+    waterfall.plot();
 });

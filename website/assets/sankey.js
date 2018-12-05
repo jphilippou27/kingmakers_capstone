@@ -1,7 +1,7 @@
 var lib = lib || {};
 
 lib.sankeyModule = function(type) {
-    var contentDiv = document.getElementById("content")
+    var contentDiv = document.getElementById("sankey-content")
     if (type == "tree") {
         var height = 700;
         //var height = contentDiv.clientHeight - 40;

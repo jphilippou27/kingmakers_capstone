@@ -1,21 +1,55 @@
 {% extends 'index.html' %}
 
 {% block content %}
+<style>
+.bar.total rect {
+  fill: steelblue;
+}
+
+.bar.positive rect {
+  fill: darkolivegreen;
+}
+.bar.negative rect {
+  fill: crimson;
+}
+
+.bar line.connector {
+  stroke: grey;
+  stroke-dasharray: 3;
+}
+
+.bar text {
+  fill: white;
+  font: 12px sans-serif;
+  text-anchor: middle;
+}
+
+.axis text {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+</style>
 <div class="w3-row">
-    <div class="w3-col m6 l6 w3-card-4 w3-panel" id="content">
+    <div class="w3-col m6 l6 w3-card-4 w3-panel" id="sankey-content">
         <header class="w3-container"><h2>Direct Contributions to {{cand_name}}</h2></header>
         <svg id="chart1"></svg>
     </div>
-    <div class="w3-col m6 l6">
+    <div class="w3-col m6 l6 w3-card-4 w3-panel" id="waterfall-content">
         <p>Other data here</p>
-        <svg id="chart2"></svg> 
+        <svg id="waterfall"></svg> 
     </div>
 </div>
-<div class="w3-card-4 w3-panel">
+<div class="w3-card-4 w3-panel" id="content">
     <header class="w3-container"><h2>PAC Spending for {{cand_name}}</h2></header>
     <svg id="timeseries_for"></svg>
 </div>
-<div class="w3-card-4 w3-panel">
+<div class="w3-card-4 w3-panel" id="content">
     <header class="w3-container"><h2>PAC Spending against {{cand_name}}</h2></header>
     <svg id="timeseries_against"></svg>
 </div>
@@ -25,10 +59,12 @@
     <script>
         const cand_id = '{{cand_id}}';
         const cand_name = '{{cand_name}}';
-        const data_endpoint = '/candidates/' + cand_id + '/tree';
+        const data_endpoint = '/candidates/' + cand_id + '/sk';
+        const wf_endpoint = '/candidates/' + cand_id + '/wf';
     </script>
     <script type="text/javascript" src=/assets/candidate.js></script>
     <script type="text/javascript" src=/assets/sankey.js></script>
+    <script type="text/javascript" src=/assets/waterfall.js></script>
 {% endblock %}
 
 

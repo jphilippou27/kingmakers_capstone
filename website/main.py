@@ -77,9 +77,13 @@ def candidate(cand_id):
      else:
          return abort(401)
 
-@application.route("/candidates/<cand_id>/tree")
+@application.route("/candidates/<cand_id>/sk")
 def get_candidate_tree(cand_id):
     return jsonify(backend.get_candidate_tree(cand_id))
+
+@application.route("/candidates/<cand_id>/wf")
+def get_waterfall(cand_id):
+    return jsonify(backend.get_waterfall_data(cand_id))
 
 @application.route("/candidates/<cand_id>/ts/for", methods=["GET", "PUT"])
 def candidate_ts_for(cand_id):
