@@ -9,7 +9,7 @@
 <p>In the 2016 election, nearly <strong>$6.6 billion</strong> was raised and spent by candidates campaigning for Federal office. <!--This figure includes money coming from individuals, PACs, Super PACs, and other organizations (including "dark-money" organizations such as 501(c)(4) and 527 committees). We can orient ourselves in the political landscape by digging into where this money comes from and where it goes.</p>
 <p>-->
 We start by asking: Does raising more money
-than your opponent increase your chances of winning an election? To help answer this question, we immersed ourselves in the data and began exploring.</p>
+than your opponent increase your chances of winning an election?</p>
 <p>Data released for the 2016 election by the Federal Election Commission show that in a shocking <strong>94%</strong> of races, the candidate who raised the most money also won the election. The effects of outraising your opponent are shown below by varying degrees:</p>
 <div style='margin:auto; width:85%;'><img src='static/figure-1.png' alt='Graph showing relationship between overall percentage raised in each election vs. chances of winning election. As fraction raised increases, so do the chances of winning.'></div>
 <p>We see above that more money corresponds to higher chances of winning an election. And it's no small effect. Below, we show two very different races, one with a significant partisan advantage and one highly competitive:
@@ -17,12 +17,52 @@ than your opponent increase your chances of winning an election? To help answer 
 <p>On the left, the Alaska senate race was a fundraising blowout by Lisa Murkowski, who also handily won the election. Despite the significant partisan advantage, her campaign still raised upwards of $5 million, while Democrats barely put up a fight for her seat. On the right, the CA-21 race was much closer, with David Valadao narrowly outraising his competition and winning the election.</p>
 <p>This isn't always the case. Sometimes a candidate wins without having the most money. However, the fundraising effect is strong enough to warrant further investigation.</p>
 <h1>So we built Kingmakers.</h1>
-<p>Kingmakers is a tool which guides you through the campaign finances of your elected representatives. This data, which the Federal Election Commission (FEC) makes publicly available, shows which individuals, PACs, and industries contribute to which campaigns, and how much is being contributed. There are many aspects to this data, so we've made several viewers available.</p>
+<p>Kingmakers is a tool which guides you through the campaign finances of your elected representatives. This data, which the Federal Election Commission (FEC) makes publicly available, shows which individuals, PACs, and industries contribute to which campaigns, and how much is being contributed. There are many aspects to this data, so we've created several visualizations to help you find your way around.</p>
 
-<h4>Candidates</h4>
-<p>This viz gives a time-series analysis of contributions to and spending against canddiates during the 2018 US Midterm elections</p>
-<h4>Sankey</h4>
-<p>This viz gives an profile of industry spending in politics. The top 100 contributions, and their recipients are shown</p>
+<a href='/candidates'>
+    <div class='row'>
+    <div class='column left'>
+        <img src='static/candidate_prev.png'>
+    </div>
+    <div class='column right'>
+        <h4>Candidates</h4>
+        <p>See the campaign contributions made to each candidate as well as their biggest donors.</p>
+    </div>
+</div>
+</a>
+<a href='/sankey'>
+<div class='row'>
+    <div class='column left'>
+        <img src='static/sankey_prev.png'>
+    </div>
+    <div class='column right'>
+        <h4>Sankey</h4>
+        <p>A profile of industry spending in politics. The top 100 contributions and their recipients are shown through linkages which show the funding priorities of different industries.</p>
+    </div>
+</div>
+</a>
+<a href='/network'>
+<div class='row'>
+    <div class='column left'>
+        <img src='static/network_prev.png'>
+    </div>
+    <div class='column right'>
+        <h4>Network</h4>
+        <p>Explore the interconnections between industry donations and politicians in a guided tour of campaign contributions. We highlight a few interesting cases and allow you explore the data yourself.</p>
+    </div>
+</div>
+</a>
+<a href='/tableau'>
+<div class='row'>
+    <div class='column left'>
+        <img src='static/geography_prev.png'>
+    </div>
+    <div class='column right'>
+        <h4>Geographic</h4>
+        <p>Explore top contributions by geographic origin. Each state shows the primary industries by total amount originating in that state.</p>
+    </div>
+</div>
+</a>
 <h4>About Us</h4>
 <p>We are students in the Masters of Information and Data Science at UC Berkeley: Matt Proetsch, Jennifer Phillippou, Daniel Balck, and Qing Zhang</p>
 {% endblock %}
