@@ -1,8 +1,46 @@
+d3.select("#search").on("click", function(d){
+    d3.select(this).attr("value", "")
+});
+
 d3.select("#search").on('keyup', function(d) {
     var string = document.getElementById("search").value
+    if (string == "") {
+        d3.select("#searchbox").selectAll("a").remove();
+    }
     var possibilites = d3.json("/candidates?lookup=" + string);
     possibilites.then(function(d) { 
         console.log(d);
+        d.map(function(d) {
+            d.name = d.name.toLowerCase();
+            lastfirst = d.name.split(",");
+            lastname = lastfirst[0].toLowerCase();
+            lastname = lastname.charAt(0).toUpperCase() + lastname.slice(1);
+            var firstmiddle = "";
+            if (lastfirst.length > 1) {
+                firstmiddle = lastfirst[1].toLowerCase();
+                firstmiddle = firstmiddle.replace(/(^\w|\"\w|\s\w)/g, function(word) {
+                    return word.toUpperCase();
+                });
+            }
+            raceType = d.id.charAt(0);
+            console.log(raceType)
+            switch(raceType) {
+                case "P":
+                    d.name = firstmiddle + " " + lastname + " (Pres. Candidate)";
+                    break;
+                case "H":
+                    d.name = firstmiddle + " " + lastname + " (House Candidate)";
+                    break;
+                case "S":
+                    d.name = firstmiddle + " " + lastname + " (Senate Candidate)";
+                    break;
+                default:
+                    d.name = firstmiddle + " " + lastname;
+                    break;
+            }
+
+        });
+
         d3.select("#dropdown").remove();
         var links = d3.select("#searchbox")
             .append("div")
@@ -21,7 +59,7 @@ d3.select("#search").on('keyup', function(d) {
             .attr("href", d => "/candview?id=" + d.id)
             .attr("class", "w3-bar-item w3-button")
             .text(d => d.name)
-            .exit().remove()
+            .exit().remove();
             
         //console.log(d);
     });

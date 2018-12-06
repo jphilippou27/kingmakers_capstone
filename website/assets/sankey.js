@@ -39,7 +39,7 @@ lib.sankeyModule = function(type) {
             .size([width, height])
             .nodeWidth(20)
             .nodePadding(10)
-            .nodeAlign(d3.sankeyCenter);
+            .nodeAlign(d3.sankeyJustify);
         let graph = sk(data)
 
         links
