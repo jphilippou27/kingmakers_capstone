@@ -237,9 +237,13 @@ def income():
         return jsonify(backend.get_income_by_industry())
     return None
 
-@application.route("/sankey", methods=["GET"])
-def sankey():
-    return render_template("sankey.html")
+@application.route("/industries", methods=["GET"])
+def industries():
+    return render_template("industries.html")
+
+@application.route("/industries/data", methods=["GET"])
+def get_industry_data():
+    return jsonify(backend.get_industries_by_party())
 
 @application.route("/sankeydata", methods=["GET"])
 def sankeydata():
@@ -259,11 +263,10 @@ def tableau():
 
 
 if __name__ == "__main__":
-
-    #with application.app_context():
-        #db = backend.get_sqlite()
-	#application.run(host="0.0.0.0")
-    app = index2.init_dash(application)
-    app.run_server(host="0.0.0.0")
+    with application.app_context():
+        db = backend.get_pg()
+    application.run(host="0.0.0.0")
+    #app = index2.init_dash(application)
+    #application.run(host="0.0.0.0")
 
 

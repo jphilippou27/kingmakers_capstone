@@ -1,0 +1,16 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<div id="sankey-content">
+    <h2>Industry to Candidate Sankey Diagram</h2>
+    <svg id="sankey"></svg>
+<div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        const data_endpoint = '/industries/data';
+    </script>
+<script type="text/javascript" src="static/sankey.js"></script>
+{% endblock %}
+

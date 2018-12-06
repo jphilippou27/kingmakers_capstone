@@ -39,7 +39,7 @@
     <div class="w3-panel w3-col m6 l6" >
         <div class="w3-card-4 " id="sankey-content">
             <header class="w3-container"><h2>Direct Contributions to {{cand_name}}</h2></header>
-            <svg id="chart1"></svg>
+            <svg id="sankey"></svg>
         </div>
     </div>
     <div class="w3-panel w3-col m6 l6" >
@@ -70,9 +70,9 @@
         const data_endpoint = '/candidates/' + cand_id + '/sk';
         const wf_endpoint = '/candidates/' + cand_id + '/wf';
     </script>
-    <script type="text/javascript" src=/assets/candidate.js></script>
-    <script type="text/javascript" src=/assets/sankey.js></script>
-    <script type="text/javascript" src=/assets/waterfall.js></script>
+    <script type="text/javascript" src=static/candidate.js></script>
+    <script type="text/javascript" src=static/sankey.js></script>
+    <script type="text/javascript" src=static/waterfall.js></script>
 {% endblock %}
 
 

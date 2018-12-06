@@ -1,13 +1,17 @@
 var lib = lib || {};
 
-lib.sankeyModule = function() {
-    var contentDiv = document.getElementById("content")
-    var height = 1600;
-    //var width = contentDiv.clientWidth;
+lib.sankeyModule = function(type) {
+    var contentDiv = document.getElementById("sankey-content")
+    if (type == "tree") {
+        var height = 700;
+        //var height = contentDiv.clientHeight - 40;
+    } else {
+        var height = 1000;
+    }
     var data = [];
     const color = d3.scaleOrdinal(d3.schemeCategory10);
     const politicolor = d3.scaleSequential(d3.interpolateRdBu);
-    var svg = d3.select("#chart1");
+    var svg = d3.select("#sankey");
     let links = svg.append("g");
     var nodes = svg.append("g");
     var titles  = svg.append("g")
@@ -22,10 +26,11 @@ lib.sankeyModule = function() {
 
     function plot_by_industry_() {
         var width = contentDiv.clientWidth - 40;
+        var width = contentDiv.clientWidth - 40;
         const nodes_with_names = data.nodes
         svg
             .attr("width", width)
-            .attr("height", height);
+            .attr("height", height + 30);
         console.log(svg);
 
         const sk = d3.sankey()
@@ -34,7 +39,7 @@ lib.sankeyModule = function() {
             .size([width, height])
             .nodeWidth(20)
             .nodePadding(10)
-            .nodeAlign(d3.sankeyCenter);
+            .nodeAlign(d3.sankeyJustify);
         let graph = sk(data)
 
         links
@@ -98,26 +103,43 @@ lib.sankeyModule = function() {
 };
 
 
-var generateNL = function(rawdata) {
+var generateNL = function(rawdata, include_parties) {
+    if (include_parties) {
+        console.log("using party info")
+        for (i = 0; i < rawdata.length; i++) {
+            rawdata[i].target =  rawdata[i].target + " (" + rawdata[i].party + ")"
+        }
+    }
     var n1 = new Set();
+    console.log("raw:")
+    console.log(rawdata);
     for (i = 0; i < rawdata.length; i++) {
         n1.add(rawdata[i].source)
         n1.add(rawdata[i].target)
     }
+    //console.log(n1);
     var l1 = {}
     var counter = 0
     var n2 = []
-    n1.forEach(function(value) {
-        if (value.includes("(D)")) {
-            n2[counter] = {"id": value, "color": 0.9}
-        } else if (value.includes("(R)")) {
-            n2[counter] = {"id": value, "color": 0.1}
-        } else {
+    if (include_parties) {
+        n1.forEach(function(value) {
+            if (value.includes("(DEM)")) {
+                n2[counter] = {"id": value, "color": 0.9}
+            } else if (value.includes("(REP)")) {
+                n2[counter] = {"id": value, "color": 0.1}
+            } else {
+                n2[counter] = {"id": value}
+            }
+            l1[value] = counter;
+            counter++;
+        });
+    } else {
+        n1.forEach(function(value) {
             n2[counter] = {"id": value}
-        }
-        l1[value] = counter;
-        counter++;
-    });
+            l1[value] = counter;
+            counter++;
+        });
+    }
     l2 = []
     var counter = 0
     rawdata.forEach(function(value) {
@@ -125,15 +147,25 @@ var generateNL = function(rawdata) {
         counter++;
     });
 
-    //console.log(n2)
-    //console.log(l2)
+    console.log("nodes:")
+    console.log(n2)
+    console.log("links:")
+    console.log(l2)
     return {"nodes": n2, "links": l2 }
 }
 
-var sankeydata = d3.json("/sankeydata")
+
+var sankeydata = d3.json(data_endpoint)
 sankeydata.then(function(d){
-    var clean_data = generateNL(d)
-    var sankey = lib.sankeyModule();
+    if (data_endpoint.startsWith("/candidates")) {
+        var clean_data = generateNL(d, false)
+        var sankey = lib.sankeyModule("tree");
+    } else if (data_endpoint.startsWith("/industries")){
+        var clean_data = generateNL(d, false)
+        var sankey = lib.sankeyModule("full");
+    } else{
+        return
+    }
     sankey.industry_data(clean_data)
     sankey.plot_by_industry()
 });
