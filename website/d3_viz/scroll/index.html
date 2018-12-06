@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Network Analysis</title>
+  <link rel="stylesheet" type="text/css" href="bootstrap.min.css"/>
+  <link rel="stylesheet" type="text/css" href="style.css"/>
+</head>
+
+<script src="/~jennifer.p/capstone/scroll2/d3.js"></script>
+<script src="/~jennifer.p/capstone/scroll2/scroller.js"></script>
+<script src="/~jennifer.p/capstone/scroll2/sections.js"></script>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<link type="text/css" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css" rel="stylesheet" />
+<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js" ></script>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.24.0/d3-legend.min.js"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+
+<body>
+<div class="container">
+  <div id='graphic'>
+    <div id='sections'>
+      <section class="step">
+        <div class="title">Welcome to Network Visualizations!</div>
+        If you've never looked at a network graph, don't worry we are going to walk you through them.<br/><br/>As you probably already know, we are looking at the campaign funding for US elections in 2016.
+      </section>
+      <section class="step">
+        <div class="title">Toy Example</div>
+		<p>Here we have a tiny network graph to introduce you to the visualization’s components. In this particular network, the largest node (in orange) represents the money being contributed to campaigns. All of the other nodes are politicians receiving donations.</p>
+<p>The nodes in blue are Democrats and the nodes in red are Republicans; occasionally there is a rare Independent node shown in green. If the node has a yellow outline that means the candidate was successful and won his or her election. The size of the circle corresponds to the amount of money contributed/raised.</p>
+<p>If you hoover your mouse over a candidate node it will detail the name of the candidate, his or her political party, and the total contributions raised.  You can also hoover over the links and see how much money was exchanged between the nodes.</p>
+<p>By double clicking on a node in the diagram you will filter it to only include the nodes that are directly linked to it. This comes in very handy for the more complex networks. Once you are done looking at the node, just click on it again to return to the full network. </p>
+ </section>
+      <section class="step">
+        <div class="title">Example Analysis: I</div>
+        In the picture to the right you can see the Natural Gas, Transmission and Distribution's node has been selected. This group has a slightly Republican lean and almost all candidates supported won their election
+      </section>
+          </section>
+		  <section class="step">
+        <div class="title">Example Analysis: II</div>
+        In the next picture you can see the Food Services & Related Unions's node has been selected. This group has a strong democratic lean and many candidates supported lost their election
+      </section>
+          </section>
+      <section class="step">
+        <div class="title">By Politician & Industry</div>
+        Here is a slice of the funding network focused on democratic candidate Glenn Ivey (D). The network shows only the industries that supported him. You can also view who else those industries support, and which candidates were successful. Unfortunately, Mr. Ivey was unsuccessful in his election (there is no green circle around his node).
+	<div id = "graphic" class="ui-widget">
+		<input id="search">
+    <button id='button' type="button" onclick="searchNode()">Find</button>
+	</div>
+	<div id = "graphic" class="ui-widget">
+		<input id="search2">
+    <button id='button2' type="button" onclick="searchNode()">New Graph</button>
+	</div>
+	  </section>
+	  <section class="step">
+        <div class="title">By Politician & Committee </div>
+        Here is a slice of the funding network focused on democratic candidate Glenn Ivey (D). The network shows only the industries that supported him. You can also view who else those industries support, and which candidates were successful. Unfortunately, Mr. Ivey was unsuccessful in his election (there is no green circle around his node).
+	<div id = "graphic" class="ui-widget">
+		<input id="search">
+    <button id='button' type="button" onclick="searchNode()">Find</button>
+	</div>
+	<div id = "graphic" class="ui-widget">
+		<input id="search2">
+    <button id='button2' type="button" onclick="searchNode()">New Graph</button>
+	</div>
+	  </section>
+	  <section class="step">
+        <div class="title">Total Fundraising & Industry</div>
+        Here is a slice of the funding network focused on democratic candidate Glenn Ivey (D). The network shows only the industries that supported him. You can also view who else those industries support, and which candidates were successful. Unfortunately, Mr. Ivey was unsuccessful in his election (there is no green circle around his node).
+	<div id = "graphic" class="ui-widget">
+		<input id="search">
+    <button id='button' type="button" onclick="searchNode()">Find</button>
+	</div>
+	<p></p>
+	<p></p>
+	<div class="slidecontainer">
+		<input type="range" min="1" max="700000" value="10000" class="slider" id="myRange">
+		<p>Contribution Threshold: <span id="demo"></span></p>
+	</div>
+	  </section>
+	  </section>
+	  <section class="step">
+        <div class="title">Total Fundraising & Committee</div>
+        Here is a slice of the funding network focused on democratic candidate Glenn Ivey (D). The network shows only the industries that supported him. You can also view who else those industries support, and which candidates were successful. Unfortunately, Mr. Ivey was unsuccessful in his election (there is no green circle around his node).
+	<div id = "graphic" class="ui-widget">
+		<input id="search">
+    <button id='button' type="button" onclick="searchNode()">Find</button>
+	</div>
+	<p></p>
+	<p></p>
+	<div class="slidecontainer">
+		<input type="range" min="1" max="700000" value="10000" class="slider" id="myRange">
+		<p>Contribution Threshold: <span id="demo"></span></p>
+	</div>
+	  </section>
+    
+    </div>
+    <div id='vis'>
+    </div>
+    <div id="extra-space">
+    </div>
+  </div>
+</div>
+
+
+
+</body>
+</html>
