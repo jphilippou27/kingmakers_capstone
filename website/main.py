@@ -254,7 +254,7 @@ def network():
 
 @application.route("/networkdata", methods=["GET"])
 def networkdata():
-    return (backend.get_network_by_industry("Elizabeth Warren (D)"))
+    return (backend.get_network_by_industry("Sean Patrick Maloney (D)"))
 
 @application.route("/tableau")
 def tableau():
