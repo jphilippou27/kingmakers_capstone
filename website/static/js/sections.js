@@ -567,7 +567,7 @@ var scrollVis = function () {
 		const svg = d3.select('svg')		
 		
 		var myimage = svg.append('image')
-			.attr('xlink:href', '/images/Demo_network_analysis.png')
+			.attr('xlink:href', '/static/images/Demo_network_analysis.png')
 			.attr('width', 1000)
 			.attr('height', 1000)
 
@@ -591,7 +591,7 @@ var scrollVis = function () {
 		const svg = d3.select('svg')		
 		
 		var myimage = svg.append('image')
-			.attr('xlink:href', '/images/Demo_network_analysisII.png')
+			.attr('xlink:href', '/static/images/Demo_network_analysisII.png')
 			.attr('width', 1000)
 			.attr('height', 1000)
 
