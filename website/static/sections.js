@@ -1429,7 +1429,7 @@ function display(data) {
 }
 
 // load data and display
-d3.tsv('data_for_testing/words.tsv', display);
+d3.tsv('/data_for_testing/words.tsv', display);
 
 function searchNodeII() { searchNode;}
 
