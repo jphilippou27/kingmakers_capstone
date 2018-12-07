@@ -162,21 +162,21 @@ def make_nodes(dataset):
     'OUTPUT: JSON format of links (ex: {'name': 'Misc Agriculture', 'group': 'Industry', 'pic_id': 'flower'},
     """
     #contributions nodes
-    df_nodes_I = pd.DataFrame(dataset.industry.unique())
+    df_nodes_I = pd.DataFrame(dataset.groupby(['industry'], as_index = False)['contr_amt'].sum())
     df_nodes_I["party"] = "Industry"
-    df_nodes_I['bioguide_id'] = 'flower'
+    df_nodes_I['ge_winner_ind_guess'] = "NotApplicable"
     df_nodes_I.columns = ['firstlastp' if x== 0 else x for x in df_nodes_I.columns]
     df_nodes_I.head()
     
     #same thing for politicians
-    df_nodes_P = dataset[['firstlastp', 'party', 'bioguide_id']].drop_duplicates()
-    df_nodes_P.head()
+    df_nodes_P = pd.DataFrame(dataset.groupby(['firstlastp','party','ge_winner_ind_guess'], as_index = False)['contr_amt'].sum())
+    #df_nodes_P.head()
     
     #merge nodes
     df_nodes = pd.concat([df_nodes_I, df_nodes_P])
     
     #Convert to list
-    node_list = list(df_nodes.apply(lambda row: {"name": row['firstlastp'], "group": row['party'], "pic_id": row['bioguide_id']}, axis=1))
+    node_list = list(df_nodes.apply(lambda row: {"name": row['firstlastp'], "group": row['party'],  "contribution_total": row['contr_amt'], "winner_ind":row['ge_winner_ind_guess']}, axis=1))
     
     #export
     return(node_list)
