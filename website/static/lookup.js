@@ -6,6 +6,8 @@ d3.select("#search").on('keyup', function(d) {
     var string = document.getElementById("search").value
     if (string == "") {
         d3.select("#searchbox").selectAll("a").remove();
+    } else if (string.length < 3){
+        return
     }
     var possibilites = d3.json("/candidates?lookup=" + string);
     possibilites.then(function(d) { 

@@ -5,14 +5,13 @@ from flask import request
 from flask import render_template 
 from flask import url_for 
 import sys
-import dash
 
 #sys.path.insert(0, 'dash')
-import index2
+#import index2
 import backend
 
 application = Flask(__name__)
-DATABASE = ''
+#db = None
 
 @application.route("/")
 def home():
@@ -163,7 +162,7 @@ def candidate_view():
             render_template("search_cand.html")
         cand_data = backend.get_candidate(cand_id)
         print(cand_data)
-        return render_template("candidate.html", cand_id=cand_id, cand_name=cand_data["name"])
+        return render_template("candidate.html", cand_id=cand_id, cand_name=cand_data["cand_name"])
     else:
         return abort(401)
 
@@ -264,7 +263,7 @@ def tableau():
 
 if __name__ == "__main__":
     with application.app_context():
-        db = backend.get_pg()
+        backend.get_pg()
     application.run(host="0.0.0.0")
     #app = index2.init_dash(application)
     #application.run(host="0.0.0.0")
