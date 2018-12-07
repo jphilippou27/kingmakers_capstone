@@ -394,7 +394,7 @@ var scrollVis = function () {
 				//width = +svg.attr('width'),
 					//height = +svg.attr('height');
 		  
-		d3.json("data/toy_network.json", function(error, graph) {
+		d3.json("data_for_testing/toy_network.json", function(error, graph) {
 		  if (error) throw error;
 
 		  
@@ -567,7 +567,7 @@ var scrollVis = function () {
 		const svg = d3.select('svg')		
 		
 		var myimage = svg.append('image')
-			.attr('xlink:href', '/~jennifer.p/capstone/Demo_network_analysis.png')
+			.attr('xlink:href', '/images/Demo_network_analysis.png')
 			.attr('width', 1000)
 			.attr('height', 1000)
 
@@ -591,7 +591,7 @@ var scrollVis = function () {
 		const svg = d3.select('svg')		
 		
 		var myimage = svg.append('image')
-			.attr('xlink:href', '/~jennifer.p/capstone/Demo_network_analysisII.png')
+			.attr('xlink:href', '/images/Demo_network_analysisII.png')
 			.attr('width', 1000)
 			.attr('height', 1000)
 
@@ -651,7 +651,7 @@ var scrollVis = function () {
 				//width = +svg.attr('width'),
 					//height = +svg.attr('height');
 		  
-		d3.json("data/industry_amt_winner_mini.json", function(error, graph) {
+		d3.json("data_for_testing/industry_amt_winner_mini.json", function(error, graph) {
 		  if (error) throw error;
 
 		  
@@ -809,7 +809,7 @@ var scrollVis = function () {
 
 
 //trying to add search
-graph = d3.json('data/industry_amt_winner_mini.json', function(error, graph) {
+graph = d3.json('data_for_testing/industry_amt_winner_mini.json', function(error, graph) {
 		//console.log(graph)
 		var optArray = [];
 		for (var i = 0; i < graph.nodes.length - 1; i++) {
@@ -917,7 +917,7 @@ function draw_filtered_nodes() {
 				g.attr("transform", d3.event.transform)
 			}*/
 			//var  max_node = 0 
-			d3.json("data/industry_amt_winner_mini.json", function(error, graph) {
+			d3.json("data_for_testing/industry_amt_winner_mini.json", function(error, graph) {
 			  if (error) throw error;
 			  //console.log(d3.max(d3.values(graph.nodes.contribution_total)))
 			  var max_node = d3.max(graph.nodes, function(d) { return d.contribution_total; })
@@ -1126,7 +1126,7 @@ function draw_filtered_nodes() {
 		
 		//trying to add search
 		
-		graph = d3.json('data/industry_amt_winner_mini.json', function(error, graph) {
+		graph = d3.json('data_for_testing/industry_amt_winner_mini.json', function(error, graph) {
 		console.log("searchbox qc " + graph)
 		var optArray = [];
 		for (var i = 0; i < graph.nodes.length - 1; i++) {
@@ -1429,7 +1429,7 @@ function display(data) {
 }
 
 // load data and display
-d3.tsv('data/words.tsv', display);
+d3.tsv('data_for_testing/words.tsv', display);
 
 function searchNodeII() { searchNode;}
 
