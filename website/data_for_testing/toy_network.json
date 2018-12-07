@@ -1,0 +1,57 @@
+{
+ "nodes": [
+  {
+   "name": "Car rental agencies",
+   "group": "Industry",
+   "contribution_total": 611250.0,
+   "winner_ind": "NotApplicable"
+  },
+    {
+   "name": "Virginia Foxx (R)",
+   "group": "R",
+   "contribution_total": 37700.0,
+   "winner_ind": "W"
+  },
+    {
+   "name": "Cedric Richmond (D)",
+   "group": "D",
+   "contribution_total": 90250.0,
+   "winner_ind": "W"
+  },
+    {
+   "name": "David Gowan (R)",
+   "group": "R",
+   "contribution_total": 5500.0,
+   "winner_ind": "null"
+  },
+   {
+   "name": "Donna Edwards (D)",
+   "group": "D",
+   "contribution_total": 81308.0,
+   "winner_ind": "null"
+  }
+  ],
+ "links": [
+  
+   {
+   "source": "Car rental agencies",
+   "target": "Virginia Foxx (R)",
+   "value": 2500.0
+  },
+  {
+   "source": "Car rental agencies",
+   "target": "Cedric Richmond (D)",
+   "value": 3000.0
+  },
+    {
+   "source": "Car rental agencies",
+   "target": "David Gowan (R)",
+   "value": 2500.0
+  },
+     {
+   "source": "Car rental agencies",
+   "target": "Donna Edwards (D)",
+   "value": 2000.0
+  }
+   ]
+}
