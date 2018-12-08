@@ -179,7 +179,7 @@ def make_nodes(dataset):
     node_list = list(df_nodes.apply(lambda row: {"name": row['firstlastp'], "group": row['party'],  "contribution_total": row['contr_amt'], "winner_ind":row['ge_winner_ind_guess']}, axis=1))
     
     #export
-    return(node_list)
+    return(df_nodes_I)
 def merge_nodes_links(links_list_fv, node_list):
      #merge
     json_prep = {"nodes":node_list, "links":links_list_fv}
@@ -195,9 +195,9 @@ def get_network_by_industry(firstlastp):
     row = query_pg("SELECT * FROM network_industry t1 LEFT JOIN (select distinct(industry) FROM network_industry WHERE firstlastp = %s) sub ON t1.industry = sub.industry WHERE (sub.industry IS NOT NULL) and (t1.contr_amt> 1)", [cand])
     print(row)
     df_network_viz_fv = pd.DataFrame([i.copy() for i in row])
-    links_list_fv = make_links(df_network_viz_fv)
+    #links_list_fv = make_links(df_network_viz_fv)
     node_list = make_nodes(df_network_viz_fv)
-    network_json = merge_nodes_links(links_list_fv, node_list)
+    #network_json = merge_nodes_links(links_list_fv, node_list)
     
     return (network_json)
 
