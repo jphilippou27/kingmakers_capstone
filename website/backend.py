@@ -201,7 +201,7 @@ def get_network_by_industry(firstlastp):
     node_list = make_nodes(df_network_viz_fv)
     network_json = merge_nodes_links(links_list_fv, node_list)
     
-    return (node_list) #network_json)
+    return (network_json)
 
 def get_individual_support_direct(cand_id):
     limit = 10
