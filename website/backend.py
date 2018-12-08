@@ -179,7 +179,7 @@ def make_nodes(dataset):
     node_list = list(df_nodes_I.apply(lambda row: {"name": row['firstlastp'], "group": row['party'],  "contribution_total": row['contr_amt'], "winner_ind":row['ge_winner_ind_guess']}, axis=1))
     
     #export
-    return(df_nodes_I)
+    return(node_list)
 def merge_nodes_links(links_list_fv, node_list):
      #merge
     json_prep = {"nodes":node_list, "links":links_list_fv}
