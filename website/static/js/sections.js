@@ -652,9 +652,10 @@ var scrollVis = function () {
 					//height = +svg.attr('height');
 
 		//updated
-		var networkdata = d3.json(data_endpoint)
-		networkdata.then(function( graph) {
+		//var networkdata = d3.json(data_endpoint)
+		//networkdata.then(function( graph) {
 		//d3.json("static/data_for_testing/industry_amt_winner_mini.json", function(error, graph) {
+		d3.json("/networkdata", function(error, graph) { 
 		  if (error) throw error;
 
 
