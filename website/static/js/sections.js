@@ -828,7 +828,7 @@ graph = d3.json('/static/data_for_testing/industry_amt_winner_mini.json', functi
 						});
 
 		});
-})
+}
 
 $("#button").on("click", function searchNode() {
     //find the node
