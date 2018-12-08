@@ -191,7 +191,7 @@ var scrollVis = function () {
       .attr('opacity', 0);
 
     // square grid
-	
+
     // barchart
     // @v4 Using .merge here to ensure
     // new and old data have same attrs applied
@@ -232,7 +232,7 @@ var scrollVis = function () {
       .attr('fill', barColors[0])
       .attr('opacity', 0);
 
-  
+
     // arrowhead from
     // http://logogin.blogspot.com/2013/02/d3js-arrowhead-markers.html
     svg.append('defs').append('marker')
@@ -268,8 +268,8 @@ var scrollVis = function () {
     activateFunctions[0] = showTitle;
     activateFunctions[1] = draw_toy_network;
 	//showFillerTitle;
-    activateFunctions[2] = demo_analysis_politicianI; 
-	activateFunctions[3] = demo_analysis_politicianII; 
+    activateFunctions[2] = demo_analysis_politicianI;
+	activateFunctions[3] = demo_analysis_politicianII;
     activateFunctions[5] = draw_filtered_nodes;
     activateFunctions[4] = draw_politician_network;
     activateFunctions[6] = draw_toy_network;
@@ -331,7 +331,7 @@ var scrollVis = function () {
 	d3.selectAll('tspan').remove();
 	d3.selectAll('text.label').remove();
     //d3.selectAll('link').remove();
-	
+
 	//removes example analysis
 	d3.selectAll('image').remove();
   }
@@ -351,15 +351,15 @@ var scrollVis = function () {
       .duration(600)
       .attr('opacity', 1.0);
   }
-  
+
   //Jen's Network Toy Example
     // @v4 Using .merge here to ensure
     // new and old data have same attrs applied
 	function draw_toy_network(){
 	//load the data
 		//function find_data(){}
-		
-	//remove title stuff	
+
+	//remove title stuff
 	g.selectAll('.openvis-title')
       .transition()
       .duration(0)
@@ -373,31 +373,31 @@ var scrollVis = function () {
       .transition()
       .duration(0)
       .attr('opacity', 0);
-	  
+
 		//removes OLD network
 	d3.selectAll(".node").remove();
 	d3.selectAll("edge").remove();
 	d3.selectAll('line.edge').remove();
 	//removes example analysis
 	d3.selectAll('image').remove();
-	  
+
 		var color = d3.scaleOrdinal() // D3 Version 4
 		  .domain(["D", "R", "I","Industry"])
 		  .range(["#0000FF","#FF0000" , "#009933" , "#FF8106"]);
-					
+
 		var tooltip = d3.select("body")
 			.append("div")
 			.attr("class", "tooltip")
 			.style("opacity", 0);
-		 
+
 		const svg = d3.select('svg')
 				//width = +svg.attr('width'),
 					//height = +svg.attr('height');
-		  
+
 		d3.json("/static/data_for_testing/toy_network.json", function(error, graph) {
 		  if (error) throw error;
 
-		  
+
 		  const simulation = d3.forceSimulation()
 			.nodes(graph.nodes)
 			.force('link', d3.forceLink().id(d => d.name))
@@ -407,18 +407,18 @@ var scrollVis = function () {
 
 		  simulation.force('link')
 			.links(graph.links);
-			
+
 		  let link = svg.selectAll('line')
 			.data(graph.links)
 			.enter().append('line');
 
-		  link  
+		  link
 			.attr('class', 'edge')
 			.on('mouseover.tooltip', function(d) {
 				tooltip.transition()
 					.duration(300)
 					.style("opacity", .8);
-				tooltip.html("Source:"+ d.source.name+ 
+				tooltip.html("Source:"+ d.source.name+
 							 "<p/>Target:" + d.target.name +
 							"<p/>Strength:"  + d.value )
 					.style("left", (d3.event.pageX) + "px")
@@ -444,12 +444,12 @@ var scrollVis = function () {
 					.on("start", dragstarted)
 				  .on("drag", dragged)
 				  .on("end", dragended));;
-			  
-			  
+
+
 				  node.append('circle')
-					.attr('r', function(d) {return(Math.sqrt(d.contribution_total)/25)}) //used to be R  //and function(d) {console.log(d.target.value)}) 
+					.attr('r', function(d) {return(Math.sqrt(d.contribution_total)/25)}) //used to be R  //and function(d) {console.log(d.target.value)})
 					.attr("fill", function(d) {return color(d.group);})
-					///trying to add winner highlight 	
+					///trying to add winner highlight
 					.style("stroke-width", function(d) {
 							if (d.winner_ind == "W"){return 4}
 							else {return 0};})
@@ -475,7 +475,7 @@ var scrollVis = function () {
 						.style("top", (d3.event.pageY + 10) + "px");
 					})
 					.on('click',releasenode)
-					
+
 				  function ticked() {
 					link
 					  .attr('x1', d => d.source.x)
@@ -505,7 +505,7 @@ var scrollVis = function () {
 						d.fx = null;
 						d.fy = null;
 					}
-					  
+
 					  const linkedByIndex = {};
 					  graph.links.forEach(d => {
 						linkedByIndex[`${d.source.index},${d.target.index}`] = 1;
@@ -543,55 +543,55 @@ var scrollVis = function () {
 								.orient("vertical")
 									.title("Group number by color:")
 									.titleWidth(100)
-								.scale(sequentialScale) 
+								.scale(sequentialScale)
 
 							svg.select(".legendSequential")
-							  .call(legendSequential); 
+							  .call(legendSequential);
 		})
 	}
 	function demo_analysis_politicianI(){
-		
+
 	//removes OLD network
 	d3.selectAll(".node").remove();
 	d3.selectAll("edge").remove();
 	d3.selectAll('line.edge').remove();
-	
+
 	//removes legend
 	d3.selectAll('rect').remove();
 	d3.selectAll('tspan').remove();
 	d3.selectAll('text.label').remove();
-	
+
 	//removes example analysis
 	d3.selectAll('image').remove();
-	
-		const svg = d3.select('svg')		
-		
+
+		const svg = d3.select('svg')
+
 		var myimage = svg.append('image')
-			.attr('xlink:href', '/static/images/Demo_network_analysis.png')
+			.attr('xlink:href', 'https://s3.us-south.objectstorage.softlayer.net/staticassets2/Demo_network_analysis.png')
 			.attr('width', 1000)
 			.attr('height', 1000)
 
 
 	}
 	function demo_analysis_politicianII(){
-		
+
 	//removes OLD network
 	d3.selectAll(".node").remove();
 	d3.selectAll("edge").remove();
 	d3.selectAll('line.edge').remove();
-	
+
 	//removes legend
 	d3.selectAll('rect').remove();
 	d3.selectAll('tspan').remove();
 	d3.selectAll('text.label').remove();
-	
+
 	//removes example analysis
 	d3.selectAll('image').remove();
-	
-		const svg = d3.select('svg')		
-		
+
+		const svg = d3.select('svg')
+
 		var myimage = svg.append('image')
-			.attr('xlink:href', '/static/images/Demo_network_analysisII.png')
+			.attr('xlink:href', 'https://s3.us-south.objectstorage.softlayer.net/staticassets2/Demo_network_analysisII.png')
 			.attr('width', 1000)
 			.attr('height', 1000)
 
@@ -605,7 +605,7 @@ var scrollVis = function () {
    * shows: square grid
    *
    */
-   
+
   function showGrid() {
   }
   /**
@@ -616,12 +616,12 @@ var scrollVis = function () {
    *  filler words. also ensures squares
    *  are moved back to their place in the grid
    */
-  
+
   function draw_politician_network(){
 	//load the data
 		//function find_data(){}
-		
-	//remove title stuff	
+
+	//remove title stuff
 	g.selectAll('.openvis-title')
       .transition()
       .duration(0)
@@ -631,33 +631,33 @@ var scrollVis = function () {
       .transition()
       .duration(0)
       .attr('opacity', 0);
-	  
+
 	  //remove toy network
 	  d3.selectAll(".node").remove();
-	  
+
 	  //removes example analysis
 	d3.selectAll('image').remove();
-	  
+
 		var color = d3.scaleOrdinal() // D3 Version 4
 		  .domain(["D", "R", "I","Industry"])
 		  .range(["#0000FF","#FF0000" , "#009933" , "#FF8106"]);
-					
+
 		var tooltip = d3.select("body")
 			.append("div")
 			.attr("class", "tooltip")
 			.style("opacity", 0);
-		 
+
 		const svg = d3.select('svg')
 				//width = +svg.attr('width'),
 					//height = +svg.attr('height');
-		  
+
 		//updated
 		var networkdata = d3.json("/networkdata")
 		networkdata.then(function( graph) {
 		//d3.json("static/data_for_testing/industry_amt_winner_mini.json", function(error, graph) {
 		  if (error) throw error;
 
-		  
+
 		  const simulation = d3.forceSimulation()
 			.nodes(graph.nodes)
 			.force('link', d3.forceLink().id(d => d.name))
@@ -667,18 +667,18 @@ var scrollVis = function () {
 
 		  simulation.force('link')
 			.links(graph.links);
-			
+
 		  let link = svg.selectAll('line')
 			.data(graph.links)
 			.enter().append('line');
 
-		  link  
+		  link
 			.attr('class', 'edge')
 			.on('mouseover.tooltip', function(d) {
 				tooltip.transition()
 					.duration(300)
 					.style("opacity", .8);
-				tooltip.html("Source:"+ d.source.name+ 
+				tooltip.html("Source:"+ d.source.name+
 							 "<p/>Target:" + d.target.name +
 							"<p/>Strength:"  + d.value )
 					.style("left", (d3.event.pageX) + "px")
@@ -704,12 +704,12 @@ var scrollVis = function () {
 					.on("start", dragstarted)
 				  .on("drag", dragged)
 				  .on("end", dragended));;
-			  
-			  
+
+
 				  node.append('circle')
-					.attr('r', function(d) {return(Math.sqrt(d.contribution_total)/45)}) //used to be R  //and function(d) {console.log(d.target.value)}) 
+					.attr('r', function(d) {return(Math.sqrt(d.contribution_total)/45)}) //used to be R  //and function(d) {console.log(d.target.value)})
 					.attr("fill", function(d) {return color(d.group);})
-					///trying to add winner highlight 	
+					///trying to add winner highlight
 					.style("stroke-width", function(d) {
 							if (d.winner_ind == "W"){return 4}
 							else {return 0};})
@@ -735,7 +735,7 @@ var scrollVis = function () {
 						.style("top", (d3.event.pageY + 10) + "px");
 					})
 					.on('click',releasenode)
-					
+
 				  function ticked() {
 					link
 					  .attr('x1', d => d.source.x)
@@ -765,7 +765,7 @@ var scrollVis = function () {
 						d.fx = null;
 						d.fy = null;
 					}
-					  
+
 					  const linkedByIndex = {};
 					  graph.links.forEach(d => {
 						linkedByIndex[`${d.source.index},${d.target.index}`] = 1;
@@ -803,11 +803,11 @@ var scrollVis = function () {
 								.orient("vertical")
 									.title("Group number by color:")
 									.titleWidth(100)
-								.scale(sequentialScale) 
+								.scale(sequentialScale)
 
 							svg.select(".legendSequential")
-							  .call(legendSequential); 
-		
+							  .call(legendSequential);
+
 
 
 
@@ -853,16 +853,16 @@ $("#button").on("click", function searchNode() {
    *
    * hides: prior network w. committee data
    * shows: filtered network
-   *  
-   *  
+   *
+   *
    */
-   
+
 function draw_filtered_nodes() {
-	
+
 	//load the data
 		//function find_data(){}
-		
-	//remove title stuff	
+
+	//remove title stuff
 	g.selectAll('.openvis-title')
       .transition()
       .duration(0)
@@ -876,72 +876,72 @@ function draw_filtered_nodes() {
       .transition()
       .duration(0)
       .attr('opacity', 0);
-	  
-		
+
+
 	//removes example analysis
 	d3.selectAll('image').remove();
-		
+
 		function redraw_post_change() {
-			
+
 			//removes OLD network
 			d3.selectAll(".node").remove();
 			d3.selectAll("edge").remove();
 			d3.selectAll('line.edge').remove();
-	
-			/*if (max_node_size == null){ 
+
+			/*if (max_node_size == null){
 			var max_node_size = 15000000}
 			if (min_node_size ==  null){
 				var min_node_size = 200000}*/
-			
+
 			console.log("starting Min " + min_node_size)
 			console.log("starting max " + max_node_size)
 
 			var color = d3.scaleOrdinal() // D3 Version 4
 			  .domain(["D", "R", "I","Industry"])
 			  .range(["#0000FF","#FF0000" , "#009933" , "#FF8106"]);
-						
+
 			var tooltip = d3.select("body")
 				.append("div")
 				.attr("class", "tooltip")
 				.style("opacity", 0)
-				
-			 
+
+
 			const svg = d3.select('svg')
-								  
-			  
-			/*  //add zoom capabilities 
+
+
+			/*  //add zoom capabilities
 			var zoom_handler = d3.zoom()
 				.on("zoom", zoom_actions);
 
 			zoom_handler(svg);
 
-			//Zoom functions 
+			//Zoom functions
 			function zoom_actions(){
 				g.attr("transform", d3.event.transform)
 			}*/
-			//var  max_node = 0 
+			//var  max_node = 0
 			d3.json("/static/data_for_testing/industry_amt_winner_mini.json", function(error, graph) {
 			  if (error) throw error;
 			  //console.log(d3.max(d3.values(graph.nodes.contribution_total)))
 			  var max_node = d3.max(graph.nodes, function(d) { return d.contribution_total; })
 				//console.log(max_node)
 					console.log(graph.nodes)
-			
+
 					var largeNodes = [];
 						graph.nodes
 							.filter(function(d){
 									if (d.group == "Industry"){largeNodes.push(d);}
-							})					
-					
+							})
+
 						graph.nodes
 							 .filter(function(d){
 									if (d.contribution_total > min_node_size && d.contribution_total < max_node_size ){
 									largeNodes.push(d);}
 									return d.contribution_total ;})
-					
+
 						//console.log(largeNodes)
-						
-				
+
+
 
 			  const simulation = d3.forceSimulation()
 				.nodes(graph.nodes)
@@ -956,11 +956,11 @@ function draw_filtered_nodes() {
 			  let link = svg.selectAll('line')
 				.data(graph.links)
 				.enter().append('line');
-				
+
 				console.log(largeNodes)
 			//matching_edges = []
 
-			  link  
+			  link
 				.filter(function(d){if (largeNodes.indexOf(d.target) > -1){
 					//matching_edges.push(d.target)
 					return d}})
@@ -969,7 +969,7 @@ function draw_filtered_nodes() {
 					tooltip.transition()
 						.duration(300)
 						.style("opacity", .8);
-					tooltip.html("Source:"+ d.source.name+ 
+					tooltip.html("Source:"+ d.source.name+
 								 "<p/>Target:" + d.target.name +
 								"<p/>Strength:"  + d.value)
 						.style("left", (d3.event.pageX) + "px")
@@ -986,9 +986,9 @@ function draw_filtered_nodes() {
 						.style("top", (d3.event.pageY + 10) + "px");
 					});
 			;
-			
+
 			//console.log('edges ' +matching_edges)
-				
+
 			let node = svg.selectAll('.node')
 				.data(graph.nodes)
 				.enter().append('g')
@@ -997,14 +997,14 @@ function draw_filtered_nodes() {
 					.on("start", dragstarted)
 				  .on("drag", dragged)
 				  .on("end", dragended));;
-				  
-				
+
+
 			  node
 				.filter(function(d){if ((d.contribution_total > min_node_size && d.contribution_total < max_node_size ) || (d.group == "Industry")) {return d.contribution_total; }})
 				.append('circle')
-				.attr('r', function(d) {return(Math.sqrt(d.contribution_total)/25)}) //used to be R  //and function(d) {console.log(d.target.value)}) 
+				.attr('r', function(d) {return(Math.sqrt(d.contribution_total)/25)}) //used to be R  //and function(d) {console.log(d.target.value)})
 				.attr("fill", function(d) {return color(d.group);})
-				///trying to add winner highlight 	
+				///trying to add winner highlight
 				.style("stroke-width", function(d) {
 						if (d.winner_ind == "W"){return 4}
 						else {return 0};})
@@ -1030,10 +1030,10 @@ function draw_filtered_nodes() {
 					.style("top", (d3.event.pageY + 10) + "px");
 				})
 				.on('click',releasenode)
-				//.on('dblclick', isConnected) //Added code 
+				//.on('dblclick', isConnected) //Added code
 
-				
-				
+
+
 			  function ticked() {
 				link
 				  .attr('x1', d => d.source.x)
@@ -1065,7 +1065,7 @@ function draw_filtered_nodes() {
 				d.fx = null;
 				d.fy = null;
 			}
-			  
+
 			  const linkedByIndex = {};
 			  console.log(graph.links)
 			  graph.links.forEach(d => {
@@ -1080,7 +1080,7 @@ function draw_filtered_nodes() {
 				return d => {
 				  node.style('stroke-opacity', function (o) {
 					const thisOpacity = isConnected(d, o) ? 1 : opacity;
-					
+
 					console.log(d)
 					console.log(o)
 					 var new_data = d3.nest()
@@ -1090,7 +1090,7 @@ function draw_filtered_nodes() {
 					  }).map(d); //.entries(d);
 					  //new_data
 					  //console.log(new_data)
-					  
+
 					  var expensesByName = d3.nest()
 					  .key(function(g) { return g.group; })
 					  .entries(d);
@@ -1121,14 +1121,14 @@ function draw_filtered_nodes() {
 				.orient("vertical")
 					.title("Group number by color:")
 					.titleWidth(100)
-				.scale(sequentialScale) 
+				.scale(sequentialScale)
 
 			svg.select(".legendSequential")
-			  .call(legendSequential); 
-		
-		
+			  .call(legendSequential);
+
+
 		//trying to add search
-		
+
 		graph = d3.json('/static/data_for_testing/industry_amt_winner_mini.json', function(error, graph) {
 		console.log("searchbox qc " + graph)
 		var optArray = [];
@@ -1149,8 +1149,8 @@ function draw_filtered_nodes() {
 
 
 
-	
-} //end of redraw_post_change}	  
+
+} //end of redraw_post_change}
 
 
 
@@ -1172,11 +1172,11 @@ $("#button").on("click", function searchNode() {
             .style("opacity", 1);
     }
 })//end of search node
- 
+
  	//redraw_post_change;
 	 //node scroll filter
 	$x(document).ready(function update_slider() {
-        
+
             $x('#mySlider').slider({
 				min: 0,
 				max: 25000000,
@@ -1186,8 +1186,8 @@ $("#button").on("click", function searchNode() {
                 slide: attachSlider_post,
 				stop: sliderStop
             })
-			
-		
+
+
             function attachSlider_pre() {
 				min_node_size = 200000
 				max_node_size = 250000
@@ -1195,13 +1195,13 @@ $("#button").on("click", function searchNode() {
                 $x('#upperlimit').val($x('#mySlider').slider("values", 1));
 				redraw_post_change();
             }
-			
+
 			function attachSlider_post() {
                 $x('#lowerlimit').val($x('#mySlider').slider("values", 0));
                 $x('#upperlimit').val($x('#mySlider').slider("values", 1));
 				redraw_post_change(min_node_size,max_node_size);
             }
-            
+
 			function sliderStop() {
 					min_node_size = $x('#mySlider').slider("values", 0);
 					console.log("lowerLimit " + min_node_size)
@@ -1211,15 +1211,15 @@ $("#button").on("click", function searchNode() {
 						attachSlider_post(); //update screen values
 					}, 5000);
             }
-		
+
         });//end of scroll filter
-		
-			
+
+
 
 }//end of draw filtered nodes
-   
-   
-   
+
+
+
   /**
    * highlightGrid - show fillers in grid
    *
