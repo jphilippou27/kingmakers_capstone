@@ -708,7 +708,7 @@ var scrollVis = function () {
 			  
 			  
 				  node.append('circle')
-					.attr('r', function(d) {return(Math.sqrt(d.contribution_total)/45)}) //used to be R  //and function(d) {console.log(d.target.value)}) 
+					.attr('r', function(d) {return(Math.sqrt(d.contribution_total)/100)}) //used to be R  //and function(d) {console.log(d.target.value)}) 
 					.attr("fill", function(d) {return color(d.group);})
 					///trying to add winner highlight 	
 					.style("stroke-width", function(d) {
