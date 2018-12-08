@@ -653,9 +653,10 @@ var scrollVis = function () {
 		  
 		//updated
 		var networkdata = d3.json("/networkdata")
-		networkdata.then(function( graph) {
+		function data_accessible() {
+		//networkdata.then(function( graph) {
 		//d3.json("static/data_for_testing/industry_amt_winner_mini.json", function(error, graph) {
-		  if (error) throw error;
+		 // if (error) throw error;
 
 		  
 		  const simulation = d3.forceSimulation()
