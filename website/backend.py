@@ -197,7 +197,7 @@ def get_network_by_industry(firstlastp):
     row = query_pg("SELECT * FROM network_industry t1 LEFT JOIN (select distinct(industry) FROM network_industry WHERE firstlastp = %s) sub ON t1.industry = sub.industry WHERE (sub.industry IS NOT NULL) and (t1.contr_amt> 1)", [cand])
     print(row)
     df_network_viz_fv = pd.DataFrame([i.copy() for i in row])
-    #links_list_fv = make_links(df_network_viz_fv)
+    links_list_fv = make_links(df_network_viz_fv)
     node_list = make_nodes(df_network_viz_fv)
     network_json = merge_nodes_links(links_list_fv, node_list)
     
