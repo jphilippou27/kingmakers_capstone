@@ -173,10 +173,10 @@ def make_nodes(dataset):
     #df_nodes_P.head()
     
     #merge nodes
-    df_nodes = pd.concat([df_nodes_I, df_nodes_P])
+    #df_nodes = pd.concat([df_nodes_I, df_nodes_P])
     
     #Convert to list
-    node_list = list(df_nodes.apply(lambda row: {"name": row['firstlastp'], "group": row['party'],  "contribution_total": row['contr_amt'], "winner_ind":row['ge_winner_ind_guess']}, axis=1))
+    node_list = list(df_nodes_I.apply(lambda row: {"name": row['firstlastp'], "group": row['party'],  "contribution_total": row['contr_amt'], "winner_ind":row['ge_winner_ind_guess']}, axis=1))
     
     #export
     return(df_nodes_I)
