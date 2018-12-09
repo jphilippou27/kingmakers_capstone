@@ -264,8 +264,8 @@ def network():
 def networkdata():
     return (backend.get_network_by_industry())
 
-@app.route('/network', methods=['POST'])
-def my_form_post():
+@application.route('/network', methods=['POST'])
+def network_searchbox_data():
     text = request.button['search2']
     if  len(text) < 1: 
         text = "Sean Patrick Maloney (D)"
