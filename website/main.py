@@ -262,7 +262,14 @@ def network():
 
 @application.route("/networkdata", methods=["GET"])
 def networkdata():
-    return (backend.get_network_by_industry("Sean Patrick Maloney (D)"))
+    return (backend.get_network_by_industry())
+
+@app.route('/network', methods=['POST'])
+def my_form_post():
+    text = request.button['search2']
+    if  len(text) < 1: 
+        text = "Sean Patrick Maloney (D)"
+    return text
 
 @application.route("/tableau")
 def tableau():
