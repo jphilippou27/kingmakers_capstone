@@ -15,14 +15,18 @@ lib.barChartModule = function() {
         if (!arguments.length) return data;
         data = _;
         console.log(data.length)
-        data = data.filter(function(d) {
-            return d.date > "2017-01";
-        });
+        //data = data.filter(function(d) {
+        //    return d.date > "2017-01";
+        //});
         console.log(data.length)
         return that;
     }
 
     function plot_net_horizontal(name, chart, accessor_x, accessor_y, color) {
+        var parser = d3.timeParse("%m%d%Y");
+        //data.map(function(d) {
+        //    d.date = parser(d.date)
+        //});
         var svg = d3.select(chart)
             .attr("height", height)
             .attr("width", width);
@@ -36,14 +40,23 @@ lib.barChartModule = function() {
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
         var y = d3.scaleLinear().range([barchartheight, 0]),
-            x = d3.scaleBand().rangeRound([barchartwidth, 0]).padding(0.1);
+            x = d3.scaleBand().range([barchartwidth, 0]).padding(0.4);
 
+        console.log("formatted data")
+        console.log(data);
         // must be linear
         y.domain(d3.extent(data, accessor_y));
 
         // must be categorical
         //x.domain(data.map(accessor_x));
-        x.domain(['2018-09', '2018-08', '2018-07', '2018-06', '2018-05', '2018-04', '2018-03', '2018-02', '2018-01','2017-12', '2017-11', '2017-10',  '2017-09', '2017-08', '2017-07', '2017-06', '2017-05', '2017-04', '2017-03', '2017-02', '2017-01']);
+        //x.domain(['2018-09', '2018-08', '2018-07', '2018-06', '2018-05', '2018-04', '2018-03', '2018-02', '2018-01','2017-12', '2017-11', '2017-10',  '2017-09', '2017-08', '2017-07', '2017-06', '2017-05', '2017-04', '2017-03', '2017-02', '2017-01']);
+        var dates = data.map(function(d) {
+            return parser(d.date)
+        });
+        var maxdate = d3.max(dates);
+        var mindate = d3.min(dates);
+        //var maxdate = d3.max(data,  d => parser(d.date));
+        x.domain(data.map(d => d.date));
 
         //g.select(".title").remove();
         //g.append("text")

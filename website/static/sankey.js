@@ -1,6 +1,6 @@
 var lib = lib || {};
 
-lib.sankeyModule = function(type) {
+lib.sankeyModule = function(type, zoom) {
     var contentDiv = document.getElementById("sankey-content")
     if (type == "tree") {
         var height = 700;
@@ -9,12 +9,26 @@ lib.sankeyModule = function(type) {
         var height = 1000;
     }
     var data = [];
+    var canzoom = zoom;
     const color = d3.scaleOrdinal(d3.schemeCategory10);
     const politicolor = d3.scaleSequential(d3.interpolateRdBu);
     var svg = d3.select("#sankey");
-    let links = svg.append("g");
-    var nodes = svg.append("g");
-    var titles  = svg.append("g")
+
+    var links = svg.select("#links");
+    if (links.empty()) {
+        links = svg.append("g").attr("id", "links");
+    }
+
+    var nodes = svg.select("#nodes");
+    if (nodes.empty()) {
+        nodes = svg.append("g").attr("id", "nodes");
+    }
+
+    var titlesg = svg.select("#titles");
+    if (titlesg.empty()) {
+        titlesg = svg.append("g").attr("id", "titles");
+    }
+
     window.addEventListener("resize", plot_by_industry_)
 
     function industry_data_(_) {
@@ -27,43 +41,55 @@ lib.sankeyModule = function(type) {
     function plot_by_industry_() {
         var width = contentDiv.clientWidth - 40;
         var width = contentDiv.clientWidth - 40;
-        const nodes_with_names = data.nodes
+        var nodes_with_names = data.nodes
         svg
             .attr("width", width)
             .attr("height", height + 30);
-        console.log(svg);
 
-        const sk = d3.sankey()
+        var sk = d3.sankey()
             .nodeWidth(15)
             .nodePadding(10)
             .size([width, height])
             .nodeWidth(20)
             .nodePadding(10)
             .nodeAlign(d3.sankeyJustify);
-        let graph = sk(data)
+        var graph = sk(data)
 
-        links
-            .selectAll("path")
+        var paths = links.selectAll("path")
             .data(graph.links)
             .attr("d", d3.sankeyLinkHorizontal())
             .attr("stroke-width", d => d.width)
-            .enter()
+            .on("click", function(d){
+                if (canzoom) linkZoom1(d);
+            });
+        paths.select("title").remove();
+        paths.append("title").text(d =>  "$" + d.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+        paths.enter()
             .append("path")
             .classed("link", true)
             .attr("fill", "none")
             .attr("d", d3.sankeyLinkHorizontal())
             .attr("stroke-width", d => d.width)
             .attr("stroke-opacity", 0.5)
-            .append("title").text(d =>  "$" + d.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-        nodes
-            .classed("nodes", true)
+            .on("click", function(d){
+                if (canzoom) linkZoom1(d);
+            });
+        paths.append("title").text(d =>  "$" + d.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+        paths.exit().remove();
+
+        var rects = nodes.classed("nodes", true)
             .selectAll("rect")
             .data(graph.nodes)
             .attr("x", d => d.x0)
             .attr("y", d => d.y0)
             .attr("width", d => d.x1 - d.x0)
-            .attr("height", d => d.y1 - d.y0)
-            .enter()
+            .attr("height", d => d.y1 - d.y0);
+        rects.select("title").remove();
+        rects.append("title").text(function(d) {
+            return d.id + "\n" + "$" + d.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
+        })
+
+        rects.enter()
             .append("rect")
             .classed("nodes", true)
             .attr("x", d => d.x0)
@@ -79,21 +105,26 @@ lib.sankeyModule = function(type) {
                 }
             }).append("title").text(function(d) {
                 return d.id + "\n" + "$" + d.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
-            });
-        titles
-            .style("font", "10px sans-serif")
+            })
+        rects.exit().remove();
+
+        var titles = titlesg.style("font", "10px sans-serif")
             .selectAll("text")
-            .attr("x", d => d.x0 < width / 2 ? d.x1 + 6 : d.x0 - 6)
-            .attr("y", d => (d.y1 + d.y0) / 2)
-            .attr("dy", "0.35em")
-            .attr("text-anchor", d => d.x0 < width / 2 ? "start" : "end")
             .data(graph.nodes)
-            .enter().append("text")
             .attr("x", d => d.x0 < width / 2 ? d.x1 + 6 : d.x0 - 6)
             .attr("y", d => (d.y1 + d.y0) / 2)
             .attr("dy", "0.35em")
             .attr("text-anchor", d => d.x0 < width / 2 ? "start" : "end")
             .text(d => d.id);
+        titles.enter()
+            .append("text")
+            .attr("x", d => d.x0 < width / 2 ? d.x1 + 6 : d.x0 - 6)
+            .attr("y", d => (d.y1 + d.y0) / 2)
+            .attr("dy", "0.35em")
+            .attr("text-anchor", d => d.x0 < width / 2 ? "start" : "end")
+            .text(d => d.id)
+        titles.exit().remove();
+
     }
 
     return {
@@ -104,20 +135,17 @@ lib.sankeyModule = function(type) {
 
 
 var generateNL = function(rawdata, include_parties) {
+    //console.log(rawdata);
     if (include_parties) {
-        console.log("using party info")
         for (i = 0; i < rawdata.length; i++) {
             rawdata[i].target =  rawdata[i].target + " (" + rawdata[i].party + ")"
         }
     }
     var n1 = new Set();
-    console.log("raw:")
-    console.log(rawdata);
     for (i = 0; i < rawdata.length; i++) {
         n1.add(rawdata[i].source)
         n1.add(rawdata[i].target)
     }
-    //console.log(n1);
     var l1 = {}
     var counter = 0
     var n2 = []
@@ -147,11 +175,44 @@ var generateNL = function(rawdata, include_parties) {
         counter++;
     });
 
-    console.log("nodes:")
-    console.log(n2)
-    console.log("links:")
-    console.log(l2)
     return {"nodes": n2, "links": l2 }
+};
+
+var linkZoom1 = function(d) {
+    d3.select("#backbtn").style("display","block");
+    var source = d.source.id;
+    var target  = d.target.id;
+    var sankeydata = d3.json("/industries/data?industry=" + encodeURIComponent(source) + "&party=" + encodeURIComponent(target) )
+    sankeydata.then(function(d){
+        var clean_data = generateNL(d, true)
+        var sankey = lib.sankeyModule("full", false);
+        sankey.industry_data(clean_data)
+        sankey.plot_by_industry()
+    });
+};
+
+var linkZoom2 = function(d) {
+    var source = d.source.id;
+    var target  = d.target.id;
+    var sankeydata = d3.json("/industries/data?industry=" + encodeURIComponent(source))
+    sankeydata.then(function(d){
+        var clean_data = generateNL(d, true)
+        var sankey = lib.sankeyModule("full");
+        sankey.industry_data(clean_data)
+        sankey.plot_by_industry()
+    });
+};
+
+var goback = function() {
+    d3.select("#backbtn").style("display","none");
+    var sankeydata = d3.json("/industries/data")
+    sankeydata.then(function(d){
+        var clean_data = generateNL(d, false)
+        var sankey = lib.sankeyModule("full", true);
+        sankey.industry_data(clean_data)
+        sankey.plot_by_industry()
+    });
+
 }
 
 
@@ -159,10 +220,10 @@ var sankeydata = d3.json(data_endpoint)
 sankeydata.then(function(d){
     if (data_endpoint.startsWith("/candidates")) {
         var clean_data = generateNL(d, false)
-        var sankey = lib.sankeyModule("tree");
+        var sankey = lib.sankeyModule("tree", false);
     } else if (data_endpoint.startsWith("/industries")){
         var clean_data = generateNL(d, false)
-        var sankey = lib.sankeyModule("full");
+        var sankey = lib.sankeyModule("full", true);
     } else{
         return
     }

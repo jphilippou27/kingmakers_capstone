@@ -1,4 +1,3 @@
-
 USE_POSTGRES=False
 
 import sqlite3
@@ -112,10 +111,12 @@ def independent_spenders_against_cand(cand_id):
     return query_pg("select cmte.name as spender, sum(amount) as total from cmte2cand join cmte on cmte.id = cmte2cand.filer_id where cmte2cand.cand_id = %s and trans_type = '24A' group by filer_id order by total desc", (cand_id,))
 
 def cmte_timeseries_against(cand_id):
-    return query_pg("select to_date(transaction_dt, 'MMDDYYYY') as date, sum(transaction_amt) as total from itpas218 x where x.cand_id = %s and transaction_tp = '24A' group by to_date(transaction_dt, 'MMDDYYYY') order by to_date(transaction_dt, 'MMDDYYYY') desc", [cand_id])
+    return query_pg("select x.transaction_dt as date, sum(x.transaction_amt) as total from itpas218 x where x.cand_id = %s and x.transaction_tp = '24A' group by x.transaction_dt having to_char(to_date(x.transaction_dt, 'MMDDYYYY'), 'YYYY-MM') is not null order by to_date(transaction_dt, 'MMDDYYYY') desc", [cand_id])
+
 
 def cmte_timeseries_for(cand_id):
-    return query_pg("select to_date(transaction_dt, 'MMDDYYYY') as date, sum(transaction_amt) as total from itpas218 x where x.cand_id = %s and transaction_tp != '24A' group by to_date(transaction_dt, 'MMDDYYYY') order by to_date(transaction_dt, 'MMDDYYYY') desc", [cand_id])
+    return query_pg("select to_char(to_date(x.transaction_dt, 'MMDDYYYY'), 'YYYY-MM') as date, sum(x.transaction_amt) as total from itpas218 x where x.cand_id = %s and x.transaction_tp != '24A' group by to_char(to_date(x.transaction_dt, 'MMDDYYYY'), 'YYYY-MM') having to_char(to_date(x.transaction_dt, 'MMDDYYYY'), 'YYYY-MM') is not null order by to_char(to_date(x.transaction_dt, 'MMDDYYYY'), 'YYYY-MM') desc ; ", [cand_id])
+    # return query_pg("select to_date(transaction_dt, 'MMDDYYYY') as date, sum(transaction_amt) as total from itpas218 x where x.cand_id = %s and transaction_tp != '24A' group by to_date(transaction_dt, 'MMDDYYYY') order by to_date(transaction_dt, 'MMDDYYYY') desc", [cand_id])
 
 def get_spending_by_cmte():
     rows = query_pg("select sum(amt) as total, id, name from (select sum(amount) as amt, pacs2cands.pac_id as id, cmtes.name as name from pacs2cands join cmtes on pacs2cands.pac_id = cmtes.cmte_id group by pac_id UNION ALL select sum(amount) as amt, pacs2pacs.filer_id as id, cmtes.name as name from pacs2pacs join cmtes on pacs2pacs.filer_id = cmtes.cmte_id group by filer_id order by amt desc ) group by id order by total desc limit 100")
@@ -192,7 +193,7 @@ def merge_nodes_links(links_list_fv, node_list):
 
 def get_network_by_industry(firstlastp):
     cand = (str(firstlastp))
-    row = query_pg("SELECT * FROM network_industry t1 LEFT JOIN (select distinct(industry) FROM network_industry WHERE firstlastp = %s) sub ON t1.industry = sub.industry WHERE (sub.industry IS NOT NULL) and (t1.contr_amt> 1)", [cand])
+    row = query_pg("SELECT * FROM network_industry t1 LEFT JOIN (select distinct(industry) FROM network_industry WHERE firstlastp = %s and ge_winner_ind_guess is not null) sub ON t1.industry = sub.industry WHERE (sub.industry IS NOT NULL) and (t1.contr_amt> 1)", [cand])
     print(row)
     df_network_viz_fv = pd.DataFrame([i.copy() for i in row])
     links_list_fv = make_links(df_network_viz_fv)
@@ -206,16 +207,22 @@ def get_individual_support_direct(cand_id):
     return query_pg("SELECT indivs.contribid AS indivs_contribid, indivs.contrib AS donor_name, SUM(indivs.amount) AS total_amt FROM pq_crp_indivs18 indivs WHERE indivs.recipid = %s GROUP BY indivs_contribid, donor_name ORDER BY total_amt DESC LIMIT %s", (cand_id, limit))
 
 def get_waterfall_data(cand_id):
-    result_set = query_pg("select 'Independent Spending Against' as group, -1 * sum(transaction_amt) as amt from itoth18 where other_id = '{cand_id}' and transaction_tp = '24A' union select 'Independent Spending For' as group, sum(transaction_amt) as amt from itoth18 where other_id = '{cand_id}' and transaction_tp = '24E' union select 'Individual Contributions' as group, sum(transaction_amt) as amt from itcont18 where cmte_id in (select cmte_id from pacs_related where cand_id = '{cand_id}') and transaction_tp similar to '(10|15|15E)' union select 'Contributions by Candidate' as group, sum(transaction_amt) as amt from itcont18 where cmte_id in (select cmte_id from pacs_related where cand_id = '{cand_id}') and transaction_tp = '15C';", (cand_id,))
+    result_set = query_pg("select 'Independent Spending Against' as group, -1 * sum(transaction_amt) as amt from itoth18 where other_id = %s and transaction_tp = '24A' union select 'Independent Spending For' as group, sum(transaction_amt) as amt from itoth18 where other_id = %s and transaction_tp = '24E' union select 'Individual Contributions' as group, sum(transaction_amt) as amt from itcont18 where cmte_id in (select cmte_id from pacs_related where cand_id = %s) and transaction_tp similar to '(10|15|15E)' union select 'Contributions by Candidate' as group, sum(transaction_amt) as amt from itcont18 where cmte_id in (select cmte_id from pacs_related where cand_id = %s) and transaction_tp = '15C';", (cand_id, cand_id, cand_id, cand_id))
     return result_set
 
 
 def get_candidate_tree(cand_id):
-    result_set = query_pg("select 'Large PAC Contributors' as source, cmte_nm as target, sum(total) as value from pacs_large where cmte_id in  (select cmte_id from pacs_related where cand_id = '{cand_id}') group by cmte_id, cmte_nm having sum(total) > 10000 union select 'Medium PAC Contributors' as source, cmte_nm as target, sum(total) as value from pacs_medium where cmte_id in  (select cmte_id from pacs_related where cand_id = '{cand_id}') group by cmte_id, cmte_nm having sum(total) > 10000 union select 'Small PAC Contributors' as source, cmte_nm as target, sum(total) as value from pacs_small where cmte_id in  (select cmte_id from pacs_related where cand_id = '{cand_id}') group by cmte_id, cmte_nm having sum(total) > 10000 union select 'Individual Contributors' as source, cmte_nm as target, sum(total) as value from indivs_simple where cmte_id in  (select cmte_id from pacs_related where cand_id = '{cand_id}') group by cmte_id, cmte_nm having sum(total) > 10000 union select y.cmte_nm as source, z.cmte_nm as target, sum(x.transaction_amt) as value from itoth18 x inner join cm18 y on y.cmte_id = x.cmte_id inner join cm18 z on z.cmte_id = x.other_id where x.other_id in ( select cmte_id from pacs_related where cand_id = '{cand_id}') and x.transaction_tp = '24G' group by y.cmte_nm, z.cmte_nm having sum(x.transaction_amt) > 10000 union select 'Super PACs' as source, z.cand_name as target, sum(x.transaction_amt) as value from itoth18 x join cn18 z on z.cand_id = x.other_id where x.other_id = '{cand_id}' and x.transaction_tp = '24E' group by z.cand_name having sum(x.transaction_amt) > 10000", (cand_id,))
+    result_set = query_pg("select 'Large PAC Contributors' as source, cmte_nm as target, sum(total) as value from pacs_large where cmte_id in  (select cmte_id from pacs_related where cand_id = %s) group by cmte_id, cmte_nm having sum(total) > 10000 union select 'Medium PAC Contributors' as source, cmte_nm as target, sum(total) as value from pacs_medium where cmte_id in  (select cmte_id from pacs_related where cand_id = %s) group by cmte_id, cmte_nm having sum(total) > 10000 union select 'Small PAC Contributors' as source, cmte_nm as target, sum(total) as value from pacs_small where cmte_id in  (select cmte_id from pacs_related where cand_id = %s) group by cmte_id, cmte_nm having sum(total) > 10000 union select 'Individual Contributors' as source, cmte_nm as target, sum(total) as value from indivs_simple where cmte_id in  (select cmte_id from pacs_related where cand_id = %s) group by cmte_id, cmte_nm having sum(total) > 10000 union select y.cmte_nm as source, z.cmte_nm as target, sum(x.transaction_amt) as value from itoth18 x inner join cm18 y on y.cmte_id = x.cmte_id inner join cm18 z on z.cmte_id = x.other_id where x.other_id in ( select cmte_id from pacs_related where cand_id = %s) and x.transaction_tp = '24G' group by y.cmte_nm, z.cmte_nm having sum(x.transaction_amt) > 10000 union select 'Super PACs' as source, z.cand_name as target, sum(x.transaction_amt) as value from itoth18 x join cn18 z on z.cand_id = x.other_id where x.other_id = %s and x.transaction_tp = '24E' group by z.cand_name having sum(x.transaction_amt) > 10000", (cand_id, cand_id, cand_id, cand_id, cand_id, cand_id))
     return result_set
 
 def get_industries_by_party():
-    # return query_pg("select industry as source, party as target, sum(total) as value from interest_spending group by industry, party order by value desc limit 50;" )
-    return query_pg("select industry as source, party as target, sum(total) as value from interest_spending where industry in (select industry as total from interest_spending group by industry order by sum(total) desc limit 50) group by industry, party having sum(total) > 500000000" )
+    return query_pg("select industry as source, party as target, sum(total) as value from interest_spending where industry in (select industry as total from interest_spending group by industry order by sum(total) desc limit 100) group by industry, party order by value desc limit 50" )
 
+def get_industry_partycands(industryname, partyname):
+    # print(industryname, partyname)
+    return query_pg("select industry as source, cand_name as target, party, sum(total) as value from interest_cand_spending where industry = %s and party =  %s group by industry, cand_name, party order by value desc limit 60", [industryname, partyname])
+
+def get_industry_cands(industryname):
+    # print(industryname, partyname)
+    return query_pg("select industry as source, cand_name as target, party, sum(total) as value from interest_cand_spending where industry = %s group by industry, cand_name, party order by value desc limit 60", [industryname])
 

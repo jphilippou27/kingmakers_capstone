@@ -242,8 +242,16 @@ def industries():
 
 @application.route("/industries/data", methods=["GET"])
 def get_industry_data():
-    return jsonify(backend.get_industries_by_party())
+    industryname = request.args.get("industry")
+    partyname = request.args.get("party")
+    if industryname is not None and partyname is not None: 
+        return jsonify(backend.get_industry_partycands(industryname, partyname))
+    elif industryname is not None and partyname is None:
+        return jsonify(backend.get_industry_cands(industryname))
+    else:
+        return jsonify(backend.get_industries_by_party())
 
+    return jsonify(backend.get_industries_by_party())
 @application.route("/sankeydata", methods=["GET"])
 def sankeydata():
     return jsonify(backend.get_simple_sankey_by_industry())
