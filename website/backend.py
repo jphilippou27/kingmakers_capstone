@@ -218,11 +218,11 @@ def get_candidate_tree(cand_id):
     return result_set
 
 def get_industries_by_party():
-    return query_pg("select industry as source, party as target, sum(total) as value from interest_spending where industry in (select industry as total from interest_spending group by industry order by sum(total) desc limit 100) group by industry, party order by value desc limit 50" )
+    return query_pg("select x.industry as source, x.party as target, x.party as party, sum(total) as value, y.proportion as proportion from interest_spending x join (select b.industry, cast(sum(b.total) as decimal) / a.grand_total as proportion from interest_spending b join (select industry, sum(total) as grand_total from interest_spending  group by industry) a on a.industry = b.industry where party = 'Democratic' group by b.industry, a.grand_total) y  on x.industry = y.industry where x.industry in (select industry as total from interest_spending group by industry order by sum(total) desc limit 50)  group by x.industry, x.party, y.proportion having sum(total) > 1000000 order by value desc limit 100;" )
 
 def get_industry_partycands(industryname, partyname):
     # print(industryname, partyname)
-    return query_pg("select industry as source, cand_name as target, party, sum(total) as value from interest_cand_spending where industry = %s and party =  %s group by industry, cand_name, party order by value desc limit 60", [industryname, partyname])
+    return query_pg("select industry as source, cand_name as target, party, sum(total) as value from interest_cand_spending where industry = %s and party =  %s group by industry, cand_name, party order by value desc limit 100", [industryname, partyname])
 
 def get_industry_cands(industryname):
     # print(industryname, partyname)

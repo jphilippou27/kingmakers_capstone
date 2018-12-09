@@ -6,11 +6,9 @@ lib.sankeyModule = function(type, zoom) {
         var height = 700;
         //var height = contentDiv.clientHeight - 40;
     } else {
-        var height = 1000;
+        var height = 1500;
     }
-    var data = [];
-    var canzoom = zoom;
-    const color = d3.scaleOrdinal(d3.schemeCategory10);
+    var data = []; var canzoom = zoom; const color = d3.scaleOrdinal(d3.schemeCategory10);
     const politicolor = d3.scaleSequential(d3.interpolateRdBu);
     var svg = d3.select("#sankey");
 
@@ -40,7 +38,6 @@ lib.sankeyModule = function(type, zoom) {
 
     function plot_by_industry_() {
         var width = contentDiv.clientWidth - 40;
-        var width = contentDiv.clientWidth - 40;
         var nodes_with_names = data.nodes
         svg
             .attr("width", width)
@@ -57,12 +54,13 @@ lib.sankeyModule = function(type, zoom) {
 
         var paths = links.selectAll("path")
             .data(graph.links)
+            //.transition().duration(1300)
             .attr("d", d3.sankeyLinkHorizontal())
             .attr("stroke-width", d => d.width)
             .on("click", function(d){
                 if (canzoom) linkZoom1(d);
             });
-        paths.select("title").remove();
+        paths.selectAll("title").remove();
         paths.append("title").text(d =>  "$" + d.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
         paths.enter()
             .append("path")
@@ -73,17 +71,26 @@ lib.sankeyModule = function(type, zoom) {
             .attr("stroke-opacity", 0.5)
             .on("click", function(d){
                 if (canzoom) linkZoom1(d);
-            });
-        paths.append("title").text(d =>  "$" + d.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+            })
+            .append("title").text(d =>  "$" + d.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+        //paths.selectAll("title").remove();
         paths.exit().remove();
 
         var rects = nodes.classed("nodes", true)
             .selectAll("rect")
             .data(graph.nodes)
+            //.transition().duration(1300)
             .attr("x", d => d.x0)
             .attr("y", d => d.y0)
             .attr("width", d => d.x1 - d.x0)
-            .attr("height", d => d.y1 - d.y0);
+            .attr("height", d => d.y1 - d.y0)
+            .attr("fill", function(d) {
+                if ("color" in d) {
+                    return politicolor(d.color); 
+                } else {
+                    return color(d.id)
+                }
+            });
         rects.select("title").remove();
         rects.append("title").text(function(d) {
             return d.id + "\n" + "$" + d.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
@@ -134,39 +141,83 @@ lib.sankeyModule = function(type, zoom) {
 };
 
 
-var generateNL = function(rawdata, include_parties) {
-    //console.log(rawdata);
-    if (include_parties) {
+var generateNL = function(rawdata, party_id, left_party_color, right_party_color) {
+    console.log(rawdata);
+    if (party_id) {
         for (i = 0; i < rawdata.length; i++) {
             rawdata[i].target =  rawdata[i].target + " (" + rawdata[i].party + ")"
         }
     }
-    var n1 = new Set();
-    for (i = 0; i < rawdata.length; i++) {
-        n1.add(rawdata[i].source)
-        n1.add(rawdata[i].target)
+    //var n1 = new Set();
+    var n1 = {};
+    if (left_party_color && right_party_color) {
+        console.log("left and right")
+        for (i = 0; i < rawdata.length; i++) {
+            if ("party" in rawdata[i]) {
+                n1[rawdata[i].source] = {"party": rawdata[i].party};
+                n1[rawdata[i].target] = {"party": rawdata[i].party};
+            } else {
+                n1[rawdata[i].source] = {};
+                n1[rawdata[i].target] = {};
+            }         
+        }
+    } else if (right_party_color) {
+        console.log("right only")
+        for (i = 0; i < rawdata.length; i++) {
+            if ("party" in rawdata[i]) {
+                //n1[rawdata[i].source] = {"proportion": rawdata[i].proportion};
+                n1[rawdata[i].target] = {"party": rawdata[i].party};
+            } else {
+                n1[rawdata[i].target] = {};
+            }
+            if ("proportion" in rawdata[i]) {
+                n1[rawdata[i].source] = {"proportion": rawdata[i].proportion};
+            } else {
+                n1[rawdata[i].source] = {};
+            }
+        }
     }
+    // for (i = 0; i < rawdata.length; i++) {
+    //     if ("party" in rawdata[i]) {
+    //         //n1[rawdata[i].source] = {"proportion": rawdata[i].proportion};
+    //         n1[rawdata[i].target] = {"party": rawdata[i].party};
+    //     } else {
+    //         n1[rawdata[i].target] = {};
+    //     }
+    //     if ("proportion" in rawdata[i]) {
+    //         n1[rawdata[i].source] = {"proportion": rawdata[i].proportion};
+    //     } else {
+    //         n1[rawdata[i].source] = {};
+    //     }
+    // }
+    console.log(n1);
+    //for (i = 0; i < rawdata.length; i++) {
+    //    n1.add({"id": rawdata[i].source})
+    //    n1.add({"id": rawdata[i].target})
+    //}
     var l1 = {}
     var counter = 0
     var n2 = []
-    if (include_parties) {
-        n1.forEach(function(value) {
-            if (value.includes("(DEM)")) {
-                n2[counter] = {"id": value, "color": 0.9}
-            } else if (value.includes("(REP)")) {
-                n2[counter] = {"id": value, "color": 0.1}
+    if (left_party_color || right_party_color) {
+        for(var key in n1) {
+            if (n1[key].party == "Democratic") {
+                n2[counter] = {"id": key, "color": 0.99}
+            } else if (n1[key].party == "Republican") {
+                n2[counter] = {"id": key, "color": 0.01}
+            } else if (n1[key].hasOwnProperty("proportion")) {
+                n2[counter] = {"id": key, "color": n1[key].proportion}
             } else {
-                n2[counter] = {"id": value}
+                n2[counter] = {"id": key}
             }
-            l1[value] = counter;
+            l1[key] = counter;
             counter++;
-        });
+        };
     } else {
-        n1.forEach(function(value) {
-            n2[counter] = {"id": value}
-            l1[value] = counter;
+        for (var key in n1) {
+            n2[counter] = {"id": key}
+            l1[key] = counter;
             counter++;
-        });
+        };
     }
     l2 = []
     var counter = 0
@@ -174,7 +225,7 @@ var generateNL = function(rawdata, include_parties) {
         l2[counter] = {"source": l1[value.source], "target": l1[value.target], "value": +value.value }
         counter++;
     });
-
+    console.log(n2);
     return {"nodes": n2, "links": l2 }
 };
 
@@ -184,7 +235,8 @@ var linkZoom1 = function(d) {
     var target  = d.target.id;
     var sankeydata = d3.json("/industries/data?industry=" + encodeURIComponent(source) + "&party=" + encodeURIComponent(target) )
     sankeydata.then(function(d){
-        var clean_data = generateNL(d, true)
+        //console.log(d)
+        var clean_data = generateNL(d, true, true, true)
         var sankey = lib.sankeyModule("full", false);
         sankey.industry_data(clean_data)
         sankey.plot_by_industry()
@@ -207,7 +259,7 @@ var goback = function() {
     d3.select("#backbtn").style("display","none");
     var sankeydata = d3.json("/industries/data")
     sankeydata.then(function(d){
-        var clean_data = generateNL(d, false)
+        var clean_data = generateNL(d, false, false, true)
         var sankey = lib.sankeyModule("full", true);
         sankey.industry_data(clean_data)
         sankey.plot_by_industry()
@@ -219,10 +271,10 @@ var goback = function() {
 var sankeydata = d3.json(data_endpoint)
 sankeydata.then(function(d){
     if (data_endpoint.startsWith("/candidates")) {
-        var clean_data = generateNL(d, false)
+        var clean_data = generateNL(d, false, false, true)
         var sankey = lib.sankeyModule("tree", false);
     } else if (data_endpoint.startsWith("/industries")){
-        var clean_data = generateNL(d, false)
+        var clean_data = generateNL(d, false, false, true)
         var sankey = lib.sankeyModule("full", true);
     } else{
         return

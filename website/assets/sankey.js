@@ -25,8 +25,7 @@ lib.sankeyModule = function(type) {
     }
 
     function plot_by_industry_() {
-        var width = contentDiv.clientWidth - 40;
-        var width = contentDiv.clientWidth - 40;
+        var width = contentDiv.clientWidth;
         const nodes_with_names = data.nodes
         svg
             .attr("width", width)
