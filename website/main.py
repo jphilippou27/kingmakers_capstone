@@ -266,8 +266,7 @@ def networkdata():
     if request.method == "POST":
         text = request.form['search2']
         return text
-    if request.method == "GET":
-        return (backend.get_network_by_industry(text))
+    return (backend.get_network_by_industry(text))
 
 @application.route("/tableau")
 def tableau():
