@@ -260,16 +260,14 @@ def sankeydata():
 def network():
     return render_template("network.html")
 
-@application.route("/networkdata", methods=["GET"])
+@application.route("/networkdata", methods=["GET", "POST"])
 def networkdata():
-    return (backend.get_network_by_industry())
-
-@application.route('/network', methods=['POST'])
-def network_searchbox_data():
-    text = request.button['search2']
-    if  len(text) < 1: 
-        text = "Sean Patrick Maloney (D)"
-    return text
+    text = "Sean Patrick Maloney (D)"
+    if request.method == "POST":
+        text = request.button['search2']
+        return text
+    if request.method == "GET":
+        return (backend.get_network_by_industry(text))
 
 @application.route("/tableau")
 def tableau():
