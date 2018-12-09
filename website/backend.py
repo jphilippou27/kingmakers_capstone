@@ -166,8 +166,9 @@ def make_nodes(dataset):
     df_nodes_I = pd.DataFrame(dataset.groupby(['industry'], as_index = False)['contr_amt'].sum())
     df_nodes_I["party"] = "Industry"
     df_nodes_I['ge_winner_ind_guess'] = "NotApplicable"
-    df_nodes_I.columns = ['firstlastp' if x== 0 else x for x in df_nodes_I.columns]
-    df_nodes_I.head()
+    df_nodes_I = df_nodes_I.rename(index=str, columns={"industry": "firstlastp", " contr_amt": " contr_amt", "party":"party", "ge_winner_ind_guess":"ge_winner_ind_guess" }) 
+    #['firstlastp' if x == 0 else x for x in df_nodes_I.columns]
+    print(df_nodes_I.head())
     
     #same thing for politicians
     df_nodes_P = pd.DataFrame(dataset.groupby(['firstlastp','party','ge_winner_ind_guess'], as_index = False)['contr_amt'].sum())
@@ -181,6 +182,7 @@ def make_nodes(dataset):
     
     #export
     return(node_list)
+
 def merge_nodes_links(links_list_fv, node_list):
      #merge
     json_prep = {"nodes":node_list, "links":links_list_fv}

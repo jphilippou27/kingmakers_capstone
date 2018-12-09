@@ -1,6 +1,18 @@
 {% extends 'index.html' %}
 
 {% block content %}
+<div class="nav">
+    <span id='menu'>&#9776;</span> 
+    <ul id="top-menu">
+        <li><a href="#intro" class="links active">Intro</a></li>
+        <li><a href="#sankey" class="links">Industry</a></li>
+        <li><a href="#network" class="links">Network</a></li>
+        <li><a href="#candidate" class="links">Candidate</a></li>
+        <li><a href="#links" class="links">All visualizations</a></li>
+    </ul>
+</div>
+<div id='story-wrapper'>
+<div id='intro' class='story-container'>
 <!--<h1>The civic process</h1>
 <p>Near the end of every even-numbered year, United States citizens 18 and older cast a vote for the person who will represent them in the next Congress. In 2018, we elected members of the 116th Congress, who are expected to report for duty on January 3, 2019, 230 years after the First Congress commenced and the United States Government formally began operations. The winners of this election will go on to serve either a two- or six-year term in the House of Representatives or the Senate, respectively, setting historic lesgislative agendas that will guide the country for generations.</p>-->
 <!--<h1>The representative's dilemma</h1>
@@ -11,18 +23,32 @@
 We start by asking: Does raising more money
 than your opponent increase your chances of winning an election?</p>
 <p>Data released for the 2016 election by the Federal Election Commission show that in a shocking <strong>94%</strong> of races, the candidate who raised the most money also won the election. The effects of outraising your opponent are shown below by varying degrees:</p>
-<div style='margin:auto; width:85%;'><img src='static/figure-1.png' alt='Graph showing relationship between overall percentage raised in each election vs. chances of winning election. As fraction raised increases, so do the chances of winning.'></div>
-<p>We see above that more money corresponds to higher chances of winning an election. And it's no small effect. Below, we show two very different races, one with a significant partisan advantage and one highly competitive:
+<div style='margin:auto; width:85%;'><img src='https://s3.us-south.objectstorage.softlayer.net/staticassets2/figure-1.png' alt='Graph showing relationship between overall percentage raised in each election vs. chances of winning election. As fraction raised increases, so do the chances of winning.'></div>
+<!--<p>We see above that more money corresponds to higher chances of winning an election. And it's no small effect. Below, we show two very different races, one with a significant partisan advantage and one highly competitive:
 <div style='margin:auto; width:85%;'><img src='static/close-far-spend.png' alt='Alaska senator race shows Lisa Murkowski winning and vastly outspending her opponent. California District 21 race shows a much closer fundraising with David Valadao narrowly outraising his opponent and winning.'></div>
 <p>On the left, the Alaska senate race was a fundraising blowout by Lisa Murkowski, who also handily won the election. Despite the significant partisan advantage, her campaign still raised upwards of $5 million, while Democrats barely put up a fight for her seat. On the right, the CA-21 race was much closer, with David Valadao narrowly outraising his competition and winning the election.</p>
-<p>This isn't always the case. Sometimes a candidate wins without having the most money. However, the fundraising effect is strong enough to warrant further investigation.</p>
+<p>This isn't always the case. Sometimes a candidate wins without having the most money. However, the fundraising effect is strong enough to warrant further investigation.</p>-->
 <h1>So we built Kingmakers.</h1>
 <p>Kingmakers is a tool which guides you through the campaign finances of your elected representatives. This data, which the Federal Election Commission (FEC) makes publicly available, shows which individuals, PACs, and industries contribute to which campaigns, and how much is being contributed. There are many aspects to this data, so we've created several visualizations to help you find your way around.</p>
-
+<p>As an example, let's look at a few of the visualization products and how they fit in with one another.</p>
+</div>
+<div id='sankey' class='story-container'>
+    <p>Analysis starts with industry sankey diagram</p>
+    <img src='https://s3.us-south.objectstorage.softlayer.net/staticassets2/sankey_prev.png'>
+</div>
+<div id='network' class='story-container'>
+    <p>Analysis gets deeper with network diagram</p>
+    <img src='https://s3.us-south.objectstorage.softlayer.net/staticassets2/network_prev.png'>
+</div>
+<div id='candidate' class='story-container'>
+    <p>Deep dive into the candidate dashboard to understand finances</p>
+    <img src='https://s3.us-south.objectstorage.softlayer.net/staticassets2/candidate_prev.png'>
+</div>
+<div id='links' class='story-container'>
 <a href='/candidates'>
     <div class='row'>
     <div class='column left'>
-        <img src='static/candidate_prev.png'>
+        <img src='https://s3.us-south.objectstorage.softlayer.net/staticassets2/candidate_prev.png'>
     </div>
     <div class='column right'>
         <h4>Candidates</h4>
@@ -33,7 +59,7 @@ than your opponent increase your chances of winning an election?</p>
 <a href='/sankey'>
 <div class='row'>
     <div class='column left'>
-        <img src='static/sankey_prev.png'>
+        <img src='https://s3.us-south.objectstorage.softlayer.net/staticassets2/sankey_prev.png'>
     </div>
     <div class='column right'>
         <h4>Sankey</h4>
@@ -44,7 +70,7 @@ than your opponent increase your chances of winning an election?</p>
 <a href='/network'>
 <div class='row'>
     <div class='column left'>
-        <img src='static/network_prev.png'>
+        <img src='https://s3.us-south.objectstorage.softlayer.net/staticassets2/network_prev.png'>
     </div>
     <div class='column right'>
         <h4>Network</h4>
@@ -55,7 +81,7 @@ than your opponent increase your chances of winning an election?</p>
 <a href='/tableau'>
 <div class='row'>
     <div class='column left'>
-        <img src='static/geography_prev.png'>
+        <img src='https://s3.us-south.objectstorage.softlayer.net/staticassets2/geography_prev.png'>
     </div>
     <div class='column right'>
         <h4>Geographic</h4>
@@ -63,6 +89,26 @@ than your opponent increase your chances of winning an election?</p>
     </div>
 </div>
 </a>
+</div>
 <h4>About Us</h4>
 <p>We are students in the Masters of Information and Data Science at UC Berkeley: Matt Proetsch, Jennifer Phillippou, Daniel Balck, and Qing Zhang</p>
+<script>
+$(document).ready(function(){
+  var $sections = $('.story-container');
+  $(window).scroll(function(){
+    var currentScroll = $(this).scrollTop();
+    var $currentSection = $('#intro')
+    $sections.each(function(){
+      var divPosition = $(this).offset().top;
+      if( divPosition - 1 < currentScroll ){
+        $currentSection = $(this);
+      }
+    })
+    var id = $currentSection.attr('id');
+    $('a').removeClass('active');
+    $("a[href='#"+id+"']").addClass('active');
+
+  });
+});
+</script>
 {% endblock %}
