@@ -871,8 +871,8 @@ $("#button").on("click", function searchNode() {
 })
 	  
 //$("#button2").on("click", draw_politician_network();}
-})
-	}//end of draw politican network
+  
+}//end of draw politican network
  /**
    * filter_nodes
    *
