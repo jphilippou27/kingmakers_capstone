@@ -813,7 +813,10 @@ var scrollVis = function () {
 
 
 //trying to add search
-graph = d3.json('/static/data_for_testing/industry_amt_winner_mini.json', function(error, graph) {
+			//d3.json("/networkdata", function(error, graph) { 
+		//  if (error) throw error;
+
+graph = d3.json('/networkdata', function(error, graph) {
 		//console.log(graph)
 		var optArray = [];
 		for (var i = 0; i < graph.nodes.length - 1; i++) {
