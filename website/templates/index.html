@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Kingmakers</title>
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <!--<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">-->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="https://unpkg.com/d3-array@1"></script>
@@ -12,6 +12,28 @@
     <script src="https://unpkg.com/d3-sankey@0"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.13.0/d3-legend.js"></script>
     <!--<script type="text/javascript" src={{ url_for('static', filename='sankey.js') }}></script> -->
+    <link rel="icon" href="https://s3.us-south.objectstorage.softlayer.net/staticassets2/kingmakers-favicon.png" sizes="32x32">
+    <!-- Materialize.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Materialize.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <!-- collapsible sidenav -->
+    <script>
+var hideSidebar = function() {
+  var elems = document.querySelectorAll('.sidenav');
+  var instances = M.Sidenav.init(elems);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  // do it twice. why do it twice? because you have to.
+  hideSidebar();
+  window.setTimeout(hideSidebar, 250);
+});
+    </script>
+
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 <style>
 .node rect {
   cursor: move;
@@ -37,34 +59,6 @@
 * {
     box-sizing: border-box;
 }
-
-/* Create two unequal columns that floats next to each other */
-.table-column {
-    float: left;
-    padding: 10px;
-    height: 300px; 
-}
-
-.left {
-  width: 40%;
-}
-
-.right {
-  width: 60%;
-  padding: 70px 0;
-}
-
-/* Clear floats after the columns */
-.table-row:after {
-    content: "";
-    display: table;
-    clear: both;
-}
-.links{
-    color: black;
-    font-size: 20px;
-    font-weight: normal;
-}
 .active{
     color: white;
     background-color: rgba(100,100,100,1);
@@ -74,7 +68,19 @@
 </head>
 <body>
 <header>
-    <ul id="nav-mobile" class="sidenav sidenav-fixed" style="overflow:auto; transform:translateX(0%); background-image: linear-gradient(to bottom, white, rgba(244, 244, 244, 255)">
+    <nav class="top-nav">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="row">
+                    <div class="col s12 m11 offset-m1">
+                        <h4 class="header">Kingmakers</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <h4 class="pinned" style="left: 20px; top: 0px; padding:3px;"><a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a></h4>
+    <ul id="slide-out" class="sidenav" style="overflow:auto; transform:translateX(0%); background-image: linear-gradient(to bottom, white, rgba(244, 244, 244, 255)">
         <a id="logo-container" class="logo brand-logo" href="/" style="padding:25px;"><center><img width="150" src="https://s3.us-south.objectstorage.softlayer.net/staticassets2/kingmakers-logo.png"></center></a>
         <li class="bold">
             <a href="/" class="waves-effect waves-teal">Home</a>
@@ -101,11 +107,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>-->
     <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
+
 {% block script %}  
 {% endblock %}
 </html> 
