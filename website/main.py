@@ -264,7 +264,7 @@ def network():
 def networkdata():
     text = "Sean Patrick Maloney (D)"
     if request.method == "POST":
-        text = request.button['search2']
+        text = request.button['search']
         return text
     if request.method == "GET":
         return (backend.get_network_by_industry(text))
