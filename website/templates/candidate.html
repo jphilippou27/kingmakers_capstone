@@ -36,29 +36,69 @@
 }
 </style>
 <div class="row">
-    <div class="col s12 m6 l6" >
-        <div class="section" id="sankey-content">
-            <header class="w3-container"><h4>Direct Contributions to {{cand_name}}</h2></header>
-            <svg id="sankey"></svg>
+    <div class="col s12 m12 l12">
+        <div class="card">
+            <div class="card-content">
+                <div id="searchbox" class="input-field">
+                    <input id="search" type="search" name="candname" value="Candidate Search">
+                </div>
+            </div>
         </div>
     </div>
-    <div class="col s12 m6 l6" >
-        <div class="w3-card-4" id="waterfall-content">
-            <header class="w3-container"><h4>Contributions Breakdown {{cand_name}}</h2></header>
-            <svg id="waterfall"></svg> 
+</row>
+<div class="row">
+    <div class="col s2 m3 l3 ">
+        <div class="card">
+            <div class="card-content">
+                <table class="striped">
+                    <thead>
+                        <tr><th colspan="2">Candidate Info</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><th>Name</th><td>{{cand_name}}</td></tr>
+                        <tr><th>FEC ID</th><td>{{cand_id}}</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
-</div>
-<div class="row" >
-    <div class="s12" id="content">
-        <header class="w3-container"><h4>PAC Spending for {{cand_name}}</h4></header>
-        <svg id="timeseries_for"></svg>
     </div>
 </div>
 <div class="row">
-    <div class="s12" id="content">
-        <header class="w3-container"><h4>PAC Spending against {{cand_name}}</h4></header>
-        <svg id="timeseries_against"></svg>
+    <div class="col s12 m6 l6" >
+        <div class="card">
+            <div class="card-content" id="sankey-content">
+                <header><h4>Direct Contributions to {{cand_name}}</h2></header>
+                <svg id="sankey"></svg>
+            </div>
+        </div>
+    </div>
+    <div class="col s12 m6 l6" >
+        <div class="card">
+            <div class="card-content" id="waterfall-content">
+                <header class="container"><h4>Contributions Breakdown {{cand_name}}</h2></header>
+                <svg id="waterfall"></svg> 
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col s12 m12 l12" >
+        <div class="card">
+            <div class="card-content" id="content">
+                <header><h4>PAC Spending for {{cand_name}}</h4></header>
+                <svg id="timeseries_for"></svg>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col s12 m12 l12" >
+        <div class="card">
+            <div class="card-content" id="content">
+                <header class="w3-container"><h4>PAC Spending against {{cand_name}}</h4></header>
+                <svg id="timeseries_against"></svg>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
@@ -73,6 +113,7 @@
     <script type="text/javascript" src=static/candidate.js></script>
     <script type="text/javascript" src=static/sankey.js></script>
     <script type="text/javascript" src=static/waterfall.js></script>
+    <script type="text/javascript" src=static/lookup.js></script>
 {% endblock %}
 
 

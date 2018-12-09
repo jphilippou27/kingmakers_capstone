@@ -1,10 +1,17 @@
 {% extends 'index.html' %}
 
 {% block content %}
-<h3>Candidate Search</h3>
-<div id="searchbox">
-    <input id="search" type="text" name="candname" value="enter name">
-</div>
+<div class="row">
+    <div class="col s12 m12 l12">
+        <div class="card">
+            <div class="card-content">
+                <div id="searchbox" class="input-field">
+                    <input id="search" type="search" name="candname" value="Candidate Search">
+                </div>
+            </div>
+        </div>
+    </div>
+</row>
 {% endblock %}
 
 {% block script %}
