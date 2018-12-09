@@ -869,6 +869,9 @@ $("#button").on("click", function searchNode() {
             .style("opacity", 1);
     }
 })
+	  
+//$("#button2").on("click", draw_politician_network();}
+})
 	}//end of draw politican network
  /**
    * filter_nodes
@@ -1475,4 +1478,7 @@ function searchNodeII() { searchNode;}
             .duration(5000)
             .style("opacity", 1);
     }
+    
 }*/
+
+$("#button2").on("click", draw_politician_network();}
