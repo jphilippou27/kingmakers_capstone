@@ -1481,4 +1481,4 @@ function searchNodeII() { searchNode;}
     
 }*/
 
-//$("#button2").on("click", draw_politician_network();)
+$("#button2").on("click", draw_politician_network(); {})
