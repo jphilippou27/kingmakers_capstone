@@ -655,7 +655,13 @@ var scrollVis = function () {
 		//var networkdata = d3.json(data_endpoint)
 		//networkdata.then(function( graph) {
 		//d3.json("static/data_for_testing/industry_amt_winner_mini.json", function(error, graph) {
-		d3.json("/networkdata", function(error, graph) { 
+        var candName = $('#search2').val();
+        if (candName === "") {
+            candName = "Sean Patrick Maloney (D)";
+        }
+        dataEndpoint = '/networkdata/' + candName;
+        console.log(dataEndpoint);
+		d3.json(dataEndpoint, function(error, graph) {
 		  if (error) throw error;
 
 
@@ -813,10 +819,15 @@ var scrollVis = function () {
 
 
 //trying to add search
-			//d3.json("/networkdata", function(error, graph) { 
+			//d3.json("/networkdata", function(error, graph) {
 		//  if (error) throw error;
-
-graph = d3.json('/networkdata', function(error, graph) {
+        var candName = $('#search2').val();
+        if (candName === "") {
+            candName = "Sean Patrick Maloney (D)";
+        }
+        dataEndpoint = '/networkdata/' + candName;
+        console.log(dataEndpoint);
+        graph = d3.json(dataEndpoint, function(error, graph) {
 		//console.log(graph)
 		var optArray = [];
 		for (var i = 0; i < graph.nodes.length - 1; i++) {
@@ -831,7 +842,7 @@ graph = d3.json('/networkdata', function(error, graph) {
 						});
 
 		}); //end of find search
-			
+
 graph = d3.json('/networkNodeList', function(error, data) {
 		//console.log(graph)
 	var optArray = [];
@@ -841,14 +852,14 @@ graph = d3.json('/networkNodeList', function(error, data) {
 		//}
 
 		optArray = optArray.sort();
-	
+
 		$(function () {
 			$("#search2").autocomplete({
 				source: optArray});
 						});
 
 		}); //end of find search
-			
+
 })//end of Data ??
 
 $("#button").on("click", function searchNode() {
@@ -869,9 +880,10 @@ $("#button").on("click", function searchNode() {
             .style("opacity", 1);
     }
 })
-	  
-//$("#button2").on("click", draw_politician_network();}
-  
+
+// $("#button2").on("click", function() { console.log('hey'); })
+$("#button2").on("click", function() { draw_politician_network();});
+
 }//end of draw politican network
  /**
    * filter_nodes
@@ -1478,7 +1490,6 @@ function searchNodeII() { searchNode;}
             .duration(5000)
             .style("opacity", 1);
     }
-    
+
 }*/
 
-//$("#button2").on("click", draw_politician_network();)

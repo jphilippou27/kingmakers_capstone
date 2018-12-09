@@ -260,11 +260,15 @@ def sankeydata():
 def network():
     return render_template("network.html")
 
-@application.route("/networkdata", methods=["GET", "POST"])
-def networkdata():
-    text = "Sean Patrick Maloney (D)"
+@application.route("/networkdata/<cand_name>", methods=["GET", "POST"])
+def networkdata(cand_name):
+    if type(cand_name) is None or cand_name == "":
+        text = "Sean Patrick Maloney (D)"
     if request.method == "POST":
         text = request.form['search2']
+        print(text)
+    else:
+        text = str(cand_name)
     return (backend.get_network_by_industry(text))
 
 @application.route("/networkNodeList", methods=["GET"])
