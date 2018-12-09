@@ -1,12 +1,14 @@
 {% extends 'index.html' %}
 
 {% block content %}
-<div id="sankey-content" class="w3-panel">
-    <h2>Political Spending By Industry</h2>
-    <p>Click a path to zoom into a per-candidate view</p>
-    <button id="backbtn" class="w3-btn w3-blue w3-margin-bottom " style="display: none" onclick="goback()">Back</button> 
-    <svg id="sankey"></svg>
-<div>
+<div class="container">
+    <div id="sankey-content" >
+        <h2>Political Spending By Industry</h2>
+        <p>Click a path to zoom into a per-candidate view</p>
+        <a id="backbtn" class="waves-effect waves-light btn light-blue darken-4" style="display: none" onclick="goback()">Back</a>
+        <svg id="sankey"></svg>
+    </div>
+</div>
 {% endblock %}
 
 {% block script %}
