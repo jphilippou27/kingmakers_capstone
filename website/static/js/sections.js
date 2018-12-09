@@ -834,9 +834,10 @@ graph = d3.json('/networkdata', function(error, graph) {
 			
 graph = d3.json('/networkNodeList', function(error, graph) {
 		//console.log(graph)
-		var optArray = [];
+		var optArray = graph.firstlastp
 		//for (var i = 0; i < graph.length - 1; i++) {
-		optArray = graph.firstlastp
+		//optArray2 = function(d) {graph.firstlastp
+		
 		//}
 
 		optArray = optArray.sort();
