@@ -205,7 +205,8 @@ def get_network_by_industry(firstlastp):
     return (network_json)
 
 def get_network_node_list():
-    node_list = query_pg("SELECT distinct(fistlastp) FROM network_industry GROUP BY firstlastp")
+    row = query_pg("SELECT distinct(fistlastp) FROM network_industry GROUP BY firstlastp")
+    node_list = pd.DataFrame([i.copy() for i in row])
     return (node_list)
 
 def get_individual_support_direct(cand_id):
