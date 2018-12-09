@@ -708,7 +708,7 @@ var scrollVis = function () {
 
 
 				  node.append('circle')
-					.attr('r', function(d) {return(Math.sqrt(d.contribution_total)/100)}) //used to be R  //and function(d) {console.log(d.target.value)})
+					.attr('r', function(d) {return(Math.sqrt(d.contribution_total)/125)}) //used to be R  //and function(d) {console.log(d.target.value)})
 					.attr("fill", function(d) {return color(d.group);})
 					///trying to add winner highlight
 					.style("stroke-width", function(d) {
@@ -720,7 +720,7 @@ var scrollVis = function () {
 						tooltip.transition()
 							.duration(300)
 							.style("opacity", .8);
-						tooltip.html("Name:" + d.name + "<p/>Party:" + d.group + "<p/>Total Contributions: " + d.contribution_total)
+						tooltip.html("Name:" + d.name + "<p/>Party:" + d.group + "<p/>Total Contributions: " + d3.format(",.0f")d.contribution_total)
 							.style("left", (d3.event.pageX) + "px")
 							.style("top", (d3.event.pageY + 10) + "px");
 						})
