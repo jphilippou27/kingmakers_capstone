@@ -196,7 +196,8 @@ def merge_nodes_links(links_list_fv, node_list):
 def get_network_by_industry(firstlastp):
     cand = (str(firstlastp))
     row = query_pg("SELECT * FROM network_industry t1 LEFT JOIN (select distinct(industry) FROM network_industry WHERE firstlastp = %s and ge_winner_ind_guess is not null) sub ON t1.industry = sub.industry WHERE (sub.industry IS NOT NULL) and (t1.contr_amt> 150000)", [cand])
-    print(row)
+    # print(row)
+    print(cand)
     df_network_viz_fv = pd.DataFrame([i.copy() for i in row])
     links_list_fv = make_links(df_network_viz_fv)
     node_list = make_nodes(df_network_viz_fv)
@@ -205,8 +206,11 @@ def get_network_by_industry(firstlastp):
     return (network_json)
 
 def get_network_node_list():
-    node_list = query_pg("SELECT distinct(fistlastp) FROM network_industry GROUP BY firstlastp")
-    return (node_list)
+    import json
+    row = query_pg("SELECT DISTINCT(firstlastp) FROM network_industry GROUP BY firstlastp")
+    json_dump = json.dumps(row, indent=1)
+    #node_list = pd.DataFrame([i.copy() for i in row])
+    return (json_dump)
 
 def get_individual_support_direct(cand_id):
     limit = 10

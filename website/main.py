@@ -265,7 +265,6 @@ def networkdata():
     text = "Sean Patrick Maloney (D)"
     if request.method == "POST":
         text = request.form['search2']
-        return text
     return (backend.get_network_by_industry(text))
 
 @application.route("/networkNodeList", methods=["GET"])

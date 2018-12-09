@@ -832,15 +832,16 @@ graph = d3.json('/networkdata', function(error, graph) {
 
 		}); //end of find search
 			
-graph = d3.json('/networkNodeList', function(error, graph) {
+graph = d3.json('/networkNodeList', function(error, data) {
 		//console.log(graph)
-		var optArray = [];
-		for (var i = 0; i < graph.nodes.length - 1; i++) {
-			optArray.push(graph.nodes[i].name);
-		}
+	var optArray = [];
+	for (var i = 0; i < data.length; i++) {
+		optArray.push( data[i].firstlastp);
+	}
+		//}
 
 		optArray = optArray.sort();
-
+	
 		$(function () {
 			$("#search2").autocomplete({
 				source: optArray});
@@ -868,7 +869,10 @@ $("#button").on("click", function searchNode() {
             .style("opacity", 1);
     }
 })
-	}//end of draw politican network
+	  
+//$("#button2").on("click", draw_politician_network();}
+  
+}//end of draw politican network
  /**
    * filter_nodes
    *
@@ -1474,4 +1478,7 @@ function searchNodeII() { searchNode;}
             .duration(5000)
             .style("opacity", 1);
     }
+    
 }*/
+
+$("#button2").on("click", draw_politician_network(); {})
