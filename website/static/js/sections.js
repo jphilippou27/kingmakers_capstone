@@ -836,10 +836,10 @@ graph = d3.json('/networkNodeList', function(error, graph) {
 		//console.log(graph)
 		var optArray = [];
 		//for (var i = 0; i < graph.length - 1; i++) {
-		optArray.push(graph.firstlastp);
+		optArray.push(graph);
 		//}
 
-		optArray = optArray.sort();
+		optArray = graph.sort();
 
 		$(function () {
 			$("#search2").autocomplete({
