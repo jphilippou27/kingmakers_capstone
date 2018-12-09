@@ -616,7 +616,6 @@ var scrollVis = function () {
    *  filler words. also ensures squares
    *  are moved back to their place in the grid
    */
-
   function draw_politician_network(){
 	//load the data
 		//function find_data(){}
@@ -885,6 +884,7 @@ $("#button").on("click", function searchNode() {
 $("#button2").on("click", function() { draw_politician_network();});
 
 }//end of draw politican network
+  
  /**
    * filter_nodes
    *
