@@ -830,8 +830,25 @@ graph = d3.json('/networkdata', function(error, graph) {
 				source: optArray});
 						});
 
-		});
-})
+		}); //end of find search
+			
+graph = d3.json('/networkNodeList', function(error, graph) {
+		//console.log(graph)
+		var optArray = [];
+		for (var i = 0; i < graph.nodes.length - 1; i++) {
+			optArray.push(graph.nodes[i].name);
+		}
+
+		optArray = optArray.sort();
+
+		$(function () {
+			$("#search2").autocomplete({
+				source: optArray});
+						});
+
+		}); //end of find search
+			
+})//end of Data ??
 
 $("#button").on("click", function searchNode() {
     //find the node
