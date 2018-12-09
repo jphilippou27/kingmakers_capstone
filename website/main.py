@@ -268,6 +268,10 @@ def networkdata():
         return text
     return (backend.get_network_by_industry(text))
 
+@application.route("/networkNodeList, methods=["GET"])
+def networkNodedata():
+    return (backend.get_network_node_list())
+
 @application.route("/tableau")
 def tableau():
     return render_template("tableau.html")
