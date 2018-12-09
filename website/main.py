@@ -1,9 +1,9 @@
-from flask import Flask 
+from flask import Flask
 from flask import g
 from flask import jsonify
 from flask import request
-from flask import render_template 
-from flask import url_for 
+from flask import render_template
+from flask import url_for
 import sys
 
 #sys.path.insert(0, 'dash')
@@ -158,7 +158,7 @@ def candidate_query():
 def candidate_view():
     if request.method == "GET":
         cand_id = request.args.get("id")
-        if cand_id is None: 
+        if cand_id is None:
             render_template("search_cand.html")
         cand_data = backend.get_candidate(cand_id)
         print(cand_data)
@@ -244,7 +244,7 @@ def industries():
 def get_industry_data():
     industryname = request.args.get("industry")
     partyname = request.args.get("party")
-    if industryname is not None and partyname is not None: 
+    if industryname is not None and partyname is not None:
         return jsonify(backend.get_industry_partycands(industryname, partyname))
     elif industryname is not None and partyname is None:
         return jsonify(backend.get_industry_cands(industryname))
@@ -276,7 +276,10 @@ def tableau():
 if __name__ == "__main__":
     with application.app_context():
         backend.get_pg()
-    application.run(host="0.0.0.0")
+    if len(sys.argv) > 1:
+        application.run(host="0.0.0.0", port=int(sys.argv[1]))
+    else:
+        application.run(host="0.0.0.0")
     #app = index2.init_dash(application)
     #application.run(host="0.0.0.0")
 
