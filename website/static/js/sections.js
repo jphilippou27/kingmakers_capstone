@@ -832,16 +832,19 @@ graph = d3.json('/networkdata', function(error, graph) {
 
 		}); //end of find search
 			
-graph = d3.json('/networkNodeList', function(error, graph) {
+graph = d3.json('/networkNodeList', function(error, data) {
 		//console.log(graph)
-		var optArray = graph.firstlastp
+	
+	for (var i = 0; i < data.length; i++) {
+		var firstitem = data[i].firstlastp;
+		
 		//for (var i = 0; i < graph.length - 1; i++) {
 		//optArray2 = function(d) {graph.firstlastp
 		
 		//}
 
-		optArray = optArray.sort();
-
+		optArray = firstitem.sort();
+	}
 		$(function () {
 			$("#search2").autocomplete({
 				source: optArray});
