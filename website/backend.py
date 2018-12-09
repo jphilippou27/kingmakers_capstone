@@ -204,6 +204,10 @@ def get_network_by_industry(firstlastp):
     
     return (network_json)
 
+def get_network_node_list():
+    node_list = query_pg("SELECT distinct(fistlastp) FROM network_industry GROUP BY firstlastp")
+    return (node_list)
+
 def get_individual_support_direct(cand_id):
     limit = 10
     return query_pg("SELECT indivs.contribid AS indivs_contribid, indivs.contrib AS donor_name, SUM(indivs.amount) AS total_amt FROM pq_crp_indivs18 indivs WHERE indivs.recipid = %s GROUP BY indivs_contribid, donor_name ORDER BY total_amt DESC LIMIT %s", (cand_id, limit))
