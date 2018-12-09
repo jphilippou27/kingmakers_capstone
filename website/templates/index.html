@@ -39,7 +39,7 @@
 }
 
 /* Create two unequal columns that floats next to each other */
-.column {
+.table-column {
     float: left;
     padding: 10px;
     height: 300px; 
@@ -55,60 +55,16 @@
 }
 
 /* Clear floats after the columns */
-.row:after {
+.table-row:after {
     content: "";
     display: table;
     clear: both;
-}
-.nav{
-    width: 100%;
-    height: 80px;
-    background: rgba(200,200,200,0.2);
-    position: fixed;
-    top: 10px;
-}
-.nav ul{
-    width: 235px;
-    list-style-type: none;
-    background: rgba(200,200,200,0.2);
-    border-radius: 5px;
 }
 .links{
     color: black;
     font-size: 20px;
     font-weight: normal;
 }
-#menu{
-    float: right;
-    font-size: 40px;
-    font-weight: normal;
-    padding-right: 20px;
-    color: rgba(100,100,100,0.9);;
-}
-.nav ul li a{
-    text-decoration: none;
-    text-align: center;
-    display: block;
-    padding: 2px 0px 2px 10px;
-}
-.nav ul li a:hover{
-    color: #fff;
-    background-color: black;
-    border-left: thick solid red;
-}
-#story-wrapper{
-    margin-top: 50px;
-}
-
-.story-container{
-    width: 1100px;
-    height: auto;
-    margin: 0px auto;
-    background: rgba(200,200,200,0.2);
-    border-bottom: 1px solid rgba(200,200,200,1);
-    padding: 20px;
-}
-
 .active{
     color: white;
     background-color: rgba(100,100,100,1);
@@ -117,23 +73,38 @@
 </style>
 </head>
 <body>
-    <div class="w3-sidebar w3-bar-block w3-light-grey" style="width:10%">
-        <h3 class="w3-bar-item">Menu</h3>
-        <a href="/" class="w3-bar-item w3-button">Home</a>
-        <a href="/candidates" class="w3-bar-item w3-button">Candidates</a>
-        <a href="/industries" class="w3-bar-item w3-button">Industry</a>
-        <a href="/tableau" class="w3-bar-item w3-button">Tableau</a>
-        <a href="/network" class="w3-bar-item w3-button">Network</a>
-    </div>
-    <div style="margin-left:10%">
-        <div class="w3-container">
-            {% block content %}  
-            {% endblock %}
-        </div> 
-    </div>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<header>
+    <ul id="nav-mobile" class="sidenav sidenav-fixed" style="overflow:auto; transform:translateX(0%); background-image: linear-gradient(to bottom, white, rgba(244, 244, 244, 255)">
+        <a id="logo-container" class="logo brand-logo" href="/" style="padding:25px;"><center><img width="150" src="https://s3.us-south.objectstorage.softlayer.net/staticassets2/kingmakers-logo.png"></center></a>
+        <li class="bold">
+            <a href="/" class="waves-effect waves-teal">Home</a>
+        </li>
+        <li class="bold">
+            <a href="/candidates" class="waves-effect waves-teal">Candidates</a>
+        </li>
+        <li class="bold">
+            <a href="/industries" class="waves-effect waves-teal">Industry</a>
+        </li>
+        <li class="bold">
+            <a href="/tableau" class="waves-effect waves-teal">Tableau</a>
+        </li>
+        <li class="bold">
+            <a href="/network" class="waves-effect waves-teal">Network</a>
+        </li>
+    </ul>
+</header>
+<main>
+  {% block content %}  
+  {% endblock %}
+</main>
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>-->
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
 {% block script %}  
 {% endblock %}
