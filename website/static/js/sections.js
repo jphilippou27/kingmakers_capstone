@@ -681,7 +681,7 @@ var scrollVis = function () {
 					.style("opacity", .8);
 				tooltip.html("Source:"+ d.source.name+
 							 "<p/>Target:" + d.target.name +
-							"<p/>Strength:"  + d.value )
+							"<p/>Strength:"  + d3.format(",.0f")(d.value ))
 					.style("left", (d3.event.pageX) + "px")
 					.style("top", (d3.event.pageY + 10) + "px");
 				})
@@ -720,7 +720,7 @@ var scrollVis = function () {
 						tooltip.transition()
 							.duration(300)
 							.style("opacity", .8);
-						tooltip.html("Name:" + d.name + "<p/>Party:" + d.group + "<p/>Total Contributions: " + d3.format(",.0f")d.contribution_total)
+						tooltip.html("Name:" + d.name + "<p/>Party:" + d.group + "<p/>Total Contributions: " + d3.format(",.0f")(d.contribution_total))
 							.style("left", (d3.event.pageX) + "px")
 							.style("top", (d3.event.pageY + 10) + "px");
 						})
@@ -972,7 +972,7 @@ function draw_filtered_nodes() {
 						.style("opacity", .8);
 					tooltip.html("Source:"+ d.source.name+
 								 "<p/>Target:" + d.target.name +
-								"<p/>Strength:"  + d.value)
+								"<p/>Strength:"  + d3.format(",.0f") (d.value))
 						.style("left", (d3.event.pageX) + "px")
 						.style("top", (d3.event.pageY + 10) + "px");
 					})
