@@ -681,7 +681,7 @@ var scrollVis = function () {
 					.style("opacity", .8);
 				tooltip.html("Source:"+ d.source.name+
 							 "<p/>Target:" + d.target.name +
-							"<p/>Strength:"  + d.value )
+							"<p/>Strength:"  + d3.format(",.0f")(d.value ))
 					.style("left", (d3.event.pageX) + "px")
 					.style("top", (d3.event.pageY + 10) + "px");
 				})
@@ -708,7 +708,7 @@ var scrollVis = function () {
 
 
 				  node.append('circle')
-					.attr('r', function(d) {return(Math.sqrt(d.contribution_total)/100)}) //used to be R  //and function(d) {console.log(d.target.value)})
+					.attr('r', function(d) {return(Math.sqrt(d.contribution_total)/125)}) //used to be R  //and function(d) {console.log(d.target.value)})
 					.attr("fill", function(d) {return color(d.group);})
 					///trying to add winner highlight
 					.style("stroke-width", function(d) {
@@ -720,7 +720,7 @@ var scrollVis = function () {
 						tooltip.transition()
 							.duration(300)
 							.style("opacity", .8);
-						tooltip.html("Name:" + d.name + "<p/>Party:" + d.group + "<p/>Total Contributions: " + d.contribution_total)
+						tooltip.html("Name:" + d.name + "<p/>Party:" + d.group + "<p/>Total Contributions: " + d3.format(",.0f")(d.contribution_total))
 							.style("left", (d3.event.pageX) + "px")
 							.style("top", (d3.event.pageY + 10) + "px");
 						})
@@ -813,7 +813,10 @@ var scrollVis = function () {
 
 
 //trying to add search
-graph = d3.json('/static/data_for_testing/industry_amt_winner_mini.json', function(error, graph) {
+			//d3.json("/networkdata", function(error, graph) { 
+		//  if (error) throw error;
+
+graph = d3.json('/networkdata', function(error, graph) {
 		//console.log(graph)
 		var optArray = [];
 		for (var i = 0; i < graph.nodes.length - 1; i++) {
@@ -827,8 +830,25 @@ graph = d3.json('/static/data_for_testing/industry_amt_winner_mini.json', functi
 				source: optArray});
 						});
 
-		});
-})
+		}); //end of find search
+			
+graph = d3.json('/networkNodeList', function(error, graph) {
+		//console.log(graph)
+		var optArray = [];
+		for (var i = 0; i < graph.nodes.length - 1; i++) {
+			optArray.push(graph.nodes[i].name);
+		}
+
+		optArray = optArray.sort();
+
+		$(function () {
+			$("#search2").autocomplete({
+				source: optArray});
+						});
+
+		}); //end of find search
+			
+})//end of Data ??
 
 $("#button").on("click", function searchNode() {
     //find the node
@@ -972,7 +992,7 @@ function draw_filtered_nodes() {
 						.style("opacity", .8);
 					tooltip.html("Source:"+ d.source.name+
 								 "<p/>Target:" + d.target.name +
-								"<p/>Strength:"  + d.value)
+								"<p/>Strength:"  + d3.format(",.0f") (d.value))
 						.style("left", (d3.event.pageX) + "px")
 						.style("top", (d3.event.pageY + 10) + "px");
 					})

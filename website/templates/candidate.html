@@ -35,29 +35,29 @@
   shape-rendering: crispEdges;
 }
 </style>
-<div class="w3-row">
-    <div class="w3-panel w3-col m6 l6" >
-        <div class="w3-card-4 " id="sankey-content">
-            <header class="w3-container"><h2>Direct Contributions to {{cand_name}}</h2></header>
+<div class="row">
+    <div class="col s12 m6 l6" >
+        <div class="section" id="sankey-content">
+            <header class="w3-container"><h4>Direct Contributions to {{cand_name}}</h2></header>
             <svg id="sankey"></svg>
         </div>
     </div>
-    <div class="w3-panel w3-col m6 l6" >
+    <div class="col s12 m6 l6" >
         <div class="w3-card-4" id="waterfall-content">
-            <header class="w3-container"><h2>Contributions Breakdown {{cand_name}}</h2></header>
+            <header class="w3-container"><h4>Contributions Breakdown {{cand_name}}</h2></header>
             <svg id="waterfall"></svg> 
         </div>
     </div>
 </div>
-<div class="w3-panel" >
-    <div class="w3-card-4" id="content">
-        <header class="w3-container"><h2>PAC Spending for {{cand_name}}</h2></header>
+<div class="row" >
+    <div class="s12" id="content">
+        <header class="w3-container"><h4>PAC Spending for {{cand_name}}</h4></header>
         <svg id="timeseries_for"></svg>
     </div>
 </div>
-<div class="w3-panel">
-    <div class="w3-card-4" id="content">
-        <header class="w3-container"><h2>PAC Spending against {{cand_name}}</h2></header>
+<div class="row">
+    <div class="s12" id="content">
+        <header class="w3-container"><h4>PAC Spending against {{cand_name}}</h4></header>
         <svg id="timeseries_against"></svg>
     </div>
 </div>
