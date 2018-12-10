@@ -1004,9 +1004,9 @@ function draw_filtered_nodes() {
 			//matching_edges = []
 
 			  link
-				.filter(function(d){if (largeNodes.indexOf(d.target) > -1){
+				//.filter(function(d){if (largeNodes.indexOf(d.target) > -1){
 					//matching_edges.push(d.target)
-					return d}})
+				//	return d}}) //I don't think I need this since I moved the filter higher up
 				//.transition().duration(500)
 				.attr('class', 'edge')
 				.on('mouseover.tooltip', function(d) {
