@@ -1561,12 +1561,13 @@ function draw_committee_network(){
 		//var networkdata = d3.json(data_endpoint)
 		//networkdata.then(function( graph) {
 		//d3.json("static/data_for_testing/industry_amt_winner_mini.json", function(error, graph) {
-        var candName = $y('#search6').val();
-        if (candName === "") {
-            candName = "Chris Collins (R)";
-        }
-        dataEndpoint = '/networkCommitteeData/' + candName;
-        console.log(dataEndpoint);
+       //HANDLING SOME GITCHY-NESS
+	// var candName = $y('#search6').val();
+        //if (candName === "") {
+        //    candName = "Chris Collins (R)";
+        //}
+        //dataEndpoint = '/networkCommitteeData/' + candName;
+        console.log("searchbox path commit: ", dataEndpoint);
 		d3.json(dataEndpoint, function(error, graph) {
 		  if (error) throw error;
 
