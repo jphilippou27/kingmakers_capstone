@@ -44,69 +44,74 @@ than your opponent increase your chances of winning an election? Data released f
 <p>On the left, the Alaska senate race was a fundraising blowout by Lisa Murkowski, who also handily won the election. Despite the significant partisan advantage, her campaign still raised upwards of $5 million, while Democrats barely put up a fight for her seat. On the right, the CA-21 race was much closer, with David Valadao narrowly outraising his competition and winning the election.</p>
 <p>This isn't always the case. Sometimes a candidate wins without having the most money. However, the fundraising effect is strong enough to warrant further investigation.</p>-->
         <h3>So we built Kingmakers.</h3>
-        <p>Kingmakers is a tool which guides you through the campaign finances of your elected representatives. This data, which the Federal Election Commission (FEC) makes publicly available, shows which individuals, PACs, and industries contribute to which campaigns, and how much is being contributed. There are many aspects to this data, so we've created several visualizations to help you find your way around.</p>
-        <p>As an example, let's look at a few of the visualization products and how they fit in with one another.</p>
+        <p>Kingmakers is a set of tools which guide you through the campaign finances of your elected representatives. This data, which the <a target="_blank" href="https://fec.gov">Federal Election Commission (FEC)</a> makes publicly available, shows which individuals, PACs, and industries contribute to which campaigns, and how much is being contributed. We also include data from other organizations in this area, including <a target="_blank" href="https://opensecrets.org">OpenSecrets</a>, <a target="_blank" href="https://propublica.org">ProPublica</a>, and <a target="_blank" href="https://github.com/unitedstates">various contributors on GitHub</a>.</p>
+        <p>With so much data coming from so many different sources, it can be difficult to orient yourself in the realm of political fundraising. Whether you're a curious first-time voter or a seasoned ballot slinger, you can use the Kingmakers tool to find your way around the campaign funds of your elected representative.</p>
+        <p>Let's look at how the Kingmakers tool can be used to understand the fundraising behind a political campaign.</p>
       </div>
-      <div id='sankey' class='section scrollspy'>
-        <p>Analysis starts with industry sankey diagram</p>
-        <img src='https://s3.us-south.objectstorage.softlayer.net/staticassets2/sankey_prev.png'>
+      <div id='sankey' class='row section scrollspy'>
+        <div class="col s12 l6">
+          <a href="/industries">
+          <img width="200px" src='https://s3.us-south.objectstorage.softlayer.net/staticassets2/pres-sankey-3.png'>
+          </a>
+        </div>
+        <div class="col s12 l6">
+          <h5>Industry diagram</h5>
+          <p>A profile of industry spending in politics. The top 100 contributions and their recipients are shown through linkages which show the funding priorities of different industries. Use this tool to generate ideas regarding what parties receive money from different industry groups. Within the diagram, click on a link to view the specific politicians receiving money from that particular industry.</p>
+        </div>
       </div>
-      <div id='network' class='section scrollspy'>
-        <p>Analysis gets deeper with network diagram</p>
-        <img src='https://s3.us-south.objectstorage.softlayer.net/staticassets2/network_prev.png'>
+      <div id='network' class='row section scrollspy'>
+        <div class="col s12 l6">
+          <a href="/network">
+          <img width="200px" src='https://s3.us-south.objectstorage.softlayer.net/staticassets2/network_prev.png'>
+          </a>
+        </div>
+        <div class="col s12 l6">
+          <h5>Network visualization</h5>
+          <p>Explore the interconnections between industry donations and politicians in a guided tour of campaign contributions. We highlight a few interesting cases and allow you explore the data yourself using guided drill-downs. (You might need a larger screen to get the full effect!)</p>
+        </div>
       </div>
-      <div id='candidate' class='section scrollspy'>
-        <p>Deep dive into the candidate dashboard to understand finances</p>
-        <img src='https://s3.us-south.objectstorage.softlayer.net/staticassets2/candidate_prev.png'>
+      <div id='candidate' class='row section scrollspy'>
+        <div class="col s12 l6">
+          <a href="/candidates">
+          <img width="200px" src='https://s3.us-south.objectstorage.softlayer.net/staticassets2/pres-cand-4.png'>
+          </a>
+        </div>
+        <div class="col s12 l6">
+          <h5>Candidate dashboard</h5>
+          <p>Dig even deeper into the funding of an individual candidate in order to see detailed campaign finance data. You can use this tool to see the specific informations on campaigns that you've already uncovered or to see data on a politician you are curious about.</p>
+        </div>
       </div>
       <div id='visualizations' class='section scrollspy'>
-        <a href='/candidates'>
+        <h3>All visualizations</h3>
         <div class='row section'>
+          <a href='/candidates'>
           <div class='col s12 l6'>
+            <h5>Candidates</h5>
             <img src='https://s3.us-south.objectstorage.softlayer.net/staticassets2/candidate_prev.png'>
           </div>
+          </a>
+          <a href='/industries'>
           <div class='col s12 l6'>
-            <h4>Candidates</h4>
-            <p>See the campaign contributions made to each candidate as well as their biggest donors.</p>
-          </div>
-        </div>
-        </a>
-        <a href='/sankey'>
-        <div class='row section'>
-          <div class='col s12 l6'>
+            <h5>Industries</h5>
             <img src='https://s3.us-south.objectstorage.softlayer.net/staticassets2/sankey_prev.png'>
           </div>
+          </a>
+          <a href='/network'>
           <div class='col s12 l6'>
-            <h4>Sankey</h4>
-            <p>A profile of industry spending in politics. The top 100 contributions and their recipients are shown through linkages which show the funding priorities of different industries.</p>
-          </div>
-        </div>
-        </a>
-        <a href='/network'>
-        <div class='row section'>
-          <div class='col s12 l6'>
+            <h5>Networks</h5>
             <img src='https://s3.us-south.objectstorage.softlayer.net/staticassets2/network_prev.png'>
           </div>
+          </a>
+          <a href='/tableau'>
           <div class='col s12 l6'>
-            <h4>Network</h4>
-            <p>Explore the interconnections between industry donations and politicians in a guided tour of campaign contributions. We highlight a few interesting cases and allow you explore the data yourself.</p>
-          </div>
-        </div>
-        </a>
-        <a href='/tableau'>
-        <div class='row section'>
-          <div class='col s12 l6'>
+            <h5>Geography</h5>
             <img src='https://s3.us-south.objectstorage.softlayer.net/staticassets2/geography_prev.png'>
           </div>
-          <div class='col s12 l6'>
-            <h4>Geographic</h4>
-            <p>Explore top contributions by geographic origin. Each state shows the primary industries by total amount originating in that state.</p>
-          </div>
+          </a>
         </div>
-        </a>
       </div>
       <div id="about" class="section scrollspy">
-        <h4>About Us</h4>
+        <h3>About Us</h3>
         <p>We are students in the Masters of Information and Data Science at UC Berkeley: Matt Proetsch, Jennifer Phillippou, Daniel Balck, and Qing Zhang</p>
       </div>
     </div>
