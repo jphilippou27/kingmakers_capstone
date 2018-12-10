@@ -194,9 +194,9 @@ def merge_nodes_links(links_list_fv, node_list):
 
 def get_network_by_industry(firstlastp):
     cand = (str(firstlastp))
-    row = query_pg("SELECT * FROM network_industry t1 LEFT JOIN (select distinct(industry) FROM network_industry WHERE firstlastp = %s and ge_winner_ind_guess is not null) sub ON t1.industry = sub.industry WHERE (sub.industry IS NOT NULL) and (t1.contr_amt> 150000)", [cand])
+    row = query_pg("SELECT * FROM network_industry t1 LEFT JOIN (select distinct(industry) FROM network_industry WHERE firstlastp = %s) sub ON t1.industry = sub.industry WHERE (sub.industry IS NOT NULL) and (t1.contr_amt> 150000)", [cand])
     # print(row)
-    print(cand)
+    print("sql draw", cand)
     df_network_viz_fv = pd.DataFrame([i.copy() for i in row])
     links_list_fv = make_links(df_network_viz_fv)
     node_list = make_nodes(df_network_viz_fv)
