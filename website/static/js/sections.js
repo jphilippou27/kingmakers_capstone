@@ -1308,7 +1308,7 @@ $y("#button").on("click", function searchNode() {
 		//var networkdata = d3.json(data_endpoint)
 		//networkdata.then(function( graph) {
 		//d3.json("static/data_for_testing/industry_amt_winner_mini.json", function(error, graph) {
-        var candName = $y('#search2').val();
+        var candName = $y('#search4').val();
         if (candName === "") {
             candName = "Sean Patrick Maloney (D)";
         }
@@ -1474,7 +1474,7 @@ $y("#button").on("click", function searchNode() {
 //trying to add search
 			//d3.json("/networkdata", function(error, graph) {
 		//  if (error) throw error;
-        var candName = $y('#search').val();
+        var candName = $y('#search3').val();
         if (candName === "") {
             candName = "Sean Patrick Maloney (D)";
         }
@@ -1490,7 +1490,7 @@ $y("#button").on("click", function searchNode() {
 		optArray = optArray.sort();
 
 		$y(function () {
-			$y("#search").autocomplete({
+			$y("#search3").autocomplete({
 				source: optArray});
 						});
 
@@ -1507,7 +1507,7 @@ graph = d3.json('/networkNodeList', function(error, data) {
 		optArray = optArray.sort();
 
 		$y(function () {
-			$y("#search2").autocomplete({
+			$y("#search4").autocomplete({
 				source: optArray});
 						});
 
@@ -1515,7 +1515,7 @@ graph = d3.json('/networkNodeList', function(error, data) {
 
 })//end of Data ??
 
-$y("#button").on("click", function searchNode() {
+$y("#button3").on("click", function searchNode() {
     //find the node
     var selectedVal = document.getElementById('search').value;
     var node = svg.selectAll(".node");
@@ -1535,7 +1535,7 @@ $y("#button").on("click", function searchNode() {
 })
 
 // $("#button2").on("click", function() { console.log('hey'); })
-$y("#button2").on("click", function() { draw_individual_network();});
+$y("#button4").on("click", function() { draw_individual_network();});
 
 }//end of draw politican network
 
