@@ -1574,7 +1574,7 @@ function draw_committee_network(){
 		  const simulation = d3.forceSimulation()
 			.nodes(graph.nodes)
 			.force('link', d3.forceLink().id(d => d.name))
-			.force('charge', d3.forceManyBody().strength(-20))
+			.force('charge', d3.forceManyBody().strength(-75))
 			.force('center', d3.forceCenter(width / 2, height / 2))
 			.on('tick', ticked);
 
