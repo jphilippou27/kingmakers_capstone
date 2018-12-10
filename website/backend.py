@@ -254,7 +254,7 @@ def make_nodes_individ(dataset):
     #export
     return(node_list)
 
-def get_network_indivd(firstlastp):
+def get_network_individ(firstlastp):
     cand = (str(firstlastp)) 
     print("sql qc: ", cand)
     row = query_pg("SELECT * FROM network_individ WHERE firstlastp ='Chris Collins (R)'") #might change to db/pg depending on where you are looking at this
