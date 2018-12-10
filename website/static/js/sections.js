@@ -233,26 +233,7 @@ var scrollVis = function () {
       .attr('opacity', 0);
 
 
-    // arrowhead from
-    // http://logogin.blogspot.com/2013/02/d3js-arrowhead-markers.html
-    svg.append('defs').append('marker')
-      .attr('id', 'arrowhead')
-      .attr('refY', 2)
-      .attr('markerWidth', 6)
-      .attr('markerHeight', 4)
-      .attr('orient', 'auto')
-      .append('path')
-      .attr('d', 'M 0,0 V 4 L6,2 Z');
-
-    g.append('path')
-      .attr('class', 'cough cough-arrow')
-      .attr('marker-end', 'url(#arrowhead)')
-      .attr('d', function () {
-        var line = 'M ' + ((width / 2) - 10) + ' ' + 80;
-        line += ' l 0 ' + 230;
-        return line;
-      })
-      .attr('opacity', 0);
+    
   };
 
   /**
@@ -270,10 +251,10 @@ var scrollVis = function () {
 	//showFillerTitle;
     activateFunctions[2] = demo_analysis_politicianI;
     activateFunctions[3] = demo_analysis_politicianII;
-    activateFunctions[5] = draw_filtered_nodes;
+    activateFunctions[7] = draw_filtered_nodes;
     activateFunctions[4] = draw_politician_network;
-    activateFunctions[6] = draw_individual_network;
-    activateFunctions[7] = draw_committee_network;
+    activateFunctions[5] = draw_individual_network;
+    activateFunctions[6] = draw_committee_network;
     /*activateFunctions[7] = showCough;
     activateFunctions[8] = showHistAll;*/
 
