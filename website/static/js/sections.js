@@ -1561,12 +1561,11 @@ function draw_committee_network(){
 		//var networkdata = d3.json(data_endpoint)
 		//networkdata.then(function( graph) {
 		//d3.json("static/data_for_testing/industry_amt_winner_mini.json", function(error, graph) {
-       //HANDLING SOME GITCHY-NESS
-	// var candName = $y('#search6').val();
-        //if (candName === "") {
-        //    candName = "Chris Collins (R)";
-        //}
-        //dataEndpoint = '/networkCommitteeData/' + candName;
+	 var candName = $y('#search6').val();
+        if (candName === "") {
+           candName = "Chris Collins (R)";
+        }
+        dataEndpoint = '/networkCommitteeData/' + candName;
         console.log("searchbox path commit: ", dataEndpoint);
 		d3.json(dataEndpoint, function(error, graph) {
 		  if (error) throw error;
@@ -1728,12 +1727,14 @@ function draw_committee_network(){
 //trying to add search
 			//d3.json("/networkdata", function(error, graph) {
 		//  if (error) throw error;
+			
+	/*HANDLING SOME GITCHY-NESS
         var candName = $y('#search5').val();
         if (candName === "") {
             candName = "Chris Collins (R)";
         }
-        dataEndpoint = '/networkcommitteeData/' + candName;
-        console.log(dataEndpoint);
+        dataEndpoint = '/networkcommitteeData/' + candName;*/
+        console.log("actual committee search: ", dataEndpoint);
         graph = d3.json(dataEndpoint, function(error, graph) {
 		//console.log(graph)
 		var optArray = [];
