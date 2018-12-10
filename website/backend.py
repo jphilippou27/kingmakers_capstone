@@ -204,15 +204,65 @@ def get_network_by_industry(firstlastp):
     
     return (network_json)
 
-def get_network_individ():
-    row = query_db("SELECT * FROM network_individ WHERE firstlastp ='Chris Collins (R)'")
-    df_network_viz_fv = pd.DataFrame([i.copy() for i in row])
-    return (df_network_viz_fv)
+def make_links_indivd(dataset):
+    """Create source and link pairs for the network graph from a pandas dataframe
+    
+    'INPUT: aggregated pandas dataframe with these columns:  sum(amount) ,feccandid, bioguide_id, firstlastp, party, Industry
+    'OUTPUT: JSON format of links (ex: {"value": 20000.0, "source": 1, "target": 96},
+    """
+    
+    #create a list of target and source values
+    links_list = list(dataset.apply(lambda row: {"source": row['contrib'], "target": row['firstlastp'], "value": row['contr_amt']}, axis=1))
+    #print(links_list)
+    #make an index of the values
+    unique_ids = pd.Index(dataset['contrib']
+                      .append(dataset['firstlastp'])
+                      .reset_index(drop=True).unique())
+    #print(unique_ids)
+    #convert source and target values to numbers for d3.v3
+    links_list_fv = []
+    for link in links_list:
+        record = {"value":link['value'], "source": (unique_ids.get_loc(link['source'])+1),
+         "target": (unique_ids.get_loc(link['target'])+1)}
+        links_list_fv.append(record)
+    return (links_list)
 
-def get_network_node_list():
-    import json
-    row = query_pg("SELECT DISTINCT(firstlastp) FROM network_industry GROUP BY firstlastp")
-    json_dump = json.dumps(row, indent=1)
+def make_nodes_individ(dataset):
+    """Create nodes for the network graph from a pandas dataframe
+    
+    'INPUT: aggregated pandas dataframe with these columns:  sum(amount) ,feccandid, bioguide_id, firstlastp, party, Industry
+    'OUTPUT: JSON format of links (ex: {'name': 'Misc Agriculture', 'group': 'Industry', 'pic_id': 'flower'},
+    """
+    #contributions nodes
+    df_nodes_I = pd.DataFrame(dataset.groupby(['contrib'], as_index = False)['contr_amt'].sum())
+    df_nodes_I["party"] = "Contributor"
+    df_nodes_I['ge_winner_ind_guess'] = "NotApplicable"
+    df_nodes_I = df_nodes_I.rename(index=str, columns={"contrib": "firstlastp", " contr_amt": " contr_amt", "party":"party", "ge_winner_ind_guess":"ge_winner_ind_guess" }) 
+    #['firstlastp' if x == 0 else x for x in df_nodes_I.columns]
+    print(df_nodes_I.head())
+    
+    #same thing for politicians
+    df_nodes_P = pd.DataFrame(dataset.groupby(['firstlastp','party','ge_winner_ind_guess'], as_index = False)['contr_amt'].sum())
+    #df_nodes_P.head()
+    
+    #merge nodes
+    df_nodes = pd.concat([df_nodes_I, df_nodes_P])
+    
+    #Convert to list
+    node_list = list(df_nodes.apply(lambda row: {"name": row['firstlastp'], "group": row['party'],  "contribution_total": row['contr_amt'], "winner_ind":row['ge_winner_ind_guess']}, axis=1))
+    
+    #export
+    return(node_list)
+
+def get_network_node_list(firstlastp):
+    cand = (str(firstlastp)) 
+    print("sql qc: ", cand)
+    row = query_pg("SELECT * FROM network_individ WHERE firstlastp ='Chris Collins (R)'") #might change to db/pg depending on where you are looking at this
+    row = pd.DataFrame([i.copy() for i in row])
+    links_list_fv = make_links_indivd(row)
+    node_list = make_nodes_individ(row)
+    json_dump = merge_nodes_links(links_list_fv, node_list)
+    #json_dump = json.dumps(network_json, indent=1)
     #node_list = pd.DataFrame([i.copy() for i in row])
     return (json_dump)
 
