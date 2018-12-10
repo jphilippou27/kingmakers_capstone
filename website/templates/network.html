@@ -29,8 +29,10 @@
           </section>
 		
 		<section class="step">
-        <div class="title">By Politician & Industry</div>
-        Here is a slice of the funding network focused on democratic candidate Glenn Ivey (D). The network shows only the industries that supported him. You can also view who else those industries support, and which candidates were successful. Unfortunately, Mr. Ivey was unsuccessful in his election (there is no green circle around his node).
+        <div class="title">Industry View Filtered by Politician</div>
+        Here is a slice of the funding network focused on democratic candidate Glenn Ivey (D). The network shows only the industries that supported him. You can also view who else those industries support,
+			and which candidates were successful. Unfortunately, Mr. Ivey was unsuccessful in his election (there is no green circle around his node). 
+			Any node with less than $150k of contributions has been removed so the visualization is more usable.
 	<div id = "graphic" class="ui-widget" method="POST">
 		<input id="search">
     <button id='button' type="button" >Find</button>
@@ -62,15 +64,15 @@
 	  </section>
 	  
 	<section class="step">
-        <div class="title">By Politician & Committee </div>
-        Here is a slice of the funding network focused on democratic candidate Glenn Ivey (D). The network shows only the industries that supported him. You can also view who else those industries support, and which candidates were successful. Unfortunately, Mr. Ivey was unsuccessful in his election (there is no green circle around his node).
-	<div id = "graphic" class="ui-widget">
+        <div class="title">Individual View Filtered by Politician</div>
+        Here is a slice of the funding network focused on democratic candidate Chris Collins (R). The network shows only the individuals that supported him. You can also view who else those industries support, and which candidates were successful. Unfortunately, Mr. Ivey was unsuccessful in his election (there is no green circle around his node).
+	<div id = "graphic" class="ui-widget" method="POST">
 		<input id="search">
-    <button id='button' type="button" onclick="searchNode()">Find</button>
+    <button id='button' type="button" >Find</button>
 	</div>
 	<div id = "graphic" class="ui-widget" method="POST">
-		<input id="search2">
-    <button id='button2' type="button" onclick="searchNode()">New Graph</button>
+		<input id="search2" name = "search2">
+    <button id='button2' type="button" >New Graph</button> 
 	</div>
 	  </section>
 	  </section>
