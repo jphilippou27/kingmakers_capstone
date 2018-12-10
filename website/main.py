@@ -271,6 +271,17 @@ def networkdata(cand_name):
         text = str(cand_name)
     return (backend.get_network_by_industry(text))
 
+@application.route("/networkIndividData/<cand_name>", methods=["GET", "POST"])
+def networkIndivdData(cand_name):
+    if type(cand_name) is None or cand_name == "":
+        text = "Sean Patrick Maloney (D)"
+    if request.method == "POST":
+        text = request.form['search2']
+        print(text)
+    else:
+        text = str(cand_name)
+    return (backend.get_network_individ(text))
+
 @application.route("/networkNodeList", methods=["GET"])
 def networkNodedata():
     return (backend.get_network_node_list())
