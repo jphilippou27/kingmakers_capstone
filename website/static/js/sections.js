@@ -656,7 +656,7 @@ var scrollVis = function () {
 		//var networkdata = d3.json(data_endpoint)
 		//networkdata.then(function( graph) {
 		//d3.json("static/data_for_testing/industry_amt_winner_mini.json", function(error, graph) {
-        var candName = $('#search2').val();
+        var candName = $y('#search2').val();
         if (candName === "") {
             candName = "Sean Patrick Maloney (D)";
         }
@@ -822,7 +822,7 @@ var scrollVis = function () {
 //trying to add search
 			//d3.json("/networkdata", function(error, graph) {
 		//  if (error) throw error;
-        var candName = $('#search2').val();
+        var candName = $y('#search2').val();
         if (candName === "") {
             candName = "Sean Patrick Maloney (D)";
         }
@@ -837,8 +837,8 @@ var scrollVis = function () {
 
 		optArray = optArray.sort();
 
-		$(function () {
-			$("#search").autocomplete({
+		$y(function () {
+			$y("#search").autocomplete({
 				source: optArray});
 						});
 
@@ -854,8 +854,8 @@ graph = d3.json('/networkNodeList', function(error, data) {
 
 		optArray = optArray.sort();
 
-		$(function () {
-			$("#search2").autocomplete({
+		$y(function () {
+			$y("#search2").autocomplete({
 				source: optArray});
 						});
 
@@ -863,7 +863,7 @@ graph = d3.json('/networkNodeList', function(error, data) {
 
 })//end of Data ??
 
-$("#button").on("click", function searchNode() {
+$y("#button").on("click", function searchNode() {
     //find the node
     var selectedVal = document.getElementById('search').value;
     var node = svg.selectAll(".node");
@@ -883,7 +883,7 @@ $("#button").on("click", function searchNode() {
 })
 
 // $("#button2").on("click", function() { console.log('hey'); })
-$("#button2").on("click", function() { draw_politician_network();});
+$y("#button2").on("click", function() { draw_politician_network();});
 
 }//end of draw politican network
   
@@ -957,7 +957,7 @@ function draw_filtered_nodes() {
 				g.attr("transform", d3.event.transform)
 			}*/
 			//var  max_node = 0
-			 var candName = $('#search2').val();
+			 var candName = $y('#search2').val();
 			if (candName === "") {
 			    candName = "Sean Patrick Maloney (D)";
 			}
@@ -1004,11 +1004,10 @@ function draw_filtered_nodes() {
 			//matching_edges = []
 
 			  link
-			  	.transition()
-				.duration(500)
 				.filter(function(d){if (largeNodes.indexOf(d.target) > -1){
 					//matching_edges.push(d.target)
 					return d}})
+				.transition().duration(500)
 				.attr('class', 'edge')
 				.on('mouseover.tooltip', function(d) {
 					tooltip.transition()
@@ -1173,7 +1172,7 @@ function draw_filtered_nodes() {
 
 
 		//trying to add search
- var candName = $('#search2').val();
+ var candName = $y('#search2').val();
         if (candName === "") {
             candName = "Sean Patrick Maloney (D)";
         }
@@ -1188,8 +1187,8 @@ function draw_filtered_nodes() {
 
 		optArray = optArray.sort();
 
-		$(function loadSearch() {
-			$("#search").autocomplete({
+		$y(function loadSearch() {
+			$y("#search").autocomplete({
 				source: optArray
 				});
 						});
@@ -1204,7 +1203,7 @@ function draw_filtered_nodes() {
 
 
 
-$("#button").on("click", function searchNode() {
+$y("#button").on("click", function searchNode() {
     //find the node
     var selectedVal = document.getElementById('search').value;
     var node = svg.selectAll(".node");
@@ -1309,7 +1308,7 @@ $("#button").on("click", function searchNode() {
 		//var networkdata = d3.json(data_endpoint)
 		//networkdata.then(function( graph) {
 		//d3.json("static/data_for_testing/industry_amt_winner_mini.json", function(error, graph) {
-        var candName = $('#search2').val();
+        var candName = $y('#search2').val();
         if (candName === "") {
             candName = "Sean Patrick Maloney (D)";
         }
@@ -1475,7 +1474,7 @@ $("#button").on("click", function searchNode() {
 //trying to add search
 			//d3.json("/networkdata", function(error, graph) {
 		//  if (error) throw error;
-        var candName = $('#search2').val();
+        var candName = $y('#search2').val();
         if (candName === "") {
             candName = "Sean Patrick Maloney (D)";
         }
@@ -1490,8 +1489,8 @@ $("#button").on("click", function searchNode() {
 
 		optArray = optArray.sort();
 
-		$(function () {
-			$("#search").autocomplete({
+		$y(function () {
+			$y("#search").autocomplete({
 				source: optArray});
 						});
 
@@ -1507,8 +1506,8 @@ graph = d3.json('/networkNodeList', function(error, data) {
 
 		optArray = optArray.sort();
 
-		$(function () {
-			$("#search2").autocomplete({
+		$y(function () {
+			$y("#search2").autocomplete({
 				source: optArray});
 						});
 
@@ -1516,7 +1515,7 @@ graph = d3.json('/networkNodeList', function(error, data) {
 
 })//end of Data ??
 
-$("#button").on("click", function searchNode() {
+$y("#button").on("click", function searchNode() {
     //find the node
     var selectedVal = document.getElementById('search').value;
     var node = svg.selectAll(".node");
@@ -1536,7 +1535,7 @@ $("#button").on("click", function searchNode() {
 })
 
 // $("#button2").on("click", function() { console.log('hey'); })
-$("#button2").on("click", function() { draw_individual_network();});
+$y("#button2").on("click", function() { draw_individual_network();});
 
 }//end of draw politican network
 
