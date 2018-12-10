@@ -205,6 +205,11 @@ def get_network_by_industry(firstlastp):
     
     return (network_json)
 
+def get_network_individ():
+    row = query_db("SELECT * FROM network_individ WHERE firstlastp ='Chris Collins (R)'")
+    df_network_viz_fv = pd.DataFrame([i.copy() for i in row])
+    return (df_network_viz_fv)
+
 def get_network_node_list():
     import json
     row = query_pg("SELECT DISTINCT(firstlastp) FROM network_industry GROUP BY firstlastp")
