@@ -49,14 +49,14 @@ lib.barChartModule = function() {
 
         // must be categorical
         //x.domain(data.map(accessor_x));
-        //x.domain(['2018-09', '2018-08', '2018-07', '2018-06', '2018-05', '2018-04', '2018-03', '2018-02', '2018-01','2017-12', '2017-11', '2017-10',  '2017-09', '2017-08', '2017-07', '2017-06', '2017-05', '2017-04', '2017-03', '2017-02', '2017-01']);
         var dates = data.map(function(d) {
             return parser(d.date)
         });
         var maxdate = d3.max(dates);
         var mindate = d3.min(dates);
         //var maxdate = d3.max(data,  d => parser(d.date));
-        x.domain(data.map(d => d.date));
+        //x.domain(data.map(d => d.date));
+        x.domain(['2018-09', '2018-08', '2018-07', '2018-06', '2018-05', '2018-04', '2018-03', '2018-02', '2018-01','2017-12', '2017-11', '2017-10',  '2017-09', '2017-08', '2017-07', '2017-06', '2017-05', '2017-04', '2017-03', '2017-02', '2017-01', '2016-12', '2016-11']);
 
         //g.select(".title").remove();
         //g.append("text")
@@ -119,10 +119,16 @@ lib.barChartModule = function() {
     };
 };
 
+var candinfo = d3.json("/candidates/" + cand_id);
+candinfo.then(function(d){
+    //d3.select()
+    //sankey.industry_data(clean_data)
+    //sankey.plot_by_industry()
+});
+
 
 var candfor = d3.json("/candidates/" + cand_id + "/ts/for");
 candfor.then(function(d){
-    console.log(d);
     var bars = lib.barChartModule();
     bars.data(d);
     bars.plot_net_horizontal("spending for cand", "#timeseries_for", d => d.date, d => d.total, "#062F4F");

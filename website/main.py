@@ -156,13 +156,22 @@ def candidate_query():
 
 @application.route("/candview", methods=["GET"])
 def candidate_view():
+    ici = {"I": "Incumbent", "C": "Challenger", "O": "Open Seat"}
+    office = {"S": "Senate", "H": "House", "P": "President"}
     if request.method == "GET":
         cand_id = request.args.get("id")
         if cand_id is None:
             render_template("search_cand.html")
         cand_data = backend.get_candidate(cand_id)
-        print(cand_data)
-        return render_template("candidate.html", cand_id=cand_id, cand_name=cand_data["cand_name"])
+        return render_template("candidate.html", 
+                cand_id=cand_id, 
+                cand_name=cand_data["cand_name"],
+                cand_office=office[cand_data["cand_office"]],
+                cand_district=cand_data["cand_office_district"],
+                cand_state=cand_data["cand_st"],
+                cand_party=cand_data["cand_pty_affiliation"],
+                cand_status=ici[cand_data["cand_office_ici"]]
+                )
     else:
         return abort(401)
 

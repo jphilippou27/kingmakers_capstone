@@ -111,11 +111,10 @@ def independent_spenders_against_cand(cand_id):
     return query_pg("select cmte.name as spender, sum(amount) as total from cmte2cand join cmte on cmte.id = cmte2cand.filer_id where cmte2cand.cand_id = %s and trans_type = '24A' group by filer_id order by total desc", (cand_id,))
 
 def cmte_timeseries_against(cand_id):
-    return query_pg("select x.transaction_dt as date, sum(x.transaction_amt) as total from itpas218 x where x.cand_id = %s and x.transaction_tp = '24A' group by x.transaction_dt having to_char(to_date(x.transaction_dt, 'MMDDYYYY'), 'YYYY-MM') is not null order by to_date(transaction_dt, 'MMDDYYYY') desc", [cand_id])
-
+    return query_pg("select to_char(to_date(x.transaction_dt, 'MMDDYYYY'), 'YYYY-MM') as date, sum(x.transaction_amt) as total from itpas218 x where x.cand_id = %s and x.transaction_tp = '24A' group by to_char(to_date(x.transaction_dt, 'MMDDYYYY'), 'YYYY-MM') having to_char(to_date(x.transaction_dt, 'MMDDYYYY'), 'YYYY-MM') is not null order by to_char(to_date(x.transaction_dt, 'MMDDYYYY'), 'YYYY-MM') desc ; ", [cand_id])
 
 def cmte_timeseries_for(cand_id):
-    return query_pg("select to_char(to_date(x.transaction_dt, 'MMDDYYYY'), 'YYYY-MM') as date, sum(x.transaction_amt) as total from itpas218 x where x.cand_id = %s and x.transaction_tp != '24A' group by to_char(to_date(x.transaction_dt, 'MMDDYYYY'), 'YYYY-MM') having to_char(to_date(x.transaction_dt, 'MMDDYYYY'), 'YYYY-MM') is not null order by to_char(to_date(x.transaction_dt, 'MMDDYYYY'), 'YYYY-MM') desc ; ", [cand_id])
+    return query_pg("select to_char(to_date(x.transaction_dt, 'MMDDYYYY'), 'YYYY-MM') as date, sum(x.transaction_amt) as total from itpas218 x where x.cand_id = %s and x.transaction_tp similar to '24(K|E)' group by to_char(to_date(x.transaction_dt, 'MMDDYYYY'), 'YYYY-MM') having to_char(to_date(x.transaction_dt, 'MMDDYYYY'), 'YYYY-MM') is not null order by to_char(to_date(x.transaction_dt, 'MMDDYYYY'), 'YYYY-MM') desc ; ", [cand_id])
     # return query_pg("select to_date(transaction_dt, 'MMDDYYYY') as date, sum(transaction_amt) as total from itpas218 x where x.cand_id = %s and transaction_tp != '24A' group by to_date(transaction_dt, 'MMDDYYYY') order by to_date(transaction_dt, 'MMDDYYYY') desc", [cand_id])
 
 def get_spending_by_cmte():
