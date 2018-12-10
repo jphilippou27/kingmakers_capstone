@@ -1321,7 +1321,7 @@ $y("#button").on("click", function searchNode() {
 		  const simulation = d3.forceSimulation()
 			.nodes(graph.nodes)
 			.force('link', d3.forceLink().id(d => d.name))
-			.force('charge', d3.forceManyBody().strength(-100))
+			.force('charge', d3.forceManyBody().strength(-2))
 			.force('center', d3.forceCenter(width / 2, height / 2))
 			.on('tick', ticked);
 
@@ -1474,7 +1474,7 @@ $y("#button").on("click", function searchNode() {
 //trying to add search
 			//d3.json("/networkdata", function(error, graph) {
 		//  if (error) throw error;
-        var candName = $y('#search2').val();
+        var candName = $y('#search').val();
         if (candName === "") {
             candName = "Sean Patrick Maloney (D)";
         }
