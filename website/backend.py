@@ -194,6 +194,7 @@ def merge_nodes_links(links_list_fv, node_list):
 
 def get_network_by_industry(firstlastp):
     cand = (str(firstlastp))
+    min_contribution = 150000
     row = query_pg("SELECT * FROM network_industry t1 LEFT JOIN (select distinct(industry) FROM network_industry WHERE firstlastp = %s) sub ON t1.industry = sub.industry WHERE (sub.industry IS NOT NULL) and (t1.contr_amt> 150000)", [cand])
     # print(row)
     print("sql draw", cand)
@@ -268,7 +269,7 @@ def get_network_individ(firstlastp):
 
 def get_network_node_list():
     import json
-    row = query_pg("SELECT DISTINCT(firstlastp) FROM network_industry GROUP BY firstlastp")
+    row = query_pg("SELECT DISTINCT(firstlastp) FROM network_industry GROUP BY firstlastp WHERE contr_amt>150000")
     json_dump = json.dumps(row, indent=1)
     #node_list = pd.DataFrame([i.copy() for i in row])
     return (json_dump)
