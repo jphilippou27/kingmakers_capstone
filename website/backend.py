@@ -330,7 +330,7 @@ def get_network_committee (firstlastp):
     print("committee sql qc: ", cand) 
     row = query_pg("SELECT contr_amt, firstlastp, ge_winner_ind_guess, t1.pacshort, party, type  \
                         FROM committee_network t1 \
-                        LEFT JOIN (select distinct(pacshort), sum(contr_amt) as Contributions  \
+                        LEFT JOIN (select distinct(pacshort) \
                         FROM committee_network \
                         WHERE firstlastp = %s and contr_amt > 1 GROUP BY pacshort)sub ON t1.pacshort = sub.pacshort \
                         WHERE contr_amt > 100000", [cand])
