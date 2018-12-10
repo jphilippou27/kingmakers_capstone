@@ -1,3 +1,19 @@
+d3.select("#cand_name").text(function() {
+    formatted_name = cand_name.toLowerCase();
+    lastfirst = formatted_name.split(",");
+    lastname = lastfirst[0].toLowerCase();
+    lastname = lastname.charAt(0).toUpperCase() + lastname.slice(1);
+    var firstmiddle = "";
+    if (lastfirst.length > 1) {
+        firstmiddle = lastfirst[1].toLowerCase();
+        firstmiddle = firstmiddle.replace(/(^\w|\"\w|\s\w)/g, function(word) {
+            return word.toUpperCase();
+        });
+    }
+    console.log(firstmiddle + " " + lastname);
+    return firstmiddle + " " + lastname;
+});
+
 
 var lib = lib || {};
 

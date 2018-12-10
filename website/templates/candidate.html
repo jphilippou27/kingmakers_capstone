@@ -35,6 +35,7 @@
   shape-rendering: crispEdges;
 }
 </style>
+<h2 id="cand_name"></h2>
 <div class="row">
     <div class="col s12 m12 l12">
         <div class="card">
@@ -73,7 +74,7 @@
     <div class="col s12 m6 l6" >
         <div class="card">
             <div class="card-content" id="sankey-content">
-                <header><h4>Direct Contributions to {{cand_name}}</h2></header>
+                <header><h4>Direct Contributions</h2></header>
                 <svg id="sankey"></svg>
             </div>
         </div>
@@ -81,7 +82,7 @@
     <div class="col s12 m6 l6" >
         <div class="card">
             <div class="card-content" id="waterfall-content">
-                <header class="container"><h4>Contributions Breakdown {{cand_name}}</h2></header>
+                <header class="container"><h4>Contributions Breakdown</h2></header>
                 <svg id="waterfall"></svg> 
             </div>
         </div>
@@ -91,7 +92,7 @@
     <div class="col s12 m12 l12" >
         <div class="card">
             <div class="card-content" id="content">
-                <header><h4>PAC Spending for {{cand_name}}</h4></header>
+                <header><h4>PAC Spending Support</h4></header>
                 <svg id="timeseries_for"></svg>
             </div>
         </div>
@@ -101,7 +102,7 @@
     <div class="col s12 m12 l12" >
         <div class="card">
             <div class="card-content" id="content">
-                <header class="w3-container"><h4>PAC Spending against {{cand_name}}</h4></header>
+                <header class="w3-container"><h4>PAC Spending Against</h4></header>
                 <svg id="timeseries_against"></svg>
             </div>
         </div>
