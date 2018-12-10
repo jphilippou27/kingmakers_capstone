@@ -1004,6 +1004,8 @@ function draw_filtered_nodes() {
 			//matching_edges = []
 
 			  link
+			  	.transition()
+				.duration(500)
 				.filter(function(d){if (largeNodes.indexOf(d.target) > -1){
 					//matching_edges.push(d.target)
 					return d}})
