@@ -269,7 +269,7 @@ def get_network_individ(firstlastp):
 
 def get_network_node_list():
     import json
-    row = query_pg("SELECT DISTINCT(firstlastp) FROM network_industry GROUP BY firstlastp WHERE contr_amt>150000")
+    row = query_pg("SELECT DISTINCT(firstlastp) FROM network_industry WHERE contr_amt>150000 GROUP BY firstlastp")
     json_dump = json.dumps(row, indent=1)
     #node_list = pd.DataFrame([i.copy() for i in row])
     return (json_dump)
