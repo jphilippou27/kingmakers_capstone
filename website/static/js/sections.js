@@ -633,6 +633,8 @@ var scrollVis = function () {
 
 	  //remove toy network
 	  d3.selectAll(".node").remove();
+	  d3.selectAll("edge").remove();
+	  d3.selectAll('line.edge').remove();
 
 	  //removes example analysis
 	d3.selectAll('image').remove();
@@ -913,8 +915,6 @@ function draw_filtered_nodes() {
       .transition()
       .duration(0)
       .attr('opacity', 0);
-
-
 	//removes example analysis
 	d3.selectAll('image').remove();
 
