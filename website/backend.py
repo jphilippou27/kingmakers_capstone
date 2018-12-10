@@ -278,7 +278,7 @@ def get_network_committee (firstlastp):
                         LEFT JOIN (select distinct(pacshort), sum(contr_amt) as Contributions  \
                         FROM committee_network \
                         WHERE firstlastp = %s and contr_amt > 1 GROUP BY pacshort)sub ON t1.pacshort = sub.pacshort \
-                        WHERE contr_amt > 25000, [cand])
+                        WHERE contr_amt > 25000"m, [cand])
     row = pd.DataFrame([i.copy() for i in row])
     links_list_fv = make_links_commit(row) 
     node_list = make_nodes_commit(row)
