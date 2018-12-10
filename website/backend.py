@@ -257,7 +257,7 @@ def make_nodes_individ(dataset):
 def get_network_individ(firstlastp):
     cand = (str(firstlastp)) 
     print("sql qc: ", cand) 
-    row = query_pg("SELECT * FROM network_individ t2 RIGHT JOIN(SELECT Distinct(contrib) FROM network_individ WHERE firstlastp = %s GROUP BY contrib and contr_amt >1)sub ON t2.contrib = sub.contrib", [cand]) #might change to db/pg depending on where you are looking at this
+    row = query_pg("SELECT * FROM network_individ t2 RIGHT JOIN(SELECT Distinct(contrib) FROM network_individ WHERE (firstlastp = %s and contr_amt >1) GROUP BY contrib)sub ON t2.contrib = sub.contrib", [cand]) #might change to db/pg depending on where you are looking at this
     row = pd.DataFrame([i.copy() for i in row])
     links_list_fv = make_links_indivd(row) 
     node_list = make_nodes_individ(row)
