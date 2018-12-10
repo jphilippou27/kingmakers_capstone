@@ -198,7 +198,9 @@ def merge_nodes_links(links_list_fv, node_list):
 def get_network_by_industry(firstlastp):
     cand = (str(firstlastp))
     min_contribution = 150000
-    row = query_pg("SELECT * FROM network_industry t1 LEFT JOIN (select distinct(industry) FROM network_industry WHERE (firstlastp = %s and contr_amt > 150000)) sub ON t1.industry = sub.industry WHERE (sub.industry IS NOT NULL) and (t1.contr_amt> 150000)", [cand])
+    row = query_pg("SELECT * FROM network_industry t1 LEFT JOIN (select distinct(industry) FROM network_industry \
+                    WHERE (firstlastp = %s and contr_amt > 150000)) sub ON t1.industry = sub.industry  \
+                        WHERE (sub.industry IS NOT NULL) and (t1.contr_amt> 100000)", [cand])
     # print(row)
     print("sql draw", cand)
     df_network_viz_fv = pd.DataFrame([i.copy() for i in row])
@@ -261,7 +263,9 @@ def make_nodes_individ(dataset):
 def get_network_individ(firstlastp):
     cand = (str(firstlastp)) 
     print("sql qc: ", cand) 
-    row = query_pg("SELECT * FROM network_individ t2 RIGHT JOIN(SELECT Distinct(contrib) FROM network_individ WHERE (firstlastp = %s and contr_amt >1) GROUP BY contrib)sub ON t2.contrib = sub.contrib WHERE contr_amt >1", [cand]) #might change to db/pg depending on where you are looking at this
+    row = query_pg("SELECT * FROM network_individ t2 RIGHT JOIN(SELECT Distinct(contrib) FROM network_individ \
+                         WHERE (firstlastp = %s and contr_amt >1) GROUP BY contrib)sub ON t2.contrib = sub.contrib WHERE \
+                        contr_amt >15", [cand]) #might change to db/pg depending on where you are looking at this
     row = pd.DataFrame([i.copy() for i in row])
     links_list_fv = make_links_indivd(row) 
     node_list = make_nodes_individ(row)
@@ -329,7 +333,7 @@ def get_network_committee (firstlastp):
                         LEFT JOIN (select distinct(pacshort), sum(contr_amt) as Contributions  \
                         FROM committee_network \
                         WHERE firstlastp = %s and contr_amt > 1 GROUP BY pacshort)sub ON t1.pacshort = sub.pacshort \
-                        WHERE contr_amt > 25000", [cand])
+                        WHERE contr_amt > 100000", [cand])
     row = pd.DataFrame([i.copy() for i in row])
     links_list_fv = make_links_commit(row)
     node_list = make_nodes_commit(row)
@@ -338,7 +342,7 @@ def get_network_committee (firstlastp):
 
 def get_network_node_list():
     import json
-    row = query_pg("SELECT DISTINCT(firstlastp) FROM network_industry WHERE contr_amt>150000 GROUP BY firstlastp")
+    row = query_pg("SELECT DISTINCT(firstlastp) FROM network_industry WHERE contr_amt>100000 GROUP BY firstlastp")
     json_dump = json.dumps(row, indent=1)
     #node_list = pd.DataFrame([i.copy() for i in row])
     return (json_dump)
