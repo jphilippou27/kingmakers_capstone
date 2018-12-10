@@ -1292,7 +1292,7 @@ $y("#button").on("click", function searchNode() {
 	d3.selectAll('image').remove();
 
 		var color = d3.scaleOrdinal() // D3 Version 4
-		  .domain(["D", "R", "I","Industry"])
+		  .domain(["D", "R", "I","Contributor"])
 		  .range(["#0000FF","#FF0000" , "#009933" , "#FF8106"]);
 
 		var tooltip = d3.select("body")
@@ -1321,7 +1321,7 @@ $y("#button").on("click", function searchNode() {
 		  const simulation = d3.forceSimulation()
 			.nodes(graph.nodes)
 			.force('link', d3.forceLink().id(d => d.name))
-			.force('charge', d3.forceManyBody().strength(-2))
+			//.force('charge', d3.forceManyBody().strength(-2))
 			.force('center', d3.forceCenter(width / 2, height / 2))
 			.on('tick', ticked);
 
