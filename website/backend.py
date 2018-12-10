@@ -55,6 +55,9 @@ def get_candidate(cand_id):
     row = query_pg("select * from cn18 where cand_id = %s", (cand_id,), one=True)
     return row
 
+def get_all_cands():
+    return query_pg("select cand_id, cand_name from cn18")
+
 def get_against_candidate_time_series(cand_id):
     return query_pg("select date, sum(amount) as amount from pac2cand where trans_type = %s and cand_id = %s group by date asc", ("24A", cand_id), one=False)
 
@@ -234,7 +237,7 @@ def get_industries_by_party():
 
 def get_industry_partycands(industryname, partyname):
     # print(industryname, partyname)
-    return query_pg("select industry as source, cand_name as target, party, sum(total) as value from interest_cand_spending where industry = %s and party =  %s group by industry, cand_name, party order by value desc limit 100", [industryname, partyname])
+    return query_pg("select industry as source, cand_name as target, party, cand_id, sum(total) as value from interest_cand_spending where industry = %s and party =  %s group by industry, cand_name, party, cand_id order by value desc limit 100", [industryname, partyname])
 
 def get_industry_cands(industryname):
     # print(industryname, partyname)

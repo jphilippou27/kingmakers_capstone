@@ -29,7 +29,10 @@
         window.setTimeout(hideSidebar, 250);
     });
     $(document).ready(function() {
-        $(".dropdown-trigger").dropdown();
+        $(".dropdown-trigger").dropdown({
+            constrainWidth: false,
+            coverTrigger: false
+        });
     });
     </script>
 

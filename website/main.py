@@ -139,6 +139,10 @@ def candidate_individual_support(cand_id):
      else:
          return abort(401)
 
+@application.route("/api/candidates", methods=["GET"])
+def all_cands():
+    return jsonify(backend.get_all_cands())
+
 @application.route("/candidates", methods=["GET"])
 def candidate_query():
     if request.method == "GET":

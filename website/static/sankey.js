@@ -90,6 +90,11 @@ lib.sankeyModule = function(type, zoom) {
                 } else {
                     return color(d.id)
                 }
+            }).on("click", function(d) {
+                if ("cand_id" in d) {
+                    window.location.href = "/candview?id=" + d.cand_id;
+                }
+
             });
         rects.select("title").remove();
         rects.append("title").text(function(d) {
@@ -110,6 +115,11 @@ lib.sankeyModule = function(type, zoom) {
                 } else {
                     return color(d.id)
                 }
+            }).on("click", function(d) {
+                if ("cand_id" in d) {
+                    window.location.href = "/candview?id=" + d.cand_id;
+                }
+
             }).append("title").text(function(d) {
                 return d.id + "\n" + "$" + d.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
             })
@@ -151,7 +161,7 @@ var generateNL = function(rawdata, party_id, left_party_color, right_party_color
     //var n1 = new Set();
     var n1 = {};
     if (left_party_color && right_party_color) {
-        console.log("left and right")
+        //console.log("left and right")
         for (i = 0; i < rawdata.length; i++) {
             if ("party" in rawdata[i]) {
                 n1[rawdata[i].source] = {"party": rawdata[i].party};
@@ -160,9 +170,13 @@ var generateNL = function(rawdata, party_id, left_party_color, right_party_color
                 n1[rawdata[i].source] = {};
                 n1[rawdata[i].target] = {};
             }         
+            if ("cand_id" in rawdata[i]) {
+                console.log("adding cand_id")
+                n1[rawdata[i].target].cand_id = rawdata[i].cand_id;
+            }
         }
     } else if (right_party_color) {
-        console.log("right only")
+        //console.log("right only")
         for (i = 0; i < rawdata.length; i++) {
             if ("party" in rawdata[i]) {
                 //n1[rawdata[i].source] = {"proportion": rawdata[i].proportion};
@@ -175,26 +189,12 @@ var generateNL = function(rawdata, party_id, left_party_color, right_party_color
             } else {
                 n1[rawdata[i].source] = {};
             }
+            if ("cand_id" in rawdata[i]) {
+                console.log("adding cand_id")
+                n1[rawdata[i].target].cand_id = rawdata[i].cand_id;
+            }
         }
     }
-    // for (i = 0; i < rawdata.length; i++) {
-    //     if ("party" in rawdata[i]) {
-    //         //n1[rawdata[i].source] = {"proportion": rawdata[i].proportion};
-    //         n1[rawdata[i].target] = {"party": rawdata[i].party};
-    //     } else {
-    //         n1[rawdata[i].target] = {};
-    //     }
-    //     if ("proportion" in rawdata[i]) {
-    //         n1[rawdata[i].source] = {"proportion": rawdata[i].proportion};
-    //     } else {
-    //         n1[rawdata[i].source] = {};
-    //     }
-    // }
-    console.log(n1);
-    //for (i = 0; i < rawdata.length; i++) {
-    //    n1.add({"id": rawdata[i].source})
-    //    n1.add({"id": rawdata[i].target})
-    //}
     var l1 = {}
     var counter = 0
     var n2 = []
@@ -208,6 +208,9 @@ var generateNL = function(rawdata, party_id, left_party_color, right_party_color
                 n2[counter] = {"id": key, "color": n1[key].proportion}
             } else {
                 n2[counter] = {"id": key}
+            }
+            if (n1[key].hasOwnProperty("cand_id")) {
+                n2[counter].cand_id =  n1[key].cand_id;
             }
             l1[key] = counter;
             counter++;
