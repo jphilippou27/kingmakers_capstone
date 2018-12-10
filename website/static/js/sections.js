@@ -1563,7 +1563,7 @@ function draw_committee_network(){
 		//d3.json("static/data_for_testing/industry_amt_winner_mini.json", function(error, graph) {
 	 var candName = $y('#search6').val();
         if (candName === "") {
-           candName = "Chris Collins (R)";
+           candName = "Sean Patrick Maloney (D)";
         }
         dataEndpoint = '/networkCommitteeData/' + candName;
         console.log("searchbox path commit: ", dataEndpoint);
