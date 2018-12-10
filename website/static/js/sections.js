@@ -1007,7 +1007,7 @@ function draw_filtered_nodes() {
 				.filter(function(d){if (largeNodes.indexOf(d.target) > -1){
 					//matching_edges.push(d.target)
 					return d}})
-				.transition().duration(500)
+				//.transition().duration(500)
 				.attr('class', 'edge')
 				.on('mouseover.tooltip', function(d) {
 					tooltip.transition()
