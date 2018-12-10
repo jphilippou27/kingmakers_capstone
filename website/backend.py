@@ -331,10 +331,10 @@ def get_network_committee (firstlastp):
     row = query_pg("Select * FROM committee_network t1 \
                         RIGHT JOIN (select distinct (pacshort)  \
                                     FROM committee_network \
-                                    WHERE firstlastp = %s and contr_amt > 50000 \
+                                    WHERE firstlastp = %s and contr_amt > 5000 \
                                     GROUP BY pacshort)sub \
                     ON t1.pacshort = sub.pacshort \
-                   WHERE contr_amt > 50000", [cand])
+                   WHERE contr_amt > 5000", [cand])
     row = pd.DataFrame([i.copy() for i in row])
     links_list_fv = make_links_commit(row)
     node_list = make_nodes_commit(row)
