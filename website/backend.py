@@ -270,6 +270,57 @@ def get_network_individ(firstlastp):
     #node_list = pd.DataFrame([i.copy() for i in row])
     return (json_dump)
 
+def make_links_commit(dataset):
+    """Create source and link pairs for the network graph from a pandas dataframe
+    
+    'INPUT: aggregated pandas dataframe with these columns:  sum(amount) ,feccandid, bioguide_id, firstlastp, party, Industry
+    'OUTPUT: JSON format of links (ex: {"value": 20000.0, "source": 1, "target": 96},
+    """
+    
+    #create a list of target and source values
+    links_list = list(dataset.apply(lambda row: {"source": row['pacshort'], "target": row['firstlastp'], "value": row['contr_amt']}, axis=1))
+    #print(links_list)
+    #make an index of the values
+    unique_ids = pd.Index(dataset['pacshort']
+                      .append(dataset['firstlastp'])
+                      .reset_index(drop=True).unique())
+    #print(unique_ids)
+    #convert source and target values to numbers for d3.v3
+    links_list_fv = []
+    for link in links_list:
+        record = {"value":link['value'], "source": (unique_ids.get_loc(link['source'])+1),
+         "target": (unique_ids.get_loc(link['target'])+1)}
+        links_list_fv.append(record)
+    return (links_list)
+
+def make_nodes_commit(dataset):
+    """Create nodes for the network graph from a pandas dataframe
+    
+    'INPUT: aggregated pandas dataframe with these columns:  sum(amount) ,feccandid, bioguide_id, firstlastp, party, Industry
+    'OUTPUT: JSON format of links (ex: {'name': 'Misc Agriculture', 'group': 'Industry', 'pic_id': 'flower'},
+    """
+    #contributions nodes
+    df_nodes_I = pd.DataFrame(dataset.groupby(['pacshort',"type"], as_index = False)['contr_amt'].sum())
+    df_nodes_I["party"] = "Contributor"
+    df_nodes_I['ge_winner_ind_guess'] = "Not Applicable"
+    df_nodes_I = df_nodes_I.rename(index=str, columns={"pacshort": "firstlastp", " contr_amt": " contr_amt", "type":"type", "party":"party", "ge_winner_ind_guess":"ge_winner_ind_guess" }) 
+    #['firstlastp' if x == 0 else x for x in df_nodes_I.columns]
+    print(df_nodes_I.head())
+    
+    #same thing for politicians
+    df_nodes_P = pd.DataFrame(dataset.groupby(['firstlastp','party','ge_winner_ind_guess',"type"], as_index = False)['contr_amt'].sum())
+    df_nodes_P['type'] = "Not Applicable"
+    #df_nodes_P.head()
+    
+    #merge nodes
+    df_nodes = pd.concat([df_nodes_I, df_nodes_P])
+    
+    #Convert to list
+    node_list = list(df_nodes.apply(lambda row: {"name": row['firstlastp'], "group": row['party'],  "contribution_total": row['contr_amt'], "winner_ind":row['ge_winner_ind_guess'],"Type":row['type']}, axis=1))
+    
+    #export
+    return(node_list)
+
 def get_network_committee (firstlastp):
     cand = (str(firstlastp)) 
     print("committee sql qc: ", cand) 
