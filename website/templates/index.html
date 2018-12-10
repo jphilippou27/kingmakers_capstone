@@ -5,11 +5,11 @@
     <!-- <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script src="https://d3js.org/d3.v5.min.js"></script>
-    <script src="https://unpkg.com/d3-array@1"></script>
-    <script src="https://unpkg.com/d3-collection@1"></script>
-    <script src="https://unpkg.com/d3-path@1"></script>
-    <script src="https://unpkg.com/d3-shape@1"></script>
-    <script src="https://unpkg.com/d3-sankey@0"></script>
+    <script src="https://s3.us-south.objectstorage.softlayer.net/staticassets2/d3-array-1.js"></script>
+    <script src="https://s3.us-south.objectstorage.softlayer.net/staticassets2/d3-collection-1.js"></script>
+    <script src="https://s3.us-south.objectstorage.softlayer.net/staticassets2/d3-path-1.js"></script>
+    <script src="https://s3.us-south.objectstorage.softlayer.net/staticassets2/d3-shape-1.js"></script>
+    <script src="https://s3.us-south.objectstorage.softlayer.net/staticassets2/d3-sankey-0.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.13.0/d3-legend.js"></script>
     <!--<script type="text/javascript" src={{ url_for('static', filename='sankey.js') }}></script> -->
     <link rel="icon" href="https://s3.us-south.objectstorage.softlayer.net/staticassets2/kingmakers-favicon.png" sizes="32x32">
@@ -33,6 +33,10 @@
             constrainWidth: false,
             coverTrigger: false
         });
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+      var elems = document.querySelectorAll('.carousel');
+      var instances = M.Carousel.init(elems);
     });
     </script>
 
@@ -64,11 +68,11 @@
 * {
     box-sizing: border-box;
 }
-.active{
+/*.active{
     color: white;
     background-color: rgba(100,100,100,1);
     border-left: thick solid rgba(0,255,0,0.5);
-}
+}*/
 </style>
 </head>
 <body >
@@ -91,7 +95,7 @@
         </li>
     </ul>
     <div class="navbar-fixed">
-        <nav class="red darken-4">
+        <nav class="red darken-4" style='background-image: linear-gradient(to bottom, rgba(196, 34, 34, 255), rgba(176, 30, 30, 255)) !important'>
             <div class="nav-wrapper">
                 <a href="/" class="center brand-logo">Kingmakers</a>
                 <ul class="left hide-on-med-and-down">

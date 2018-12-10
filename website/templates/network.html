@@ -67,21 +67,25 @@
         <div class="title">Individual View Filtered by Politician</div>
         Here is a slice of the funding network focused on democratic candidate Chris Collins (R). The network shows only the individuals that supported him. You can also view who else those industries support, and which candidates were successful. Unfortunately, Mr. Ivey was unsuccessful in his election (there is no green circle around his node).
 	<div id = "graphic" class="ui-widget" method="POST">
-		<input id="search">
-    <button id='button' type="button" >Find</button>
+		<input id="search3">
+    <button id='button3' type="button" >Find</button>
 	</div>
 	<div id = "graphic" class="ui-widget" method="POST">
-		<input id="search2" name = "search2">
-    <button id='button2' type="button" >New Graph</button> 
+		<input id="search4" name = "search4">
+    <button id='button4' type="button" >New Graph</button> 
 	</div>
 	  </section>
 	  </section>
 	  <section class="step">
-        <div class="title">Total Fundraising & Committee</div>
-        Here is a slice of the funding network focused on democratic candidate Glenn Ivey (D). The network shows only the industries that supported him. You can also view who else those industries support, and which candidates were successful. Unfortunately, Mr. Ivey was unsuccessful in his election (there is no green circle around his node).
-	<div id = "graphic" class="ui-widget">
-		<input id="search">
-    <button id='button' type="button" onclick="searchNode()">Find</button>
+        <div class="title">Committee View Filtered by Politician</div>
+        TBD INTRO TEXT
+		  <div id = "graphic" class="ui-widget">
+		<input id="search5">
+    <button id='button5' type="button" onclick="searchNode()">Find</button>
+	</div>
+	<div id = "graphic" class="ui-widget" method="POST">
+		<input id="search6" name = "search4">
+    <button id='button6' type="button" >New Graph</button> 
 	</div>
 	<p></p>
 	<p></p>
@@ -126,6 +130,7 @@
 
 <!--Jquery for search box-->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>var $y = jQuery.noConflict();</script>
 <link type="text/css" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css" rel="stylesheet" />
 <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js" ></script>
 

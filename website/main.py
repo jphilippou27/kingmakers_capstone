@@ -289,11 +289,22 @@ def networkIndivdData(cand_name):
     if type(cand_name) is None or cand_name == "":
         text = "Sean Patrick Maloney (D)"
     if request.method == "POST":
-        text = request.form['search2']
+        text = request.form['search4']
         print(text)
     else:
         text = str(cand_name)
     return (backend.get_network_individ(text))
+
+@application.route("/networkCommitteedData/<cand_name>", methods=["GET", "POST"])
+def networkIndivdData(cand_name):
+    if type(cand_name) is None or cand_name == "":
+        text = "Chris Collins (R)"
+    if request.method == "POST":
+        text = request.form['search6']
+        print(text)
+    else:
+        text = str(cand_name)
+    return (backend.get_network_committee(text))
 
 @application.route("/networkNodeList", methods=["GET"])
 def networkNodedata():

@@ -656,7 +656,7 @@ var scrollVis = function () {
 		//var networkdata = d3.json(data_endpoint)
 		//networkdata.then(function( graph) {
 		//d3.json("static/data_for_testing/industry_amt_winner_mini.json", function(error, graph) {
-        var candName = $('#search2').val();
+        var candName = $y('#search2').val();
         if (candName === "") {
             candName = "Sean Patrick Maloney (D)";
         }
@@ -822,7 +822,7 @@ var scrollVis = function () {
 //trying to add search
 			//d3.json("/networkdata", function(error, graph) {
 		//  if (error) throw error;
-        var candName = $('#search2').val();
+        var candName = $y('#search2').val();
         if (candName === "") {
             candName = "Sean Patrick Maloney (D)";
         }
@@ -837,8 +837,8 @@ var scrollVis = function () {
 
 		optArray = optArray.sort();
 
-		$(function () {
-			$("#search").autocomplete({
+		$y(function () {
+			$y("#search").autocomplete({
 				source: optArray});
 						});
 
@@ -854,8 +854,8 @@ graph = d3.json('/networkNodeList', function(error, data) {
 
 		optArray = optArray.sort();
 
-		$(function () {
-			$("#search2").autocomplete({
+		$y(function () {
+			$y("#search2").autocomplete({
 				source: optArray});
 						});
 
@@ -863,7 +863,7 @@ graph = d3.json('/networkNodeList', function(error, data) {
 
 })//end of Data ??
 
-$("#button").on("click", function searchNode() {
+$y("#button").on("click", function searchNode() {
     //find the node
     var selectedVal = document.getElementById('search').value;
     var node = svg.selectAll(".node");
@@ -883,7 +883,7 @@ $("#button").on("click", function searchNode() {
 })
 
 // $("#button2").on("click", function() { console.log('hey'); })
-$("#button2").on("click", function() { draw_politician_network();});
+$y("#button2").on("click", function() { draw_politician_network();});
 
 }//end of draw politican network
   
@@ -957,7 +957,7 @@ function draw_filtered_nodes() {
 				g.attr("transform", d3.event.transform)
 			}*/
 			//var  max_node = 0
-			 var candName = $('#search2').val();
+			 var candName = $y('#search2').val();
 			if (candName === "") {
 			    candName = "Sean Patrick Maloney (D)";
 			}
@@ -1004,9 +1004,10 @@ function draw_filtered_nodes() {
 			//matching_edges = []
 
 			  link
-				.filter(function(d){if (largeNodes.indexOf(d.target) > -1){
+				//.filter(function(d){if (largeNodes.indexOf(d.target) > -1){
 					//matching_edges.push(d.target)
-					return d}})
+				//	return d}}) //I don't think I need this since I moved the filter higher up
+				//.transition().duration(500)
 				.attr('class', 'edge')
 				.on('mouseover.tooltip', function(d) {
 					tooltip.transition()
@@ -1171,7 +1172,7 @@ function draw_filtered_nodes() {
 
 
 		//trying to add search
- var candName = $('#search2').val();
+ var candName = $y('#search2').val();
         if (candName === "") {
             candName = "Sean Patrick Maloney (D)";
         }
@@ -1186,8 +1187,8 @@ function draw_filtered_nodes() {
 
 		optArray = optArray.sort();
 
-		$(function loadSearch() {
-			$("#search").autocomplete({
+		$y(function loadSearch() {
+			$y("#search").autocomplete({
 				source: optArray
 				});
 						});
@@ -1202,7 +1203,7 @@ function draw_filtered_nodes() {
 
 
 
-$("#button").on("click", function searchNode() {
+$y("#button").on("click", function searchNode() {
     //find the node
     var selectedVal = document.getElementById('search').value;
     var node = svg.selectAll(".node");
@@ -1291,7 +1292,7 @@ $("#button").on("click", function searchNode() {
 	d3.selectAll('image').remove();
 
 		var color = d3.scaleOrdinal() // D3 Version 4
-		  .domain(["D", "R", "I","Industry"])
+		  .domain(["D", "R", "I","Contributor"])
 		  .range(["#0000FF","#FF0000" , "#009933" , "#FF8106"]);
 
 		var tooltip = d3.select("body")
@@ -1307,7 +1308,7 @@ $("#button").on("click", function searchNode() {
 		//var networkdata = d3.json(data_endpoint)
 		//networkdata.then(function( graph) {
 		//d3.json("static/data_for_testing/industry_amt_winner_mini.json", function(error, graph) {
-        var candName = $('#search2').val();
+        var candName = $y('#search4').val();
         if (candName === "") {
             candName = "Sean Patrick Maloney (D)";
         }
@@ -1320,7 +1321,7 @@ $("#button").on("click", function searchNode() {
 		  const simulation = d3.forceSimulation()
 			.nodes(graph.nodes)
 			.force('link', d3.forceLink().id(d => d.name))
-			.force('charge', d3.forceManyBody().strength(-100))
+			.force('charge', d3.forceManyBody().strength(-20))
 			.force('center', d3.forceCenter(width / 2, height / 2))
 			.on('tick', ticked);
 
@@ -1473,7 +1474,7 @@ $("#button").on("click", function searchNode() {
 //trying to add search
 			//d3.json("/networkdata", function(error, graph) {
 		//  if (error) throw error;
-        var candName = $('#search2').val();
+        var candName = $y('#search3').val();
         if (candName === "") {
             candName = "Sean Patrick Maloney (D)";
         }
@@ -1488,8 +1489,8 @@ $("#button").on("click", function searchNode() {
 
 		optArray = optArray.sort();
 
-		$(function () {
-			$("#search").autocomplete({
+		$y(function () {
+			$y("#search3").autocomplete({
 				source: optArray});
 						});
 
@@ -1505,8 +1506,8 @@ graph = d3.json('/networkNodeList', function(error, data) {
 
 		optArray = optArray.sort();
 
-		$(function () {
-			$("#search2").autocomplete({
+		$y(function () {
+			$y("#search4").autocomplete({
 				source: optArray});
 						});
 
@@ -1514,9 +1515,9 @@ graph = d3.json('/networkNodeList', function(error, data) {
 
 })//end of Data ??
 
-$("#button").on("click", function searchNode() {
+$y("#button3").on("click", function searchNode_individ() {
     //find the node
-    var selectedVal = document.getElementById('search').value;
+    var selectedVal = document.getElementById('search3').value;
     var node = svg.selectAll(".node");
     if (selectedVal == "none") {
         node.style("stroke", "white").style("stroke-width", "1");
@@ -1534,7 +1535,7 @@ $("#button").on("click", function searchNode() {
 })
 
 // $("#button2").on("click", function() { console.log('hey'); })
-$("#button2").on("click", function() { draw_politician_network();});
+$y("#button4").on("click", function() { draw_individual_network();});
 
 }//end of draw politican network
 
