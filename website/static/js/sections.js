@@ -269,7 +269,7 @@ var scrollVis = function () {
     activateFunctions[1] = draw_toy_network;
 	//showFillerTitle;
     activateFunctions[2] = demo_analysis_politicianI;
-	activateFunctions[3] = demo_analysis_politicianII;
+    activateFunctions[3] = demo_analysis_politicianII;
     activateFunctions[5] = draw_filtered_nodes;
     activateFunctions[4] = draw_politician_network;
     activateFunctions[6] = draw_toy_network;
@@ -360,11 +360,11 @@ var scrollVis = function () {
 		//function find_data(){}
 
 	//remove title stuff
-	g.selectAll('.openvis-title')
+   g.selectAll('.openvis-title')
       .transition()
       .duration(0)
       .attr('opacity', 0);
-	g.selectAll('.openvis-title')
+   g.selectAll('.openvis-title')
       .transition()
       .duration(0)
       .attr('opacity', 0);
@@ -957,7 +957,13 @@ function draw_filtered_nodes() {
 				g.attr("transform", d3.event.transform)
 			}*/
 			//var  max_node = 0
-			d3.json("/static/data_for_testing/industry_amt_winner_mini.json", function(error, graph) {
+			 var candName = $('#search2').val();
+			if (candName === "") {
+			    candName = "Sean Patrick Maloney (D)";
+			}
+			dataEndpoint = '/networkdata/' + candName;
+			console.log(dataEndpoint);
+				d3.json(dataEndpoint, function(error, graph) {
 			  if (error) throw error;
 			  //console.log(d3.max(d3.values(graph.nodes.contribution_total)))
 			  var max_node = d3.max(graph.nodes, function(d) { return d.contribution_total; })
@@ -1039,7 +1045,7 @@ function draw_filtered_nodes() {
 			  node
 				.filter(function(d){if ((d.contribution_total > min_node_size && d.contribution_total < max_node_size ) || (d.group == "Industry")) {return d.contribution_total; }})
 				.append('circle')
-				.attr('r', function(d) {return(Math.sqrt(d.contribution_total)/25)}) //used to be R  //and function(d) {console.log(d.target.value)})
+				.attr('r', function(d) {return(Math.sqrt(d.contribution_total)/125)}) //used to be R  //and function(d) {console.log(d.target.value)})
 				.attr("fill", function(d) {return color(d.group);})
 				///trying to add winner highlight
 				.style("stroke-width", function(d) {
@@ -1165,8 +1171,13 @@ function draw_filtered_nodes() {
 
 
 		//trying to add search
-
-		graph = d3.json('/static/data_for_testing/industry_amt_winner_mini.json', function(error, graph) {
+ var candName = $('#search2').val();
+        if (candName === "") {
+            candName = "Sean Patrick Maloney (D)";
+        }
+        dataEndpoint = '/networkdata/' + candName;
+        console.log(dataEndpoint);
+		d3.json(dataEndpoint, function(error, graph) {
 		console.log("searchbox qc " + graph)
 		var optArray = [];
 		for (var i = 0; i < graph.nodes.length - 1; i++) {
