@@ -296,7 +296,7 @@ def networkIndivdData(cand_name):
     return (backend.get_network_individ(text))
 
 @application.route("/networkCommitteedData/<cand_name>", methods=["GET", "POST"])
-def networkIndivdData(cand_name):
+def networkCommitteeData(cand_name):
     if type(cand_name) is None or cand_name == "":
         text = "Chris Collins (R)"
     if request.method == "POST":
