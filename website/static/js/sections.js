@@ -1748,7 +1748,7 @@ function draw_committee_network(){
 		//  if (error) throw error;
         var candName = $y('#search5').val();
         if (candName === "") {
-            candName = "Sean Patrick Maloney (D)";
+            candName = "Chris Collins (R)";
         }
         dataEndpoint = '/networkcommitteeData/' + candName;
         console.log(dataEndpoint);
