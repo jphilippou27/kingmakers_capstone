@@ -1536,7 +1536,7 @@ $("#button").on("click", function searchNode() {
 })
 
 // $("#button2").on("click", function() { console.log('hey'); })
-$("#button2").on("click", function() { draw_politician_network();});
+$("#button2").on("click", function() { draw_individual_network();});
 
 }//end of draw politican network
 
