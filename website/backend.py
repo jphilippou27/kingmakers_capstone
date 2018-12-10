@@ -257,9 +257,9 @@ def make_nodes_individ(dataset):
 def get_network_individ(firstlastp):
     cand = (str(firstlastp)) 
     print("sql qc: ", cand)
-    row = query_pg("SELECT * FROM network_individ WHERE firstlastp ='Chris Collins (R)'") #might change to db/pg depending on where you are looking at this
+    row = query_pg("SELECT * FROM network_individ WHERE firstlastp = %s", [cand]) #might change to db/pg depending on where you are looking at this
     row = pd.DataFrame([i.copy() for i in row])
-    links_list_fv = make_links_indivd(row)
+    links_list_fv = make_links_indivd(row) 
     node_list = make_nodes_individ(row)
     json_dump = merge_nodes_links(links_list_fv, node_list)
     #json_dump = json.dumps(network_json, indent=1)
