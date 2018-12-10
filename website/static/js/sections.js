@@ -1515,7 +1515,7 @@ graph = d3.json('/networkNodeList', function(error, data) {
 
 })//end of Data ??
 
-$y("#button3").on("click", function searchNode() {
+$y("#button3").on("click", function searchNode_individ() {
     //find the node
     var selectedVal = document.getElementById('search').value;
     var node = svg.selectAll(".node");
