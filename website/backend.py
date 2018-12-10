@@ -267,6 +267,21 @@ def get_network_individ(firstlastp):
     #node_list = pd.DataFrame([i.copy() for i in row])
     return (json_dump)
 
+def get_network_committee (firstlastp):
+    cand = (str(firstlastp)) 
+    print("committee sql qc: ", cand) 
+    row = query_pg("SELECT contr_amt, firstlastp, ge_winner_ind_guess, t1.pacshort, party, type  \
+                        FROM committee_network t1 \
+                        LEFT JOIN (select distinct(pacshort), sum(contr_amt) as Contributions  \
+                        FROM committee_network \
+                        WHERE firstlastp = %s and contr_amt > 1 GROUP BY pacshort)sub ON t1.pacshort = sub.pacshort \
+                        WHERE contr_amt > 25000, [cand])
+    row = pd.DataFrame([i.copy() for i in row])
+    links_list_fv = make_links_commit(row) 
+    node_list = make_nodes_commit(row)
+    json_dump = merge_nodes_links(links_list_fv, node_list)
+    return (json_dump)
+
 def get_network_node_list():
     import json
     row = query_pg("SELECT DISTINCT(firstlastp) FROM network_industry WHERE contr_amt>150000 GROUP BY firstlastp")
