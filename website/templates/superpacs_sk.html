@@ -1,0 +1,21 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<div class="container">
+    <div id="sankey-content" >
+        <h2>Political Spending By Industry</h2>
+        <p>Click a path to zoom into a per-candidate view</p>
+        <a id="backbtn" class="waves-effect waves-light btn light-blue darken-4" style="width: 100px; display: none" onclick="goback()">Back</a>
+        <p></p>
+        <svg id="sankey"></svg>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        const data_endpoint = '/api/superpacs/sankey';
+    </script>
+    <script type="text/javascript" src="/static/sankey.js"></script>
+{% endblock %}
+
