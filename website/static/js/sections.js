@@ -251,7 +251,6 @@ var scrollVis = function () {
 	//showFillerTitle;
     activateFunctions[2] = demo_analysis_politicianI;
     activateFunctions[3] = demo_analysis_politicianII;
-    activateFunctions[7] = draw_filtered_nodes;
     activateFunctions[4] = draw_politician_network;
     activateFunctions[5] = draw_individual_network;
     activateFunctions[6] = draw_committee_network;
