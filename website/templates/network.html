@@ -37,7 +37,9 @@
 	as well as which candidates were successful. Mr. Maloney was successful in his election as indicated by the a green circle around his node. 
 			<p></p>
 	This particular network view merges both the individual and the committee spending so it is the most comprehensive. The industry indentification
-	was made available to our team by OpenSecrets. Any node, wether an industry or a candidate, with less than $75k of contributions has been removed so the visualization is more usable.
+	was made available to our team by OpenSecrets. Any node, wether an industry or a candidate, with less than $75k of contributions has been 
+			removed so the visualization is more usable. You can't make a new graph based on an industry because that would only return a single node,
+			instead we recommend using the industry tab for your exploration.
 	<div id = "graphic" class="ui-widget" method="POST">
 		<input id="search">
     <button id='button' type="button" >Find</button>
@@ -68,7 +70,11 @@
 	  <section class="step">
         <div class="title">Committee View Filtered by Politician</div>
         Keeping with the theme, the network at the right is also for Sean Patrick Maloney. Here we examine the PACs that contributed to
-		  his campagain. The threshold for this visualization is two thousand dollars.
+		  his campagain. The threshold for this visualization is two thousand dollars. The party bifurcation is most strongly 
+		  demonstrated by the committee view. 
+		  
+		  Mr. Maloney is in the middle of the diagram, further from the anchor that is the Democratic Congressional Campaign Committee node 
+		  and closer to the republican side.
 		  <div id = "graphic" class="ui-widget">
 		<input id="search5">
     <button id='button5' type="button" onclick="searchNode()">Find</button>
