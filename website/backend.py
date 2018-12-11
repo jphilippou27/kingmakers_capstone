@@ -198,7 +198,7 @@ def merge_nodes_links(links_list_fv, node_list):
 def get_network_by_industry(firstlastp):
     cand = (str(firstlastp))
     min_contribution = 150000
-    row = query_pg("SELECT * FROM network_industry t1 LEFT JOIN (select distinct(industry) FROM network_industry \
+    row = query_pg("SELECT * FROM network_industry t1 RIGHT JOIN (select distinct(industry) FROM network_industry \
                     WHERE (firstlastp = %s and contr_amt > 75000)) sub ON t1.industry = sub.industry  \
                         WHERE (sub.industry IS NOT NULL) and (t1.contr_amt> 75000)", [cand])
     # print(row)
