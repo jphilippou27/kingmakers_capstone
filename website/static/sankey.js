@@ -293,6 +293,8 @@ sankeydata.then(function(d){
 if (typeof industry_endpoint !== 'undefined') {
     var sankeydata = d3.json(industry_endpoint)
     sankeydata.then(function(d){
+        console.log("raw data");
+        console.log(d);
         var clean_data = generateNL(d, false, false, true)
         console.log("clean data");
         console.log(clean_data);

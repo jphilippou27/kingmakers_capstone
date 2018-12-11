@@ -362,7 +362,7 @@ def get_candidate_tree(cand_id):
     return result_set
 
 def get_candidate_industry_tree(cand_id):
-    result_set = query_pg("select industry as source, recip_cmte_nm as target, sum(total) as value from interest_spending_cand_cmtes where cand_id = %s group by industry, party , recip_cmte_nm union select y.cmte_nm as source, z.cmte_nm as target, sum(x.transaction_amt) as value from itoth18 x inner join cm18 y on y.cmte_id = x.cmte_id inner join cm18 z on z.cmte_id = x.other_id where x.other_id in ( select cmte_id from pacs_related where cand_id = %s) and x.transaction_tp similar to '24G' group by y.cmte_nm, z.cmte_nm having sum(x.transaction_amt) > 10000 ;", [cand_id, cand_id])
+    result_set = query_pg("select industry as source, recip_cmte_nm as target, sum(total) as value from interest_spending_cand_cmtes where cand_id = %s group by industry, party , recip_cmte_nm having sum(total) > 0 union select y.cmte_nm as source, z.cmte_nm as target, sum(x.transaction_amt) as value from itoth18 x inner join cm18 y on y.cmte_id = x.cmte_id inner join cm18 z on z.cmte_id = x.other_id where x.other_id in ( select cmte_id from pacs_related where cand_id = %s) and x.transaction_tp similar to '24G' group by y.cmte_nm, z.cmte_nm having sum(x.transaction_amt) > 10000 limit 80;", [cand_id, cand_id])
     return result_set
 
 def get_industries_by_party():
