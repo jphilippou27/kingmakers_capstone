@@ -1,6 +1,7 @@
 var lib = lib || {};
 
 lib.sankeyModule = function(type, zoom, svgid, parentid) {
+    console.log(parentid);
     var contentDiv = document.getElementById(parentid)
     if (type == "tree") {
         var height = 700;
@@ -238,7 +239,7 @@ var linkZoom1 = function(d) {
     sankeydata.then(function(d){
         //console.log(d)
         var clean_data = generateNL(d, true, true, true)
-        var sankey = lib.sankeyModule("full", false);
+        var sankey = lib.sankeyModule("full", false, "#sankey", "sankey-content");
         sankey.industry_data(clean_data)
         sankey.plot_by_industry()
     });
