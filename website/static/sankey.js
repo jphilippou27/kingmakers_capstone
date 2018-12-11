@@ -42,14 +42,18 @@ lib.sankeyModule = function(type, zoom, svgid, parentid, superpaczoom) {
         svg
             .attr("width", width)
             .attr("height", height + 30);
-
         var sk = d3.sankey()
             .nodeWidth(15)
             .nodePadding(10)
             .size([width, height])
             .nodeWidth(20)
-            .nodePadding(10)
-            .nodeAlign(d3.sankeyJustify);
+            .nodePadding(10);
+        if (superpaczoom) {
+            sk.nodeAlign(d3.sankeyJustify)
+        } else {
+            sk.nodeAlign(d3.sankeyJustify)
+        }
+           
         var graph = sk(data)
 
         var paths = links.selectAll("path")
@@ -57,6 +61,7 @@ lib.sankeyModule = function(type, zoom, svgid, parentid, superpaczoom) {
             //.transition().duration(1300)
             .attr("d", d3.sankeyLinkHorizontal())
             .attr("stroke-width", d => d.width)
+            .attr("fill", "green")
             .on("click", function(d){
                 if (canzoom) linkZoom1(d);
             });
@@ -65,9 +70,15 @@ lib.sankeyModule = function(type, zoom, svgid, parentid, superpaczoom) {
         paths.enter()
             .append("path")
             .classed("link", true)
-            .attr("fill", "none")
             .attr("d", d3.sankeyLinkHorizontal())
             .attr("stroke-width", d => d.width)
+            //.style("stroke", "blue")
+            .style("stroke", function(d) {
+                if (d.target.hasOwnProperty("type")) {
+                    if (d.target.type == "For") return "gray";
+                    if (d.target.type == "Against") return "red";
+                }
+            })
             .attr("stroke-opacity", 0.5)
             .on("click", function(d){
                 if (canzoom) linkZoom1(d);
@@ -186,6 +197,9 @@ var generateNL = function(rawdata, party_id, left_party_color, right_party_color
             if ("cand_id" in rawdata[i]) {
                 n1[rawdata[i].target].cand_id = rawdata[i].cand_id;
             }
+            if ("type" in rawdata[i]) {
+                n1[rawdata[i].target].type = rawdata[i].type;
+            }
             if (industry_link) {
                 n1[rawdata[i].source].industry = rawdata[i].source;
             }
@@ -206,6 +220,9 @@ var generateNL = function(rawdata, party_id, left_party_color, right_party_color
             }
             if ("cand_id" in rawdata[i]) {
                 n1[rawdata[i].target].cand_id = rawdata[i].cand_id;
+            }
+            if ("type" in rawdata[i]) {
+                n1[rawdata[i].target].type = rawdata[i].type;
             }
             if (industry_link) {
                 n1[rawdata[i].source].industry = rawdata[i].source;
@@ -235,6 +252,9 @@ var generateNL = function(rawdata, party_id, left_party_color, right_party_color
             }
             if (n1[key].hasOwnProperty("industry")) {
                 n2[counter].industry =  n1[key].industry;
+            }
+            if (n1[key].hasOwnProperty("type")) {
+                n2[counter].type =  n1[key].type;
             }
             l1[key] = counter;
             counter++;
@@ -283,7 +303,7 @@ var linkZoom2 = function(industry) {
 };
 
 var linkZoom3 = function(d) {
-    d3.select("#backbtn").style("display","block");
+    d3.select("#backbtnsp").style("display","block");
     var source = d.source.id;
     var target  = d.target.id;
     var sankeydata = d3.json("/api/superpacs?superpac=" + encodeURIComponent(target) )
@@ -308,7 +328,7 @@ var goback = function() {
     });
 }
 var gobacksp = function() {
-    d3.select("#backbtnsp").style("display","block");
+    d3.select("#backbtnsp").style("display","none");
     var sankeydata = d3.json("/api/superpacs/sankey")
     sankeydata.then(function(d){
         var clean_data = generateNL(d, false, false, true, true)
@@ -332,6 +352,7 @@ sankeydata.then(function(d){
         var sankey = lib.sankeyModule("full", true, "#sankey","sankey-content", false);
     } else if (data_endpoint.startsWith("/api/superpacs")){
         var clean_data = generateNL(d, false, false, true, false)
+        console.log(clean_data);
         var sankey = lib.sankeyModule("full", false, "#sankey", "sankey-content", true);
     } else {
         return
