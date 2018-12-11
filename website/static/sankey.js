@@ -86,7 +86,7 @@ lib.sankeyModule = function(type, zoom, svgid, parentid) {
             .attr("height", d => d.y1 - d.y0)
             .attr("fill", function(d) {
                 if ("color" in d) {
-                    return politicolor(d.color); 
+                    return politicolor(d.color);
                 } else {
                     return color(d.id)
                 }
@@ -98,7 +98,7 @@ lib.sankeyModule = function(type, zoom, svgid, parentid) {
             });
         rects.select("title").remove();
         rects.append("title").text(function(d) {
-            return d.id + "\n" + "$" + d.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
+            return d.id + "\n" + "$" + d.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         })
 
         rects.enter()
@@ -111,7 +111,7 @@ lib.sankeyModule = function(type, zoom, svgid, parentid) {
             .attr("opacity", 0.8)
             .attr("fill", function(d) {
                 if ("color" in d) {
-                    return politicolor(d.color); 
+                    return politicolor(d.color);
                 } else {
                     return color(d.id)
                 }
@@ -121,7 +121,7 @@ lib.sankeyModule = function(type, zoom, svgid, parentid) {
                 }
 
             }).append("title").text(function(d) {
-                return d.id + "\n" + "$" + d.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
+                return d.id + "\n" + "$" + d.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             })
         rects.exit().remove();
 
@@ -169,7 +169,7 @@ var generateNL = function(rawdata, party_id, left_party_color, right_party_color
             } else {
                 n1[rawdata[i].source] = {};
                 n1[rawdata[i].target] = {};
-            }         
+            }
             if ("cand_id" in rawdata[i]) {
                 n1[rawdata[i].target].cand_id = rawdata[i].cand_id;
             }
@@ -274,6 +274,8 @@ sankeydata.then(function(d){
     if (data_endpoint.startsWith("/api/candidates")) {
         var clean_data = generateNL(d, false, false, true)
         var sankey = lib.sankeyModule("tree", false, "#sankey", "sankey-content");
+        $('#sankey').siblings('img').remove();
+        $('#sankey2').siblings('img').remove();
     } else if (data_endpoint.startsWith("/api/industries")){
         var clean_data = generateNL(d, false, false, true)
         var sankey = lib.sankeyModule("full", true, "#sankey","sankey-content");
@@ -297,4 +299,4 @@ if (typeof industry_endpoint !== 'undefined') {
         sankey.industry_data(clean_data)
         sankey.plot_by_industry()
     });
-} 
+}
