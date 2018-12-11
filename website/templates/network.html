@@ -8,7 +8,9 @@
     <div id='sections'>
       <section class="step">
         <div class="title">Welcome to Network Visualizations!</div>
-        If you've never looked at a network graph, don't worry we are going to walk you through them.<br/><br/>As you probably already know, we are looking at the campaign funding for US elections in 2016.
+        If you've never looked at a network graph, don't worry we are going to walk you through them.<br/><br/>
+	      Unlike the candidate page, we are looking at the campaign funding for US elections in 2016 because the outcome data is much more reliable,
+	      and there is a lag in the data as the funding documentation deadline is at the end of December. 
       </section>
       <section class="step">
         <div class="title">Toy Example</div>
@@ -30,9 +32,12 @@
 		
 		<section class="step">
         <div class="title">Industry View Filtered by Politician</div>
-        Here is a slice of the funding network focused on democratic candidate Glenn Ivey (D). The network shows only the industries that supported him. You can also view who else those industries support,
-			and which candidates were successful. Unfortunately, Mr. Ivey was unsuccessful in his election (there is no green circle around his node). 
-			Any node with less than $150k of contributions has been removed so the visualization is more usable.
+        Here is a slice of the funding network pre-poulated with data on democratic candidate Sean Patrick Maloney, who ran in NY for the house of representatives. 
+	The network shows the industries that supported him and the other candidates supported by the same industries,
+	as well as which candidates were successful. Mr. Maloney was successful in his election as indicated by the a green circle around his node. 
+			<p></p>
+	This particular network view merges both the individual and the committee spending so it is the most comprehensive. The industry indentification
+	was made available to our team by OpenSecrets. Any node, wether an industry or a candidate, with less than $75k of contributions has been removed so the visualization is more usable.
 	<div id = "graphic" class="ui-widget" method="POST">
 		<input id="search">
     <button id='button' type="button" >Find</button>
@@ -44,7 +49,12 @@
 	  </section>
 	<section class="step">
         <div class="title">Individual View Filtered by Politician</div>
-        Here is a slice of the funding network focused on democratic candidate Chris Collins (R). The network shows only the individuals that supported him. You can also view who else those industries support, and which candidates were successful. Unfortunately, Mr. Ivey was unsuccessful in his election (there is no green circle around his node).
+        Once again, the graph is pre-populated with Sean Patrick Maloney, but this network shows only the individuals that supported him. 
+	The threshold for contributions needed to be much lower ($15) because individuals contribute at a very different scale, and the network 
+	only shows contributions directly made to the candidate. As you may have guessed, it is less common for individuals to contribute 
+	to several politicians. The size of the starburst seen directly around the candidate node reflects how many contributors
+		only sponsored his campaign.
+	As with the other networks, you can double click on a node to pin it down and explore further. Try this out with Philip Munger!
 	<div id = "graphic" class="ui-widget" method="POST">
 		<input id="search3">
     <button id='button3' type="button" >Find</button>
@@ -57,7 +67,8 @@
 	  </section>
 	  <section class="step">
         <div class="title">Committee View Filtered by Politician</div>
-        TBD INTRO TEXT
+        Keeping with the theme, the network at the right is also for Sean Patrick Maloney. Here we examine the PACs that contributed to
+		  his campagain. The threshold for this visualization is two thousand dollars.
 		  <div id = "graphic" class="ui-widget">
 		<input id="search5">
     <button id='button5' type="button" onclick="searchNode()">Find</button>
