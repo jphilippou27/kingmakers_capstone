@@ -151,6 +151,7 @@ candfor.then(function(d){
     var bars = lib.barChartModule();
     bars.data(d);
     bars.plot_net_horizontal("spending for cand", "#timeseries_for", d => d.date, d => d.total, "#062F4F");
+    $('#timeseries_for').siblings('img').remove();
     //sankey.industry_data(clean_data)
     //sankey.plot_by_industry()
 });
@@ -160,6 +161,7 @@ candagainst.then(function(d){
     var bars = lib.barChartModule();
     bars.data(d);
     bars.plot_net_horizontal("spending against cand", "#timeseries_against", d => d.date, d => d.total, "#B82601");
+    $('#timeseries_against').siblings('img').remove();
     //sankey.industry_data(clean_data)
     //sankey.plot_by_industry()
 });

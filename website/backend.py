@@ -1,7 +1,7 @@
 USE_POSTGRES=False
 
 import sqlite3
-import psycopg2 
+import psycopg2
 import psycopg2.extras
 from flask import Flask
 from flask import g
@@ -21,11 +21,11 @@ def get_pg():
         g.db = psycopg2.connect(conx,
                                             sslrootcert=ROOT_CERT,
                                             cursor_factory=psycopg2.extras.RealDictCursor)
-    return g.db            
+    return g.db
 
 @app.teardown_appcontext
 def close_connection(exception):
-    db = g.pop('db', None) 
+    db = g.pop('db', None)
     if db is not None:
         print("disconnecting to db.")
         db.Close()
@@ -88,7 +88,7 @@ def get_cands_by_amt():
 
 
 ######
-        
+
 def get_all_sums_by_cand():
     return query_pg("select sum(amount) as amt, indivs.recip_id, cands.name from indivs join cands where cands.cand_id = indivs.recip_id group by indivs.recip_id order by amt desc limit 100")
 def get_all_sums_by_cmte():
@@ -125,7 +125,7 @@ def get_spending_by_cmte():
 
 def get_spending_by_industry():
     return query_pg("select sum(amt) as total, industry, name from (select sum(amount) as amt, pacs2cands.industry as industry, industry.name as name from pacs2cands join industry on pacs2cands.industry = industry.code group by industry.code UNION ALL select sum(amount) as amt, pacs2pacs.donor_industry as industry, industry.name as name from pacs2pacs join industry on pacs2pacs.donor_industry = industry.code group by industry order by amt desc ) group by  industry order by total desc limit 100")
- 
+
 def get_simple_sankey_by_industry():
     return query_pg("select source, target, value, party from (select interest.name as source, cand.name as target, sum(amount) as value, cand.party as party from cmte2cand join cmte_advanced on cmte_advanced.id = cmte2cand.filer_id join interest on interest.code = cmte_advanced.interest join cand on cand.id = cmte2cand.cand_id where trans_type != '24A' and substr(cmte_advanced.interest, 0, 2) != 'J' and substr(cmte_advanced.interest, 0, 2) != 'Z' group by cmte_advanced.interest, cmte2cand.cand_id order by value desc) where value > 200000")
      #return query_pg("""select MAX(interest.name) as source, MAX(cands.name) as target, sum(amount) as value, substr(interest,0,1) from cmte2cand join interest on cmte2cand.industry = industry.code join cands on pacs2cands.cand_id = cands.cand_id  where substr(industry.code,0,2) != 'J' AND substr(industry.code,0,2) != 'Z' group by industry, pacs2cands.cand_id order by value desc limit 50""", ])
@@ -137,11 +137,11 @@ def cand_lookup(name):
 
 def make_links(dataset):
     """Create source and link pairs for the network graph from a pandas dataframe
-    
+
     'INPUT: aggregated pandas dataframe with these columns:  sum(amount) ,feccandid, bioguide_id, firstlastp, party, Industry
     'OUTPUT: JSON format of links (ex: {"value": 20000.0, "source": 1, "target": 96},
     """
-    
+
     #create a list of target and source values
     links_list = list(dataset.apply(lambda row: {"source": row['industry'], "target": row['firstlastp'], "value": row['contr_amt']}, axis=1))
     #print(links_list)
@@ -160,7 +160,7 @@ def make_links(dataset):
 
 def make_nodes(dataset):
     """Create nodes for the network graph from a pandas dataframe
-    
+
     'INPUT: aggregated pandas dataframe with these columns:  sum(amount) ,feccandid, bioguide_id, firstlastp, party, Industry
     'OUTPUT: JSON format of links (ex: {'name': 'Misc Agriculture', 'group': 'Industry', 'pic_id': 'flower'},
     """
@@ -168,20 +168,20 @@ def make_nodes(dataset):
     df_nodes_I = pd.DataFrame(dataset.groupby(['industry'], as_index = False)['contr_amt'].sum())
     df_nodes_I["party"] = "Industry"
     df_nodes_I['ge_winner_ind_guess'] = "NotApplicable"
-    df_nodes_I = df_nodes_I.rename(index=str, columns={"industry": "firstlastp", " contr_amt": " contr_amt", "party":"party", "ge_winner_ind_guess":"ge_winner_ind_guess" }) 
+    df_nodes_I = df_nodes_I.rename(index=str, columns={"industry": "firstlastp", " contr_amt": " contr_amt", "party":"party", "ge_winner_ind_guess":"ge_winner_ind_guess" })
     #['firstlastp' if x == 0 else x for x in df_nodes_I.columns]
     print(df_nodes_I.head())
-    
+
     #same thing for politicians
     df_nodes_P = pd.DataFrame(dataset.groupby(['firstlastp','party','ge_winner_ind_guess'], as_index = False)['contr_amt'].sum())
     #df_nodes_P.head()
-    
+
     #merge nodes
     df_nodes = pd.concat([df_nodes_I, df_nodes_P])
-    
+
     #Convert to list
     node_list = list(df_nodes.apply(lambda row: {"name": row['firstlastp'], "group": row['party'],  "contribution_total": row['contr_amt'], "winner_ind":row['ge_winner_ind_guess']}, axis=1))
-    
+
     #export
     return(node_list)
 
@@ -189,7 +189,7 @@ def merge_nodes_links(links_list_fv, node_list):
      #merge
     json_prep = {"nodes":node_list, "links":links_list_fv}
     json_prep.keys()
-    
+
     #convert to json
     import json
     json_dump = json.dumps(json_prep, indent=1)
@@ -207,16 +207,16 @@ def get_network_by_industry(firstlastp):
     links_list_fv = make_links(df_network_viz_fv)
     node_list = make_nodes(df_network_viz_fv)
     network_json = merge_nodes_links(links_list_fv, node_list)
-    
+
     return (network_json)
 
 def make_links_indivd(dataset):
     """Create source and link pairs for the network graph from a pandas dataframe
-    
+
     'INPUT: aggregated pandas dataframe with these columns:  sum(amount) ,feccandid, bioguide_id, firstlastp, party, Industry
     'OUTPUT: JSON format of links (ex: {"value": 20000.0, "source": 1, "target": 96},
     """
-    
+
     #create a list of target and source values
     links_list = list(dataset.apply(lambda row: {"source": row['contrib'], "target": row['firstlastp'], "value": row['contr_amt']}, axis=1))
     #print(links_list)
@@ -235,7 +235,7 @@ def make_links_indivd(dataset):
 
 def make_nodes_individ(dataset):
     """Create nodes for the network graph from a pandas dataframe
-    
+
     'INPUT: aggregated pandas dataframe with these columns:  sum(amount) ,feccandid, bioguide_id, firstlastp, party, Industry
     'OUTPUT: JSON format of links (ex: {'name': 'Misc Agriculture', 'group': 'Industry', 'pic_id': 'flower'},
     """
@@ -243,31 +243,31 @@ def make_nodes_individ(dataset):
     df_nodes_I = pd.DataFrame(dataset.groupby(['contrib'], as_index = False)['contr_amt'].sum())
     df_nodes_I["party"] = "Contributor"
     df_nodes_I['ge_winner_ind_guess'] = "NotApplicable"
-    df_nodes_I = df_nodes_I.rename(index=str, columns={"contrib": "firstlastp", " contr_amt": " contr_amt", "party":"party", "ge_winner_ind_guess":"ge_winner_ind_guess" }) 
+    df_nodes_I = df_nodes_I.rename(index=str, columns={"contrib": "firstlastp", " contr_amt": " contr_amt", "party":"party", "ge_winner_ind_guess":"ge_winner_ind_guess" })
     #['firstlastp' if x == 0 else x for x in df_nodes_I.columns]
     print(df_nodes_I.head())
-    
+
     #same thing for politicians
     df_nodes_P = pd.DataFrame(dataset.groupby(['firstlastp','party','ge_winner_ind_guess'], as_index = False)['contr_amt'].sum())
     #df_nodes_P.head()
-    
+
     #merge nodes
     df_nodes = pd.concat([df_nodes_I, df_nodes_P])
-    
+
     #Convert to list
     node_list = list(df_nodes.apply(lambda row: {"name": row['firstlastp'], "group": row['party'],  "contribution_total": row['contr_amt'], "winner_ind":row['ge_winner_ind_guess']}, axis=1))
-    
+
     #export
     return(node_list)
 
 def get_network_individ(firstlastp):
-    cand = (str(firstlastp)) 
-    print("sql qc: ", cand) 
+    cand = (str(firstlastp))
+    print("sql qc: ", cand)
     row = query_pg("SELECT * FROM network_individ t2 RIGHT JOIN(SELECT Distinct(contrib) FROM network_individ \
                          WHERE (firstlastp = %s and contr_amt >1) GROUP BY contrib)sub ON t2.contrib = sub.contrib WHERE \
                         contr_amt >15", [cand]) #might change to db/pg depending on where you are looking at this
     row = pd.DataFrame([i.copy() for i in row])
-    links_list_fv = make_links_indivd(row) 
+    links_list_fv = make_links_indivd(row)
     node_list = make_nodes_individ(row)
     json_dump = merge_nodes_links(links_list_fv, node_list)
     #json_dump = json.dumps(network_json, indent=1)
@@ -276,11 +276,11 @@ def get_network_individ(firstlastp):
 
 def make_links_commit(dataset):
     """Create source and link pairs for the network graph from a pandas dataframe
-    
+
     'INPUT: aggregated pandas dataframe with these columns:  sum(amount) ,feccandid, bioguide_id, firstlastp, party, Industry
     'OUTPUT: JSON format of links (ex: {"value": 20000.0, "source": 1, "target": 96},
     """
-    
+
     #create a list of target and source values
     links_list = list(dataset.apply(lambda row: {"source": row['pacshort'], "target": row['firstlastp'], "value": row['contr_amt']}, axis=1))
     #print(links_list)
@@ -299,7 +299,7 @@ def make_links_commit(dataset):
 
 def make_nodes_commit(dataset):
     """Create nodes for the network graph from a pandas dataframe
-    
+
     'INPUT: aggregated pandas dataframe with these columns:  sum(amount) ,feccandid, bioguide_id, firstlastp, party, Industry
     'OUTPUT: JSON format of links (ex: {'name': 'Misc Agriculture', 'group': 'Industry', 'pic_id': 'flower'},
     """
@@ -307,27 +307,27 @@ def make_nodes_commit(dataset):
     df_nodes_I = pd.DataFrame(dataset.groupby(['pacshort'], as_index = False)['contr_amt'].sum())
     df_nodes_I["party"] = "Contributor"
     df_nodes_I['ge_winner_ind_guess'] = "Not Applicable"
-    df_nodes_I = df_nodes_I.rename(index=str, columns={"pacshort": "firstlastp", " contr_amt": " contr_amt",  "party":"party", "ge_winner_ind_guess":"ge_winner_ind_guess" }) 
+    df_nodes_I = df_nodes_I.rename(index=str, columns={"pacshort": "firstlastp", " contr_amt": " contr_amt",  "party":"party", "ge_winner_ind_guess":"ge_winner_ind_guess" })
     #['firstlastp' if x == 0 else x for x in df_nodes_I.columns]
     print(df_nodes_I.head())
-    
+
     #same thing for politicians
     df_nodes_P = pd.DataFrame(dataset.groupby(['firstlastp','party','ge_winner_ind_guess'], as_index = False)['contr_amt'].sum())
     df_nodes_P['type'] = "Not Applicable"
     #df_nodes_P.head()
-    
+
     #merge nodes
     df_nodes = pd.concat([df_nodes_I, df_nodes_P])
-    
+
     #Convert to list
     node_list = list(df_nodes.apply(lambda row: {"name": row['firstlastp'], "group": row['party'],  "contribution_total": row['contr_amt'], "winner_ind":row['ge_winner_ind_guess']}, axis=1))
-    
+
     #export
     return(node_list)
 
 def get_network_committee (firstlastp):
-    cand = (str(firstlastp)) 
-    print("committee sql qc: ", cand) 
+    cand = (str(firstlastp))
+    print("committee sql qc: ", cand)
     row = query_pg("Select * FROM committee_network t1 \
                         RIGHT JOIN (select distinct (pacshort)  \
                                     FROM committee_network \
@@ -379,3 +379,11 @@ def get_industry_cands(industryname):
 def get_superpac_sankey():
     return query_pg("select rank_filter.donor as source, rank_filter.cmte_nm as target, rank_filter.total_donation as value from (select donor, cmte_nm, total_donation, rank() over (partition by donor order by total_donation desc) from superpac_donors where donor in (select donor from superpac_donors group by donor order by sum(total_donation) desc limit 50)) rank_filter where rank <= 3 union select rf.cmte_nm as source, rf.cand_nm as target, rf.total as value from (select cmte_nm, cand_nm, total, rank() over (partition by cmte_nm order by total desc) from superpac_spending where cmte_nm in ( select rank_filter.cmte_nm from (select donor, cmte_nm, total_donation, rank() over (partition by donor order by total_donation desc) from superpac_donors where donor in (select donor from superpac_donors group by donor order by sum(total_donation) desc limit 50)) rank_filter where rank <= 3)) rf where rank <= 3;")
 
+def get_cand_photo(cand_id):
+    try:
+      bioguide_id = query_pg("select bioguide_id from pic_ids where FECCandID=%s",
+[cand_id], one=True)['bioguide_id'] + '.jpg'
+    except:
+        bioguide_id = 'could-not-find-pic.png'
+    baseurl = r'https://s3.us-south.objectstorage.softlayer.net/staticassets2/'
+    return baseurl + bioguide_id

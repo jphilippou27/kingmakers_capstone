@@ -57,6 +57,7 @@
                         <tr><th colspan="2">Candidate Info</th></tr>
                     </thead>
                     <tbody>
+                        <tr><td colspan="2"><img id="candphoto" width="100%"></td></tr>
                         <tr><th>Name</th><td>{{cand_name}}</td></tr>
                         <tr><th>FEC ID</th><td>{{cand_id}}</td></tr>
                         <tr><th>Office</th><td>{{cand_office}}</td></tr>
@@ -76,6 +77,7 @@
             <div class="card-content" id="sankey-content">
                 <header><h4>Direct Contributions by Type</h2></header>
                 <svg id="sankey"></svg>
+                <img src='https://s3.us-south.objectstorage.softlayer.net/staticassets2/loading.gif'>
             </div>
         </div>
     </div>
@@ -84,6 +86,7 @@
             <div class="card-content" id="sankey-content2">
                 <header class="container"><h4>Direct Contributions by Industry</h2></header>
                 <svg id="sankey2"></svg> 
+                <img src='https://s3.us-south.objectstorage.softlayer.net/staticassets2/loading.gif'>
             </div>
         </div>
     </div>
@@ -94,6 +97,7 @@
             <div class="card-content" id="content">
                 <header><h4>PAC Spending Support</h4></header>
                 <svg id="timeseries_for"></svg>
+                <img src='https://s3.us-south.objectstorage.softlayer.net/staticassets2/loading.gif'>
             </div>
         </div>
     </div>
@@ -104,6 +108,7 @@
             <div class="card-content" id="content">
                 <header class="w3-container"><h4>PAC Spending Against</h4></header>
                 <svg id="timeseries_against"></svg>
+                <img src='https://s3.us-south.objectstorage.softlayer.net/staticassets2/loading.gif'>
             </div>
         </div>
     </div>
@@ -116,6 +121,17 @@
         const data_endpoint = '/api/candidates/' + cand_id + '/sk/type';
         const industry_endpoint = '/api/candidates/' + cand_id + '/sk/industry';
         //const wf_endpoint = '/api/candidates/' + cand_id + '/wf';
+        function setCandPhoto() {
+            console.log(this.responseText);
+            $('#candphoto').attr('src', this.responseText);
+        }
+
+        var oReq = new XMLHttpRequest();
+        var candPhotoReqUrl = "/candphoto/{{cand_id}}";
+        console.log(candPhotoReqUrl);
+        oReq.addEventListener("load", setCandPhoto);
+        oReq.open("GET", candPhotoReqUrl);
+        oReq.send();
     </script>
     <script type="text/javascript" src=/static/candidate.js></script>
     <script type="text/javascript" src=/static/sankey.js></script>
