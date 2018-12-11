@@ -699,7 +699,7 @@ var scrollVis = function () {
 					.attr("fill", function(d) {return color(d.group);})
 					///trying to add winner highlight
 					.style("stroke-width", function(d) {
-							if (d.winner_ind == "W"){return 4}
+							if (d.winner_ind == "W"){return 3}
 							else {return 0};})
 					.style("stroke", function(d) {
 						   if (d.winner_ind == "W" ){return "#32CD32"};})
@@ -1573,7 +1573,7 @@ function draw_committee_network(){
 		  const simulation = d3.forceSimulation()
 			.nodes(graph.nodes)
 			.force('link', d3.forceLink().id(d => d.name))
-			.force('charge', d3.forceManyBody().strength(-75))
+			.force('charge', d3.forceManyBody().strength(-30))
 			.force('center', d3.forceCenter(width / 2, height / 2))
 			.on('tick', ticked);
 
@@ -1623,7 +1623,7 @@ function draw_committee_network(){
 					.attr("fill", function(d) {return color(d.group);})
 					///trying to add winner highlight
 					.style("stroke-width", function(d) {
-							if (d.winner_ind == "W"){return 4}
+							if (d.winner_ind == "W"){return 2}
 							else {return 0};})
 					.style("stroke", function(d) {
 						   if (d.winner_ind == "W" ){return "#32CD32"};})
