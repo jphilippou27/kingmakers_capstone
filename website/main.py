@@ -219,6 +219,13 @@ def tableau():
 def superpacs_sk_data():
     return jsonify(backend.get_superpac_sankey())
 
+@application.route("/api/superpacs")
+def superpacs_cand_data():
+    superpac = request.args.get("superpac")
+    if superpac is None:
+        return
+    return jsonify(backend.get_superpac_cand_data(superpac))
+
 @application.route("/superpacs/sankey")
 def superpacs_sk_view():
     return render_template("superpacs_sk.html")

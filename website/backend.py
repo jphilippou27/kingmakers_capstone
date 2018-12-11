@@ -379,6 +379,9 @@ def get_industry_cands(industryname):
 def get_superpac_sankey():
     return query_pg("select rank_filter.donor as source, rank_filter.cmte_nm as target, rank_filter.total_donation as value from (select donor, cmte_nm, total_donation, rank() over (partition by donor order by total_donation desc) from superpac_donors where donor in (select donor from superpac_donors group by donor order by sum(total_donation) desc limit 50)) rank_filter where rank <= 3 union select rf.cmte_nm as source, rf.cand_nm as target, rf.total as value from (select cmte_nm, cand_nm, total, rank() over (partition by cmte_nm order by total desc) from superpac_spending where cmte_nm in ( select rank_filter.cmte_nm from (select donor, cmte_nm, total_donation, rank() over (partition by donor order by total_donation desc) from superpac_donors where donor in (select donor from superpac_donors group by donor order by sum(total_donation) desc limit 50)) rank_filter where rank <= 5)) rf where rank <= 3;")
 
+def get_superpac_cand_data(superpac):
+    return query_pg("select x.cmte_nm as source, x.cand_id, x.cand_nm as target, y.cand_pty_affiliation as party, sum(x.total) as value from superpac_spending x join cn18 y on y.cand_id = x.cand_id where x.cmte_nm ilike %s group by x.cmte_nm, x.cand_id, x.cand_nm, y.cand_pty_affiliation order by sum(x.total) desc limit 80", [superpac])
+
 def get_cands_per_industry(industry):
     return query_pg("select industry as source, cand_name as target, party, sum(total) as value from interest_cand_spending where industry = %s group by industry, cand_name, party order by value desc limit 60", [industryname])
 

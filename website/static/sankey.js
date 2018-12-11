@@ -1,6 +1,6 @@
 var lib = lib || {};
 
-lib.sankeyModule = function(type, zoom, svgid, parentid) {
+lib.sankeyModule = function(type, zoom, svgid, parentid, superpaczoom) {
     console.log(parentid); var contentDiv = document.getElementById(parentid)
     if (type == "tree") {
         var height = 700;
@@ -71,6 +71,7 @@ lib.sankeyModule = function(type, zoom, svgid, parentid) {
             .attr("stroke-opacity", 0.5)
             .on("click", function(d){
                 if (canzoom) linkZoom1(d);
+                if (superpaczoom) linkZoom3(d);
             })
             .append("title").text(d =>  "$" + d.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
         //paths.selectAll("title").remove();
@@ -220,6 +221,10 @@ var generateNL = function(rawdata, party_id, left_party_color, right_party_color
                 n2[counter] = {"id": key, "color": 0.99}
             } else if (n1[key].party == "Republican") {
                 n2[counter] = {"id": key, "color": 0.01}
+            } else if (n1[key].party == "REP") {
+                n2[counter] = {"id": key, "color": 0.01}
+            } else if (n1[key].party == "DEM") {
+                n2[counter] = {"id": key, "color": 0.99}
             } else if (n1[key].hasOwnProperty("proportion")) {
                 n2[counter] = {"id": key, "color": n1[key].proportion}
             } else {
@@ -259,7 +264,7 @@ var linkZoom1 = function(d) {
     sankeydata.then(function(d){
         //console.log(d)
         var clean_data = generateNL(d, true, true, true, true)
-        var sankey = lib.sankeyModule("full", false, "#sankey", "sankey-content");
+        var sankey = lib.sankeyModule("full", false, "#sankey", "sankey-content", false);
         sankey.industry_data(clean_data)
         sankey.plot_by_industry()
     });
@@ -271,9 +276,24 @@ var linkZoom2 = function(industry) {
     var sankeydata2 = d3.json("/api/industries?industry=" + encodeURIComponent(industry));
     sankeydata2.then(function(d){
         var clean_data = generateNL(d, true, true, true, true)
-        var industryzoom = lib.sankeyModule("full", false, "#sankey", "sankey-content");
+        var industryzoom = lib.sankeyModule("full", false, "#sankey", "sankey-content", false);
         industryzoom.industry_data(clean_data)
         industryzoom.plot_by_industry();
+    });
+};
+
+var linkZoom3 = function(d) {
+    d3.select("#backbtn").style("display","block");
+    var source = d.source.id;
+    var target  = d.target.id;
+    var sankeydata = d3.json("/api/superpacs?superpac=" + encodeURIComponent(target) )
+    sankeydata.then(function(d){
+        console.log("superpac cand data");
+        console.log(d);
+        var clean_data = generateNL(d, true, true, true, false)
+        var sankey = lib.sankeyModule("full", false, "#sankey", "sankey-content", true);
+        sankey.industry_data(clean_data)
+        sankey.plot_by_industry()
     });
 };
 
@@ -282,7 +302,17 @@ var goback = function() {
     var sankeydata = d3.json("/api/industries")
     sankeydata.then(function(d){
         var clean_data = generateNL(d, false, false, true, true)
-        var sankey = lib.sankeyModule("full", true, "#sankey", "sankey-content");
+        var sankey = lib.sankeyModule("full", true, "#sankey", "sankey-content", false);
+        sankey.industry_data(clean_data)
+        sankey.plot_by_industry()
+    });
+}
+var gobacksp = function() {
+    d3.select("#backbtnsp").style("display","block");
+    var sankeydata = d3.json("/api/superpacs/sankey")
+    sankeydata.then(function(d){
+        var clean_data = generateNL(d, false, false, true, true)
+        var sankey = lib.sankeyModule("full", true, "#sankey", "sankey-content", false);
         sankey.industry_data(clean_data)
         sankey.plot_by_industry()
     });
@@ -294,15 +324,15 @@ var sankeydata = d3.json(data_endpoint)
 sankeydata.then(function(d){
     if (data_endpoint.startsWith("/api/candidates")) {
         var clean_data = generateNL(d, false, false, true, false)
-        var sankey = lib.sankeyModule("tree", false, "#sankey", "sankey-content");
+        var sankey = lib.sankeyModule("tree", false, "#sankey", "sankey-content", false);
         $('#sankey').siblings('img').remove();
         $('#sankey2').siblings('img').remove();
     } else if (data_endpoint.startsWith("/api/industries")){
         var clean_data = generateNL(d, false, false, true, true)
-        var sankey = lib.sankeyModule("full", true, "#sankey","sankey-content");
+        var sankey = lib.sankeyModule("full", true, "#sankey","sankey-content", false);
     } else if (data_endpoint.startsWith("/api/superpacs")){
         var clean_data = generateNL(d, false, false, true, false)
-        var sankey = lib.sankeyModule("full", true, "#sankey", "sankey-content");
+        var sankey = lib.sankeyModule("full", false, "#sankey", "sankey-content", true);
     } else {
         return
     }
@@ -314,7 +344,7 @@ if (typeof industry_endpoint !== 'undefined') {
     var sankeydata = d3.json(industry_endpoint)
     sankeydata.then(function(d){
         var clean_data = generateNL(d, false, false, true, true)
-        var sankey = lib.sankeyModule("tree", false, "#sankey2", "sankey-content2");
+        var sankey = lib.sankeyModule("tree", false, "#sankey2", "sankey-content2", false);
         sankey.industry_data(clean_data)
         sankey.plot_by_industry()
     });
