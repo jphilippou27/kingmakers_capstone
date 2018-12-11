@@ -199,8 +199,8 @@ def get_network_by_industry(firstlastp):
     cand = (str(firstlastp))
     min_contribution = 150000
     row = query_pg("SELECT * FROM network_industry t1 LEFT JOIN (select distinct(industry) FROM network_industry \
-                    WHERE (firstlastp = %s and contr_amt > 150000)) sub ON t1.industry = sub.industry  \
-                        WHERE (sub.industry IS NOT NULL) and (t1.contr_amt> 100000)", [cand])
+                    WHERE (firstlastp = %s and contr_amt > 75000)) sub ON t1.industry = sub.industry  \
+                        WHERE (sub.industry IS NOT NULL) and (t1.contr_amt> 75000)", [cand])
     # print(row)
     print("sql draw", cand)
     df_network_viz_fv = pd.DataFrame([i.copy() for i in row])
@@ -331,10 +331,10 @@ def get_network_committee (firstlastp):
     row = query_pg("Select * FROM committee_network t1 \
                         RIGHT JOIN (select distinct (pacshort)  \
                                     FROM committee_network \
-                                    WHERE firstlastp = %s and contr_amt > 50000 \
+                                    WHERE firstlastp = %s and contr_amt > 10000 \
                                     GROUP BY pacshort)sub \
                     ON t1.pacshort = sub.pacshort \
-                   WHERE contr_amt > 50000", [cand])
+                   WHERE contr_amt > 10000", [cand])
     row = pd.DataFrame([i.copy() for i in row])
     links_list_fv = make_links_commit(row)
     node_list = make_nodes_commit(row)
@@ -343,7 +343,7 @@ def get_network_committee (firstlastp):
 
 def get_network_node_list():
     import json
-    row = query_pg("SELECT DISTINCT(firstlastp) FROM network_industry WHERE contr_amt>100000 GROUP BY firstlastp")
+    row = query_pg("SELECT DISTINCT(firstlastp) FROM network_industry WHERE contr_amt>75000 GROUP BY firstlastp")
     json_dump = json.dumps(row, indent=1)
     #node_list = pd.DataFrame([i.copy() for i in row])
     return (json_dump)
