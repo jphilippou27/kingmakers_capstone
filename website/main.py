@@ -295,7 +295,7 @@ def networkIndivdData(cand_name):
         text = str(cand_name)
     return (backend.get_network_individ(text))
 
-@application.route("/networkCommitteedData/<cand_name>", methods=["GET", "POST"])
+@application.route("/networkCommitteeData/<cand_name>", methods=["GET", "POST"])
 def networkCommitteeData(cand_name):
     if type(cand_name) is None or cand_name == "":
         text = "Chris Collins (R)"

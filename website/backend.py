@@ -198,7 +198,9 @@ def merge_nodes_links(links_list_fv, node_list):
 def get_network_by_industry(firstlastp):
     cand = (str(firstlastp))
     min_contribution = 150000
-    row = query_pg("SELECT * FROM network_industry t1 LEFT JOIN (select distinct(industry) FROM network_industry WHERE (firstlastp = %s and contr_amt > 150000)) sub ON t1.industry = sub.industry WHERE (sub.industry IS NOT NULL) and (t1.contr_amt> 150000)", [cand])
+    row = query_pg("SELECT * FROM network_industry t1 LEFT JOIN (select distinct(industry) FROM network_industry \
+                    WHERE (firstlastp = %s and contr_amt > 75000)) sub ON t1.industry = sub.industry  \
+                        WHERE (sub.industry IS NOT NULL) and (t1.contr_amt> 75000)", [cand])
     # print(row)
     print("sql draw", cand)
     df_network_viz_fv = pd.DataFrame([i.copy() for i in row])
@@ -261,7 +263,9 @@ def make_nodes_individ(dataset):
 def get_network_individ(firstlastp):
     cand = (str(firstlastp)) 
     print("sql qc: ", cand) 
-    row = query_pg("SELECT * FROM network_individ t2 RIGHT JOIN(SELECT Distinct(contrib) FROM network_individ WHERE (firstlastp = %s and contr_amt >1) GROUP BY contrib)sub ON t2.contrib = sub.contrib WHERE contr_amt >1", [cand]) #might change to db/pg depending on where you are looking at this
+    row = query_pg("SELECT * FROM network_individ t2 RIGHT JOIN(SELECT Distinct(contrib) FROM network_individ \
+                         WHERE (firstlastp = %s and contr_amt >1) GROUP BY contrib)sub ON t2.contrib = sub.contrib WHERE \
+                        contr_amt >15", [cand]) #might change to db/pg depending on where you are looking at this
     row = pd.DataFrame([i.copy() for i in row])
     links_list_fv = make_links_indivd(row) 
     node_list = make_nodes_individ(row)
@@ -270,15 +274,67 @@ def get_network_individ(firstlastp):
     #node_list = pd.DataFrame([i.copy() for i in row])
     return (json_dump)
 
+def make_links_commit(dataset):
+    """Create source and link pairs for the network graph from a pandas dataframe
+    
+    'INPUT: aggregated pandas dataframe with these columns:  sum(amount) ,feccandid, bioguide_id, firstlastp, party, Industry
+    'OUTPUT: JSON format of links (ex: {"value": 20000.0, "source": 1, "target": 96},
+    """
+    
+    #create a list of target and source values
+    links_list = list(dataset.apply(lambda row: {"source": row['pacshort'], "target": row['firstlastp'], "value": row['contr_amt']}, axis=1))
+    #print(links_list)
+    #make an index of the values
+    unique_ids = pd.Index(dataset['pacshort']
+                      .append(dataset['firstlastp'])
+                      .reset_index(drop=True).unique())
+    #print(unique_ids)
+    #convert source and target values to numbers for d3.v3
+    links_list_fv = []
+    for link in links_list:
+        record = {"value":link['value'], "source": (unique_ids.get_loc(link['source'])+1),
+         "target": (unique_ids.get_loc(link['target'])+1)}
+        links_list_fv.append(record)
+    return (links_list)
+
+def make_nodes_commit(dataset):
+    """Create nodes for the network graph from a pandas dataframe
+    
+    'INPUT: aggregated pandas dataframe with these columns:  sum(amount) ,feccandid, bioguide_id, firstlastp, party, Industry
+    'OUTPUT: JSON format of links (ex: {'name': 'Misc Agriculture', 'group': 'Industry', 'pic_id': 'flower'},
+    """
+    #contributions nodes
+    df_nodes_I = pd.DataFrame(dataset.groupby(['pacshort'], as_index = False)['contr_amt'].sum())
+    df_nodes_I["party"] = "Contributor"
+    df_nodes_I['ge_winner_ind_guess'] = "Not Applicable"
+    df_nodes_I = df_nodes_I.rename(index=str, columns={"pacshort": "firstlastp", " contr_amt": " contr_amt",  "party":"party", "ge_winner_ind_guess":"ge_winner_ind_guess" }) 
+    #['firstlastp' if x == 0 else x for x in df_nodes_I.columns]
+    print(df_nodes_I.head())
+    
+    #same thing for politicians
+    df_nodes_P = pd.DataFrame(dataset.groupby(['firstlastp','party','ge_winner_ind_guess'], as_index = False)['contr_amt'].sum())
+    df_nodes_P['type'] = "Not Applicable"
+    #df_nodes_P.head()
+    
+    #merge nodes
+    df_nodes = pd.concat([df_nodes_I, df_nodes_P])
+    
+    #Convert to list
+    node_list = list(df_nodes.apply(lambda row: {"name": row['firstlastp'], "group": row['party'],  "contribution_total": row['contr_amt'], "winner_ind":row['ge_winner_ind_guess']}, axis=1))
+    
+    #export
+    return(node_list)
+
 def get_network_committee (firstlastp):
     cand = (str(firstlastp)) 
     print("committee sql qc: ", cand) 
-    row = query_pg("SELECT contr_amt, firstlastp, ge_winner_ind_guess, t1.pacshort, party, type  \
-                        FROM committee_network t1 \
-                        LEFT JOIN (select distinct(pacshort), sum(contr_amt) as Contributions  \
-                        FROM committee_network \
-                        WHERE firstlastp = %s and contr_amt > 1 GROUP BY pacshort)sub ON t1.pacshort = sub.pacshort \
-                        WHERE contr_amt > 25000", [cand])
+    row = query_pg("Select * FROM committee_network t1 \
+                        RIGHT JOIN (select distinct (pacshort)  \
+                                    FROM committee_network \
+                                    WHERE firstlastp = %s and contr_amt > 10000 \
+                                    GROUP BY pacshort)sub \
+                    ON t1.pacshort = sub.pacshort \
+                   WHERE contr_amt > 10000", [cand])
     row = pd.DataFrame([i.copy() for i in row])
     links_list_fv = make_links_commit(row)
     node_list = make_nodes_commit(row)
@@ -287,7 +343,7 @@ def get_network_committee (firstlastp):
 
 def get_network_node_list():
     import json
-    row = query_pg("SELECT DISTINCT(firstlastp) FROM network_industry WHERE contr_amt>150000 GROUP BY firstlastp")
+    row = query_pg("SELECT DISTINCT(firstlastp) FROM network_industry WHERE contr_amt>75000 GROUP BY firstlastp")
     json_dump = json.dumps(row, indent=1)
     #node_list = pd.DataFrame([i.copy() for i in row])
     return (json_dump)
