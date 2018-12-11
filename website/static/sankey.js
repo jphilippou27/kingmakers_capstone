@@ -92,7 +92,7 @@ lib.sankeyModule = function(type, zoom, svgid, parentid) {
                 }
             }).on("click", function(d) {
                 if ("cand_id" in d) {
-                    window.location.href = "/candview?id=" + d.cand_id;
+                    window.location.href = "/candidates/" + d.cand_id;
                 }
 
             });
