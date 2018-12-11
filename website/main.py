@@ -21,51 +21,7 @@ def home():
 def ping():
     return "pong"
 
-@application.route("/donors", methods=["GET", "PUT"])
-def donors():
-    if request.method == "GET":
-        pass
-    elif request.method == "PUT":
-        pass
-    elif request.method == "OPTIONS":
-        pass
-    else:
-        return abort(401)
-
-@application.route("/donors/<uuid:donor_id>", methods=["GET", "PUT"])
-def donor(donor_id):
-    if request.method == "GET":
-        db = get_sqlite()
-    elif request.method == "PUT":
-        pass
-    elif request.method == "OPTIONS":
-        pass
-    else:
-        return abort(401)
-
-@application.route("/recipients", methods=["GET", "PUT"])
-def recipients():
-    if request.method == "GET":
-        pass
-    elif request.method == "PUT":
-        pass
-    elif request.method == "OPTIONS":
-        pass
-    else:
-        return abort(401)
-
-@application.route("/recipients/<uuid:rep_id>", methods=["GET", "PUT"])
-def recipient(rep_id):
-    if request.method == "GET":
-        pass
-    elif request.method == "PUT":
-        pass
-    elif request.method == "OPTIONS":
-        pass
-    else:
-        return abort(401)
-
-@application.route("/candidates/<cand_id>", methods=["GET", "PUT"])
+@application.route("/api/candidates/<cand_id>", methods=["GET", "PUT"])
 def candidate(cand_id):
      if request.method == "GET":
          return jsonify(backend.get_candidate(cand_id))
@@ -76,15 +32,19 @@ def candidate(cand_id):
      else:
          return abort(401)
 
-@application.route("/candidates/<cand_id>/sk")
+@application.route("/api/candidates/<cand_id>/sk/type")
 def get_candidate_tree(cand_id):
     return jsonify(backend.get_candidate_tree(cand_id))
 
-@application.route("/candidates/<cand_id>/wf")
+@application.route("/api/candidates/<cand_id>/sk/industry")
+def get_candidate_industry_tree(cand_id):
+    return jsonify(backend.get_candidate_industry_tree(cand_id))
+
+@application.route("/api/candidates/<cand_id>/wf")
 def get_waterfall(cand_id):
     return jsonify(backend.get_waterfall_data(cand_id))
 
-@application.route("/candidates/<cand_id>/ts/for", methods=["GET", "PUT"])
+@application.route("/api/candidates/<cand_id>/ts/for", methods=["GET", "PUT"])
 def candidate_ts_for(cand_id):
      if request.method == "GET":
          return jsonify(backend.cmte_timeseries_for(cand_id))
@@ -95,7 +55,7 @@ def candidate_ts_for(cand_id):
      else:
          return abort(401)
 
-@application.route("/candidates/<cand_id>/ts/against", methods=["GET", "PUT"])
+@application.route("/api/candidates/<cand_id>/ts/against", methods=["GET", "PUT"])
 def candidate_ts_against(cand_id):
      if request.method == "GET":
          return jsonify(backend.cmte_timeseries_against(cand_id))
@@ -106,7 +66,7 @@ def candidate_ts_against(cand_id):
      else:
          return abort(401)
 
-@application.route("/candidates/<cand_id>/interests/for", methods=["GET", "PUT"])
+@application.route("/api/candidates/<cand_id>/interests/for", methods=["GET", "PUT"])
 def candidate_interest_for(cand_id):
      if request.method == "GET":
          return jsonify(backend.interest_spending_for(cand_id))
@@ -117,7 +77,7 @@ def candidate_interest_for(cand_id):
      else:
          return abort(401)
 
-@application.route("/candidates/<cand_id>/interests/against", methods=["GET", "PUT"])
+@application.route("/api/candidates/<cand_id>/interests/against", methods=["GET", "PUT"])
 def candidate_interest_against(cand_id):
      if request.method == "GET":
          return jsonify(backend.interest_spending_against(cand_id))
@@ -128,7 +88,7 @@ def candidate_interest_against(cand_id):
      else:
          return abort(401)
 
-@application.route("/candidates/<cand_id>/indiv/for", methods=["GET", "PUT"])
+@application.route("/api/candidates/<cand_id>/indiv/for", methods=["GET", "PUT"])
 def candidate_individual_support(cand_id):
      if request.method == "GET":
          return jsonify(backend.get_individual_support_direct(cand_id))
@@ -143,27 +103,11 @@ def candidate_individual_support(cand_id):
 def all_cands():
     return jsonify(backend.get_all_cands())
 
-@application.route("/candidates", methods=["GET"])
-def candidate_query():
-    if request.method == "GET":
-        if len(request.args) == 0:
-            return render_template("candlookup.html")
-
-        string = request.args.get("lookup")
-        if string:
-            return jsonify(backend.cand_lookup(string))
-        fn = request.args.get("fn")
-        ln = request.args.get("ln")
-        return jsonify(backend.get_cands_by_name(ln, fn))
-    else:
-        return abort(401)
-
-@application.route("/candview", methods=["GET"])
-def candidate_view():
+@application.route("/candidates/<cand_id>", methods=["GET"])
+def candidate_view(cand_id):
     ici = {"I": "Incumbent", "C": "Challenger", "O": "Open Seat"}
     office = {"S": "Senate", "H": "House", "P": "President"}
     if request.method == "GET":
-        cand_id = request.args.get("id")
         if cand_id is None:
             render_template("search_cand.html")
         cand_data = backend.get_candidate(cand_id)
@@ -179,6 +123,12 @@ def candidate_view():
     else:
         return abort(401)
 
+@application.route("/candidates", methods=["GET"])
+def candidate_query():
+    if request.method == "GET":
+        return render_template("candlookup.html")
+    else:
+        return abort(401)
 
 @application.route("/expenditures/<trans_id>", methods=["GET", "PUT"])
 def expenditure(trans_id):
@@ -200,60 +150,11 @@ def expenditures():
      else:
          return abort(401)
 
-@application.route("/filers/", methods=["GET"])
-def expenditures_filer():
-     if request.method == "GET":
-         max = request.args.get("max")
-         min = request.args.get("min")
-         return jsonify(backend.get_expends_by_amt(min, max))
-     else:
-         return abort(401)
-
-@application.route("/candidates/amt", methods=["GET"])
-def candidates_amt():
-     if request.method == "GET":
-         return jsonify(backend.get_cands_by_amt())
-     else:
-         return abort(401)
-
-@application.route("/sums", methods=["GET"])
-def sums_all():
-    sum_type = request.args.get("type")
-    if sum_type == "cmte":
-        get_all_sums_by_cmte()
-    elif sum_type == "cand":
-        get_all_sums_by_cand()
-    elif sum_type == "industry":
-        get_all_sums_by_industry()
-    return None
-
-@application.route("/spending", methods=["GET"])
-def spending():
-    sum_type = request.args.get("type")
-    if sum_type == "cmte":
-        return jsonify(backend.get_spending_by_cmte())
-    elif sum_type == "cand":
-        return jsonify(backend.get_spending_by_cand())
-    elif sum_type == "industry":
-        return jsonify(backend.get_spending_by_industry())
-    return None
-
-@application.route("/income", methods=["GET"])
-def income():
-    sum_type = request.args.get("type")
-    if sum_type == "cmte":
-        return jsonify(backend.get_income_by_cmte())
-    elif sum_type == "cand":
-        return jsonify(backend.get_income_by_cand())
-    elif sum_type == "industry":
-        return jsonify(backend.get_income_by_industry())
-    return None
-
 @application.route("/industries", methods=["GET"])
 def industries():
     return render_template("industries.html")
 
-@application.route("/industries/data", methods=["GET"])
+@application.route("/api/industries", methods=["GET"])
 def get_industry_data():
     industryname = request.args.get("industry")
     partyname = request.args.get("party")
@@ -313,6 +214,14 @@ def networkNodedata():
 @application.route("/tableau")
 def tableau():
     return render_template("tableau.html")
+
+@application.route("/api/superpacs/sankey")
+def superpacs_sk_data():
+    return jsonify(backend.get_superpac_sankey()) 
+
+@application.route("/superpacs/sankey")
+def superpacs_sk_view():
+    return render_template("superpacs_sk.html") 
 
 
 if __name__ == "__main__":

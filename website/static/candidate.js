@@ -1,4 +1,7 @@
+var cand_name = d3.select("#cand_name").text();
+console.log(cand_name);
 d3.select("#cand_name").text(function() {
+    console.log(cand_name)
     formatted_name = cand_name.toLowerCase();
     lastfirst = formatted_name.split(",");
     lastname = lastfirst[0].toLowerCase();
@@ -135,7 +138,7 @@ lib.barChartModule = function() {
     };
 };
 
-var candinfo = d3.json("/candidates/" + cand_id);
+var candinfo = d3.json("/api/candidates/" + cand_id);
 candinfo.then(function(d){
     //d3.select()
     //sankey.industry_data(clean_data)
@@ -143,7 +146,7 @@ candinfo.then(function(d){
 });
 
 
-var candfor = d3.json("/candidates/" + cand_id + "/ts/for");
+var candfor = d3.json("/api/candidates/" + cand_id + "/ts/for");
 candfor.then(function(d){
     var bars = lib.barChartModule();
     bars.data(d);
@@ -151,7 +154,7 @@ candfor.then(function(d){
     //sankey.industry_data(clean_data)
     //sankey.plot_by_industry()
 });
-var candagainst = d3.json("/candidates/" + cand_id + "/ts/against");
+var candagainst = d3.json("/api/candidates/" + cand_id + "/ts/against");
 candagainst.then(function(d){
     console.log(d);
     var bars = lib.barChartModule();

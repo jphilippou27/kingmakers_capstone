@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var elems = document.querySelectorAll('.autocomplete');
         M.Autocomplete.init(elems, {data:cData, limit: 10, onAutocomplete: function(choice) {
             var cand_id = choice.split("-")[2].trim();
-            window.location.href = "/candview?id=" + cand_id;
+            window.location.href = "/candidates/" + cand_id;
         }});
     });
 });

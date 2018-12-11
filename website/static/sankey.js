@@ -1,7 +1,7 @@
 var lib = lib || {};
 
-lib.sankeyModule = function(type, zoom) {
-    var contentDiv = document.getElementById("sankey-content")
+lib.sankeyModule = function(type, zoom, svgid, parentid) {
+    var contentDiv = document.getElementById(parentid)
     if (type == "tree") {
         var height = 700;
         //var height = contentDiv.clientHeight - 40;
@@ -10,7 +10,7 @@ lib.sankeyModule = function(type, zoom) {
     }
     var data = []; var canzoom = zoom; const color = d3.scaleOrdinal(d3.schemeCategory10);
     const politicolor = d3.scaleSequential(d3.interpolateRdBu);
-    var svg = d3.select("#sankey");
+    var svg = d3.select(svgid);
 
     var links = svg.select("#links");
     if (links.empty()) {
@@ -117,7 +117,7 @@ lib.sankeyModule = function(type, zoom) {
                 }
             }).on("click", function(d) {
                 if ("cand_id" in d) {
-                    window.location.href = "/candview?id=" + d.cand_id;
+                    window.location.href = "/candidates/" + d.cand_id;
                 }
 
             }).append("title").text(function(d) {
@@ -152,7 +152,7 @@ lib.sankeyModule = function(type, zoom) {
 
 
 var generateNL = function(rawdata, party_id, left_party_color, right_party_color) {
-    console.log(rawdata);
+    //console.log(rawdata);
     if (party_id) {
         for (i = 0; i < rawdata.length; i++) {
             rawdata[i].target =  rawdata[i].target + " (" + rawdata[i].party + ")"
@@ -171,7 +171,6 @@ var generateNL = function(rawdata, party_id, left_party_color, right_party_color
                 n1[rawdata[i].target] = {};
             }         
             if ("cand_id" in rawdata[i]) {
-                console.log("adding cand_id")
                 n1[rawdata[i].target].cand_id = rawdata[i].cand_id;
             }
         }
@@ -190,7 +189,6 @@ var generateNL = function(rawdata, party_id, left_party_color, right_party_color
                 n1[rawdata[i].source] = {};
             }
             if ("cand_id" in rawdata[i]) {
-                console.log("adding cand_id")
                 n1[rawdata[i].target].cand_id = rawdata[i].cand_id;
             }
         }
@@ -228,7 +226,7 @@ var generateNL = function(rawdata, party_id, left_party_color, right_party_color
         l2[counter] = {"source": l1[value.source], "target": l1[value.target], "value": +value.value }
         counter++;
     });
-    console.log(n2);
+    //console.log(n2);
     return {"nodes": n2, "links": l2 }
 };
 
@@ -236,7 +234,7 @@ var linkZoom1 = function(d) {
     d3.select("#backbtn").style("display","block");
     var source = d.source.id;
     var target  = d.target.id;
-    var sankeydata = d3.json("/industries/data?industry=" + encodeURIComponent(source) + "&party=" + encodeURIComponent(target) )
+    var sankeydata = d3.json("/api/industries?industry=" + encodeURIComponent(source) + "&party=" + encodeURIComponent(target) )
     sankeydata.then(function(d){
         //console.log(d)
         var clean_data = generateNL(d, true, true, true)
@@ -249,7 +247,7 @@ var linkZoom1 = function(d) {
 var linkZoom2 = function(d) {
     var source = d.source.id;
     var target  = d.target.id;
-    var sankeydata = d3.json("/industries/data?industry=" + encodeURIComponent(source))
+    var sankeydata = d3.json("/industries?industry=" + encodeURIComponent(source))
     sankeydata.then(function(d){
         var clean_data = generateNL(d, true)
         var sankey = lib.sankeyModule("full");
@@ -260,7 +258,7 @@ var linkZoom2 = function(d) {
 
 var goback = function() {
     d3.select("#backbtn").style("display","none");
-    var sankeydata = d3.json("/industries/data")
+    var sankeydata = d3.json("/api/industries")
     sankeydata.then(function(d){
         var clean_data = generateNL(d, false, false, true)
         var sankey = lib.sankeyModule("full", true);
@@ -273,15 +271,30 @@ var goback = function() {
 
 var sankeydata = d3.json(data_endpoint)
 sankeydata.then(function(d){
-    if (data_endpoint.startsWith("/candidates")) {
+    if (data_endpoint.startsWith("/api/candidates")) {
         var clean_data = generateNL(d, false, false, true)
-        var sankey = lib.sankeyModule("tree", false);
-    } else if (data_endpoint.startsWith("/industries")){
+        var sankey = lib.sankeyModule("tree", false, "#sankey", "sankey-content");
+    } else if (data_endpoint.startsWith("/api/industries")){
         var clean_data = generateNL(d, false, false, true)
-        var sankey = lib.sankeyModule("full", true);
-    } else{
+        var sankey = lib.sankeyModule("full", true, "#sankey","sankey-content");
+    } else if (data_endpoint.startsWith("/api/superpacs")){
+        var clean_data = generateNL(d, false, false, true)
+        var sankey = lib.sankeyModule("full", true, "#sankey", "sankey-content");
+    } else {
         return
     }
     sankey.industry_data(clean_data)
     sankey.plot_by_industry()
 });
+
+if (typeof industry_endpoint !== 'undefined') {
+    var sankeydata = d3.json(industry_endpoint)
+    sankeydata.then(function(d){
+        var clean_data = generateNL(d, false, false, true)
+        console.log("clean data");
+        console.log(clean_data);
+        var sankey = lib.sankeyModule("tree", false, "#sankey2", "sankey-content2");
+        sankey.industry_data(clean_data)
+        sankey.plot_by_industry()
+    });
+} 
