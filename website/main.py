@@ -111,8 +111,8 @@ def candidate_view(cand_id):
         if cand_id is None:
             render_template("search_cand.html")
         cand_data = backend.get_candidate(cand_id)
-        return render_template("candidate.html", 
-                cand_id=cand_id, 
+        return render_template("candidate.html",
+                cand_id=cand_id,
                 cand_name=cand_data["cand_name"],
                 cand_office=office[cand_data["cand_office"]],
                 cand_district=cand_data["cand_office_district"],
@@ -217,11 +217,18 @@ def tableau():
 
 @application.route("/api/superpacs/sankey")
 def superpacs_sk_data():
-    return jsonify(backend.get_superpac_sankey()) 
+    return jsonify(backend.get_superpac_sankey())
 
 @application.route("/superpacs/sankey")
 def superpacs_sk_view():
-    return render_template("superpacs_sk.html") 
+    return render_template("superpacs_sk.html")
+
+@application.route("/candphoto/<cand_id>", methods=["GET"])
+def get_cand_photo(cand_id):
+    cand_id = str(cand_id)[:9]
+    if not cand_id.isalnum():
+        return abort(401)
+    return backend.get_cand_photo(cand_id)
 
 
 if __name__ == "__main__":
