@@ -242,7 +242,7 @@ def get_elect_ppts(cand_id):
     cand_id = str(cand_id)[:10]
     if not cand_id.isalnum():
         return abort(401)
-    return backend.get_most_recent_election(cand_id)
+    return jsonify(backend.get_most_recent_election(cand_id))
 
 
 if __name__ == "__main__":

@@ -149,7 +149,7 @@
         oReq.send();
 
         function addCand(cand_row) {
-            $('mrelect').append($.parseHTML('<tr><td>' + cand_row.cycle + '</td><td>' + cand_row.state + '</td><td>' + cand_row.district + '</td><td>' + cand_row.fec_id + '</td></tr>'));
+            $('#mrelect').append($.parseHTML('<tr><td>' + cand_row.cycle + '</td><td>' + cand_row.state + '</td><td>' + cand_row.district + '</td><td>' + cand_row.fec_id + '</td></tr>'));
         }
 
         function addCands(xhr_ret) {
