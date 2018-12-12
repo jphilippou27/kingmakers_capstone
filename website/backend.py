@@ -396,7 +396,10 @@ def get_cand_photo(cand_id):
 
 def get_most_recent_election(cand_id):
     s = '''
-SELECT * FROM public.election_ppts3 e WHERE e.cycle IN (
+SELECT * FROM public.election_ppts3 e
+LEFT JOIN pic_ids p
+ON e.fec_id = p.feccandid
+WHERE e.cycle IN (
    SELECT cycle_mr
    FROM public.election_ppts3
    WHERE fec_id='{fec_id}'

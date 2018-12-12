@@ -78,7 +78,7 @@
                         <tr><th colspan="2">Most recent competitors</th></tr>
                     </thead>
                     <tbody id="mrelect">
-                    <tr><th>Year</th><th>State</th><th>District</th><th>FEC ID</th></tr>
+                    <tr><th>Year</th><th>State</th><th>District</th><th>Competitor</th></tr>
                     </tbody>
                 </table>
             </div>
@@ -149,10 +149,16 @@
         oReq.send();
 
         function addCand(cand_row) {
-            $('#mrelect').append($.parseHTML('<tr><td>' + cand_row.cycle + '</td><td>' + cand_row.state + '</td><td>' + cand_row.district + '</td><td><a href="/candidates/' + cand_row.fec_id + '">' + cand_row.fec_id + '</a></td></tr>'));
+            name = cand_row.firstlastp;
+            console.log(name);
+            if (name === "null" || name === null) {
+                name = cand_row.fec_id;
+            }
+            $('#mrelect').append($.parseHTML('<tr><td>' + cand_row.cycle + '</td><td>' + cand_row.state + '</td><td>' + cand_row.district + '</td><td><a href="/candidates/' + cand_row.fec_id + '">' + name + '</a></td></tr>'));
         }
 
         function addCands() {
+            console.log(this.response);
             xhr_ret = JSON.parse(this.response);
 
             console.log(xhr_ret);
