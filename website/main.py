@@ -232,10 +232,17 @@ def superpacs_sk_view():
 
 @application.route("/candphoto/<cand_id>", methods=["GET"])
 def get_cand_photo(cand_id):
-    cand_id = str(cand_id)[:9]
+    cand_id = str(cand_id)[:10]
     if not cand_id.isalnum():
         return abort(401)
     return backend.get_cand_photo(cand_id)
+
+@application.route("/electionppts/<cand_id>", methods=["GET"])
+def get_elect_ppts(cand_id):
+    cand_id = str(cand_id)[:10]
+    if not cand_id.isalnum():
+        return abort(401)
+    return backend.get_most_recent_election(cand_id)
 
 
 if __name__ == "__main__":

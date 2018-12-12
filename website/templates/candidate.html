@@ -49,7 +49,7 @@
     </div>
 </row>
 <div class="row">
-    <div class="col s2 m3 l3 ">
+    <div class="col s3">
         <div class="card">
             <div class="card-content">
                 <table class="striped">
@@ -70,6 +70,21 @@
             </div>
         </div>
     </div>
+    <div class="col s4 offset-s1">
+        <div class="card">
+            <div class="card-content">
+                <table class="striped">
+                    <thead>
+                        <tr><th colspan="2">Most recent competitors</th></tr>
+                    </thead>
+                    <tbody id="mrelect">
+                    <tr><th>Year</th><th>State</th><th>District</th><th>FEC ID</th></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
 </div>
 <div class="row">
     <div class="col s12 m6 l6" >
@@ -132,6 +147,23 @@
         oReq.addEventListener("load", setCandPhoto);
         oReq.open("GET", candPhotoReqUrl);
         oReq.send();
+
+        function addCand(cand_row) {
+            $('mrelect').append($.parseHTML('<tr><td>' + cand_row.cycle + '</td><td>' + cand_row.state + '</td><td>' + cand_row.district + '</td><td>' + cand_row.fec_id + '</td></tr>'));
+        }
+
+        function addCands(xhr_ret) {
+            for (var i = 0; i < xhr_ret.length; i++) {
+                addCand(xhr_ret[i]);
+            }
+        }
+
+        var oReqC = new XMLHttpRequest();
+        var competitors = "/electionppts/{{cand_id}}";
+        console.log(competitors);
+        oReqC.addEventListener("load", addCands);
+        oReqC.open("GET", competitors);
+        oReqC.send();
     </script>
     <script type="text/javascript" src=/static/candidate.js></script>
     <script type="text/javascript" src=/static/sankey.js></script>
