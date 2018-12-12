@@ -149,10 +149,15 @@
         oReq.send();
 
         function addCand(cand_row) {
-            $('#mrelect').append($.parseHTML('<tr><td>' + cand_row.cycle + '</td><td>' + cand_row.state + '</td><td>' + cand_row.district + '</td><td>' + cand_row.fec_id + '</td></tr>'));
+            $('#mrelect').append($.parseHTML('<tr><td>' + cand_row.cycle + '</td><td>' + cand_row.state + '</td><td>' + cand_row.district + '</td><td><a href="/candidates/' + cand_row.fec_id + '">' + cand_row.fec_id + '</a></td></tr>'));
         }
 
-        function addCands(xhr_ret) {
+        function addCands() {
+            xhr_ret = JSON.parse(this.response);
+
+            console.log(xhr_ret);
+            console.log(xhr_ret.length);
+
             for (var i = 0; i < xhr_ret.length; i++) {
                 addCand(xhr_ret[i]);
             }
@@ -162,6 +167,7 @@
         var competitors = "/electionppts/{{cand_id}}";
         console.log(competitors);
         oReqC.addEventListener("load", addCands);
+        oReqC.overrideMimeType("application/json");
         oReqC.open("GET", competitors);
         oReqC.send();
     </script>
