@@ -393,3 +393,23 @@ def get_cand_photo(cand_id):
         bioguide_id = 'could-not-find-pic.png'
     baseurl = r'https://s3.us-south.objectstorage.softlayer.net/staticassets2/'
     return baseurl + bioguide_id
+
+def get_most_recent_election(cand_id):
+    s = '''
+SELECT * FROM public.election_ppts2 e WHERE e.cycle IN (
+   SELECT cycle_mr
+   FROM public.election_ppts2
+   WHERE fec_id='{fec_id}'
+)
+AND e.district IN (
+    SELECT district_mr
+    FROM public.election_ppts2
+    WHERE fec_id='{fec_id}'
+)
+AND e.state IN (
+    SELECT state_mr
+    FROM public.election_ppts2
+    WHERE fec_id='{fec_id}'
+)
+'''.format(fec_id=cand_id)
+    return query_pg(s)
